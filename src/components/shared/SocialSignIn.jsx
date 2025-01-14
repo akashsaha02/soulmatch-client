@@ -1,10 +1,10 @@
-import useAxiosPublic from '../../hooks/useAxiosPublic';
 import facebookIcon from '../../assets/icons/icons8-facebook.svg';
 import githubIcon from '../../assets/icons/icons8-github.svg';
 import googleIcon from '../../assets/icons/icons8-google.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
+import useAxiosPublic from '@/hooks/useAxiosPublic';
 
 const SocialSignIn = () => {
 

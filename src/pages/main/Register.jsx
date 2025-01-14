@@ -8,7 +8,7 @@ import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
 
 const Register = () => {
-    const axiosPublic = useAxiosPublic;
+    const axiosPublic = useAxiosPublic();
     const { createUser } = useAuth();
     const navigate = useNavigate();
 
