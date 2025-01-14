@@ -39,27 +39,16 @@ const Navbar = () => {
 
                 </ul>
 
-                <div className="flex items-center">
-                    <Button variant="secondary" className="hidden md:block px-2">
-                        Login
+                <div className="flex items-center gap-2">
+                    <Button asChild variant="secondary" className="w-full text-sm">
+                        <Link to="/login">Login</Link>
                     </Button>
-                    <Button className="hidden md:block ml-2 mr-2">Get Started</Button>
+                    <Button asChild className="w-full text-sm">
+                        <Link to="/register">Register</Link>
+                    </Button>
 
-                    <div className="flex md:hidden mr-2 items-center gap-2">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <span className="py-2 px-2 bg-gray-100 rounded-md">Pages</span>
-                            </DropdownMenuTrigger>
-
-                            <DropdownMenuContent align="start">
-                                {landings.map((page) => (
-                                    <DropdownMenuItem key={page.id}>
-                                        <Link href={page.route}>{page.title}</Link>
-                                    </DropdownMenuItem>
-                                ))}
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-
+                    <div className="flex md:hidden items-center gap-2">
+                        
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -79,14 +68,6 @@ const Navbar = () => {
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
                                     <a href="#faqs">FAQs</a>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Button variant="secondary" className="w-full text-sm">
-                                        Login
-                                    </Button>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                    <Button className="w-full text-sm">Get Started</Button>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
