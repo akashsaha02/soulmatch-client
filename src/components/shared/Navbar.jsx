@@ -6,13 +6,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Menu } from "lucide-react";
 import { Card } from "@/components/ui/card";
-//   import ThemeToggle from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
-//   import ShadcnKit from "@/components/icons/shadcn-kit";
-import { nanoid } from "nanoid";
-import { Link } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
+import Swal from "sweetalert2";
+
+
 
 const Navbar = () => {
+
+    const { user, logoutUser } = useAuth();
+
+    const handleLogOut = async () => {
+        try {
+            await logoutUser();
+            Swal.fire({
+                icon: "success",
+                title: "Success",
+                text: "Logged out successfully!",
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
     return (
         <div className="sticky top-0 z-50 bg-rose-100">
             <Card className=" py-3 px-4 max-w-[1920px] bg-rose-100 border-0 flex items-center justify-between gap-6 rounded-none">
@@ -25,30 +41,44 @@ const Navbar = () => {
 
                 <ul className="hidden md:flex items-center gap-10 text-card-foreground">
                     <li className="text-primary font-medium">
-                        <a href="#home">Home</a>
+                        <a to="#home">Home</a>
                     </li>
                     <li>
-                        <a href="#features">Features</a>
+                        <NavLink to="/biodatas">Biodatas</NavLink>
                     </li>
                     <li>
-                        <a href="#pricing">Pricing</a>
+                        <NavLink to="/about">About Us</NavLink>
                     </li>
                     <li>
-                        <a href="#faqs">FAQs</a>
+                        <NavLink to="/contact">Contact Us</NavLink>
                     </li>
+
+                    {user && (
+                        <li>
+                            <NavLink to="/dashboard">Dashboard</NavLink>
+                        </li>
+                    )}
 
                 </ul>
 
                 <div className="flex items-center gap-2">
-                    <Button asChild variant="secondary" className="w-full text-sm">
-                        <Link to="/login">Login</Link>
-                    </Button>
-                    <Button asChild className="w-full text-sm">
-                        <Link to="/register">Register</Link>
-                    </Button>
+                    {user ? (
+                        <Button variant="outline" size="sm" onClick={() => handleLogOut()} >
+                            Logout
+                        </Button>
+                    ) : (
+                        <>
+                            <Button asChild variant="secondary" className="w-full text-sm">
+                                <Link to="/login">Login</Link>
+                            </Button>
+                            <Button asChild className="w-full text-sm">
+                                <Link to="/register">Register</Link>
+                            </Button>
+                        </>
+                    )}
 
                     <div className="flex md:hidden items-center gap-2">
-                        
+
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -58,50 +88,31 @@ const Navbar = () => {
 
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem>
-                                    <a href="#home">Home</a>
+                                    <NavLink to="/">Home</NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <a href="#features">Features</a>
+                                    <NavLink to="/biodatas">Biodatas</NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <a href="#pricing">Pricing</a>
+                                    <NavLink to="/about">About Us</NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <a href="#faqs">FAQs</a>
+                                    <NavLink to="/contact">Contact Us</NavLink>
                                 </DropdownMenuItem>
+                                {user && (
+                                    <DropdownMenuItem>
+                                        <NavLink to="/dashboard">Dashboard</NavLink>
+                                    </DropdownMenuItem>
+                                )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
 
                     {/* <ThemeToggle /> */}
                 </div>
-            </Card>
-        </div>
+            </Card >
+        </div >
     );
 };
-
-const landings = [
-    {
-        id: nanoid(),
-        title: "Landing 01",
-        route: "/project-management",
-    },
-    {
-        id: nanoid(),
-        title: "Landing 02",
-        route: "/crm-landing",
-    },
-    {
-        id: nanoid(),
-        title: "Landing 03",
-        route: "/ai-content-landing",
-    },
-    {
-        id: nanoid(),
-        title: "Landing 04",
-        route: "/new-intro-landing",
-    },
-
-];
 
 export default Navbar;
