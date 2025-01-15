@@ -1,5 +1,5 @@
 import Lottie from "lottie-react";
-import loadingAnimation from '../../assets/others/toaster.json';
+import loadingAnimation from '../../assets/animations/squid-game-loading.json'
 
 const Loader = () => {
     return (
