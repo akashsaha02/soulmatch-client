@@ -61,7 +61,7 @@ const userItems = [
     },
     {
         title: "Edit BioData",
-        to: "/inbox",
+        to: "/dashboard/manage-biodata",
         icon: Inbox,
     }]
 

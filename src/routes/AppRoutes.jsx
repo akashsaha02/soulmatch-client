@@ -8,6 +8,7 @@ import { createBrowserRouter } from "react-router-dom"
 import PrivateRoute from "./PrivateRoute"
 import AllUsers from "@/pages/dashboard/admin/AllUsers"
 import AdminRoute from "./AdminRoute"
+import ManageBiodata from "@/pages/dashboard/user/ManageBiodata"
 
 
 export const router = createBrowserRouter([
@@ -47,10 +48,10 @@ export const router = createBrowserRouter([
                     </PrivateRoute>
             },
             {
-                path: "/dashboard/edit-biodata",
+                path: "/dashboard/manage-biodata",
                 element:
                     <PrivateRoute>
-                        <p>Edit biodata</p>
+                        <ManageBiodata/>
                     </PrivateRoute>,
             }
 
