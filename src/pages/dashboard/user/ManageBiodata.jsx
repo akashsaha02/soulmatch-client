@@ -5,10 +5,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import useAuth from "@/hooks/useAuth";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
-import useAxiosPublic from "@/hooks/useAxiosPublic";
 import useBiodatas from "@/hooks/useBiodatas";
-import axios from "axios";
 import Swal from "sweetalert2";
+import Loader from "@/components/shared/Loader";
 
 const divisions = [
   { value: "Dhaka", label: "Dhaka" },
@@ -47,14 +46,12 @@ const heightOptions = [
   { value: "6 feet 2 inch", label: "6'2\"" },
   { value: "6 feet 4 inch", label: "6'4\"" },
   { value: "6 feet 6 inch", label: "6'6\"" },
-
 ]
 
 const ManageBiodata = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const axiosSecure = useAxiosSecure();
-
   const [biodatas, loading, myBiodata] = useBiodatas();
   console.log(biodatas.length);
 
@@ -67,6 +64,7 @@ const ManageBiodata = () => {
   } = useForm();
 
   useEffect(() => {
+    if (loading) return;
     if (myBiodata) {
       setValue("biodataType", myBiodata.biodataType);
       setValue("name", myBiodata.name);
@@ -93,9 +91,10 @@ const ManageBiodata = () => {
         label: myBiodata.partnerHeight,
       });
       setValue("partnerWeight", myBiodata.partnerWeight);
-
     }
-  }, [myBiodata, setValue]);
+  }, [loading, myBiodata, setValue]);
+
+  if (loading) return <Loader />
 
 
   const onSubmit = async (data) => {
@@ -200,6 +199,7 @@ const ManageBiodata = () => {
             />
             {errors.fatherName && <p className="text-red-500 text-xs">{errors.fatherName.message}</p>}
           </div>
+
           {/*Mothers Name */}
           <div className="mb-4">
             <label htmlFor="motherName" className="block text-sm font-medium text-gray-700">
@@ -214,12 +214,8 @@ const ManageBiodata = () => {
             {errors.motherName && <p className="text-red-500 text-xs">{errors.motherName.message}</p>}
           </div>
 
-
-
           {/* type and race */}
-
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-
             {/* Biodata Type */}
             <div className="mb-4 w-full">
               <label htmlFor="biodataType" className="block text-sm font-medium text-gray-700">
@@ -241,7 +237,6 @@ const ManageBiodata = () => {
               <label htmlFor="race" className="block text-sm font-medium text-gray-700">
                 Race
               </label>
-
               <Controller
                 name="race"
                 control={control}
@@ -253,14 +248,8 @@ const ManageBiodata = () => {
                 )}
               />
               {errors.race && <p className="text-red-500 text-xs">{errors.race.message}</p>}
-
-
             </div>
-
-
           </div>
-
-
 
           {/* Profile Image */}
           <div className="mb-4">
@@ -275,7 +264,6 @@ const ManageBiodata = () => {
             />
             {errors.profileImage && <p className="text-red-500 text-xs">{errors.profileImage.message}</p>}
           </div>
-
 
           {/* Height Weight and date of birth */}
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 w-full">
@@ -337,14 +325,10 @@ const ManageBiodata = () => {
               />
               {errors.dob && <p className="text-red-500 text-xs">{errors.dob.message}</p>}
             </div>
-
           </div>
-
-
 
           {/* Occupation and Division */}
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-
             {/* Occupation */}
             <div className="mb-4 w-full">
               <label htmlFor="occupation" className="block text-sm font-medium text-gray-700">
@@ -374,7 +358,6 @@ const ManageBiodata = () => {
               />
               {errors.presentDivision && <p className="text-red-500 text-xs">{errors.presentDivision.message}</p>}
             </div>
-
 
             {/* Permanent Division */}
             <div className="mb-4 w-full">
@@ -408,8 +391,6 @@ const ManageBiodata = () => {
           </div>
 
 
-
-
           {/* <---------------------------- Partnar Info----------------------> */}
           <div className="text-center text-gray-700 font-semibold mb-4">Expected Partner's Info</div>
 
@@ -430,7 +411,6 @@ const ManageBiodata = () => {
               />
               {errors.partnerAge && <p className="text-red-500 text-xs">{errors.partnerAge.message}</p>}
             </div>
-
 
             {/* Partner's Height */}
             <div className="mb-4 w-full">
@@ -467,10 +447,7 @@ const ManageBiodata = () => {
               />
               {errors.partnerWeight && <p className="text-red-500 text-xs">{errors.partnerWeight.message}</p>}
             </div>
-
           </div>
-
-
 
           {/* Save Button */}
           <div className="mb-4">
