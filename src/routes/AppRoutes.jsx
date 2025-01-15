@@ -9,6 +9,9 @@ import PrivateRoute from "./PrivateRoute"
 import AllUsers from "@/pages/dashboard/admin/AllUsers"
 import AdminRoute from "./AdminRoute"
 import ManageBiodata from "@/pages/dashboard/user/ManageBiodata"
+import MyContactRequests from "@/pages/dashboard/user/MyContactRequests"
+import MyFavourites from "@/pages/dashboard/user/MyFavourites"
+import UserHome from "@/pages/dashboard/user/UserHome"
 
 
 export const router = createBrowserRouter([
@@ -44,26 +47,36 @@ export const router = createBrowserRouter([
                 path: "/dashboard/user-home",
                 element:
                     <PrivateRoute>
-                        <p>hello user</p>
+                      <UserHome/>
                     </PrivateRoute>
             },
             {
                 path: "/dashboard/manage-biodata",
                 element:
                     <PrivateRoute>
-                        <ManageBiodata/>
+                        <ManageBiodata />
                     </PrivateRoute>,
+            }, {
+                path: "/dashboard/my-contact-requests",
+                element: <PrivateRoute>
+                    <MyContactRequests />
+                </PrivateRoute>
+            }, {
+                path: "/dashboard/my-favourites",
+                element: <PrivateRoute>
+                    <MyFavourites />
+                </PrivateRoute>
             }
 
             // Admin Routes
-            ,  {
+            , {
                 path: "/dashboard/admin-home",
                 element:
                     <PrivateRoute>
                         <p>hello admin</p>
                     </PrivateRoute>
-            }, 
-            
+            },
+
             {
                 path: "/dashboard/users",
                 element: <AdminRoute>

@@ -9,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "./ui/sidebar"
-import { Calendar, Home, Inbox, Search, Send, Settings, SquareUser, } from "lucide-react"
+import { BookHeart, Calendar, Home, Inbox, MailWarning, Search, Send, Settings, SquareUser, UserCog, } from "lucide-react"
 import useAdmin from "@/hooks/useAdmin"
 
 const sharedItems = [
@@ -60,10 +60,23 @@ const userItems = [
         icon: Home,
     },
     {
-        title: "Edit BioData",
+        title: "Manage Biodata",
         to: "/dashboard/manage-biodata",
-        icon: Inbox,
-    }]
+        icon: UserCog,
+    },
+    {
+        title:'My Contact Requests',
+        to:'/dashboard/my-contact-requests',
+        icon:MailWarning,
+
+    },
+    {
+        title:'My Favourites',
+        to:'/dashboard/my-favourites',
+        icon:BookHeart,
+
+    }
+]
 
 
 const AppSidebar = () => {
