@@ -14,7 +14,8 @@ import MyFavourites from "@/pages/dashboard/user/MyFavourites"
 import UserHome from "@/pages/dashboard/user/UserHome"
 import AllBiodatas from "@/pages/main/AllBiodatas"
 import BiodataDetails from "@/pages/main/BiodataDetails"
-
+import ApprovePremium from "@/pages/dashboard/admin/ApprovePremium"
+import ApproveContact from "@/pages/dashboard/admin/ApproveContact"
 
 export const router = createBrowserRouter([
     {
@@ -91,6 +92,18 @@ export const router = createBrowserRouter([
                 path: "/dashboard/users",
                 element: <AdminRoute>
                     <AllUsers />
+                </AdminRoute>
+            },
+            {
+                path: "/dashboard/approve-premium",
+                element: <AdminRoute>
+                    <ApprovePremium/>
+                </AdminRoute>
+            },
+            {
+                path: "/dashboard/approve-contact-requests",
+                element: <AdminRoute>
+                    <ApproveContact/>
                 </AdminRoute>
             }
 

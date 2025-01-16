@@ -9,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "./ui/sidebar"
-import { BookHeart, Calendar, Home, Inbox, MailWarning, Search, Send, Settings, SquareUser, UserCog, } from "lucide-react"
+import { BookHeart, Home, MailCheck, MailWarning, Send, Settings, SquareUser, UserCheck, UserCog, } from "lucide-react"
 import useAdmin from "@/hooks/useAdmin"
 
 const sharedItems = [
@@ -37,19 +37,19 @@ const adminItems = [
         icon: Home,
     },
     {
-        title: "All Users",
+        title: "Manage Users",
         to: "/dashboard/users",
-        icon: Inbox,
+        icon: UserCog,
     },
     {
-        title: "Search",
-        to: "/search",
-        icon: Search,
+        title: "Approve Premium",
+        to: "/dashboard/approve-premium",
+        icon: UserCheck,
     },
     {
-        title: "Settings",
-        to: "/settings",
-        icon: Settings,
+        title: "Approve Contact Requests",
+        to: "/dashboard/approve-contact-requests",
+        icon: MailCheck,
     },
 ]
 
