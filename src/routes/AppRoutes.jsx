@@ -12,6 +12,7 @@ import ManageBiodata from "@/pages/dashboard/user/ManageBiodata"
 import MyContactRequests from "@/pages/dashboard/user/MyContactRequests"
 import MyFavourites from "@/pages/dashboard/user/MyFavourites"
 import UserHome from "@/pages/dashboard/user/UserHome"
+import AllBiodatas from "@/pages/main/AllBiodatas"
 
 
 export const router = createBrowserRouter([
@@ -33,7 +34,8 @@ export const router = createBrowserRouter([
                 element: <Register />
             },
             {
-                // path:"/biodatas",
+                path: "/biodatas",
+                element: <AllBiodatas />
             }
         ],
 
@@ -47,7 +49,7 @@ export const router = createBrowserRouter([
                 path: "/dashboard/user-home",
                 element:
                     <PrivateRoute>
-                      <UserHome/>
+                        <UserHome />
                     </PrivateRoute>
             },
             {
@@ -56,12 +58,14 @@ export const router = createBrowserRouter([
                     <PrivateRoute>
                         <ManageBiodata />
                     </PrivateRoute>,
-            }, {
+            },
+            {
                 path: "/dashboard/my-contact-requests",
                 element: <PrivateRoute>
                     <MyContactRequests />
                 </PrivateRoute>
-            }, {
+            },
+            {
                 path: "/dashboard/my-favourites",
                 element: <PrivateRoute>
                     <MyFavourites />

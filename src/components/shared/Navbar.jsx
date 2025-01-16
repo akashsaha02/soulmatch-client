@@ -30,18 +30,18 @@ const Navbar = () => {
         }
     };
     return (
-        <div className="sticky top-0 z-50 bg-rose-100">
-            <Card className=" py-3 px-4 max-w-[1920px] bg-rose-100 border-0 flex items-center justify-between gap-6 rounded-none">
+        <div className="sticky top-0 z-50 shadow-md">
+            <Card className=" py-3 px-4 max-w-[1920px] bg-white border-0 flex items-center justify-between gap-6 rounded-none">
                 {/* <ShadcnKit className="text-primary cursor-pointer" /> */}
 
                 {/* logo & site name */}
-                <div className="">
+                <div className="playfair">
                     Matrimonealsite
                 </div>
 
                 <ul className="hidden md:flex items-center gap-10 text-card-foreground">
                     <li className="text-primary font-medium">
-                        <a to="#home">Home</a>
+                        <NavLink to="/">Home</NavLink>
                     </li>
                     <li>
                         <NavLink to="/biodatas">Biodatas</NavLink>

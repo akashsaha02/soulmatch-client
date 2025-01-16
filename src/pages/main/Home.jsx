@@ -1,10 +1,14 @@
 import { Button } from '@/components/ui/button'
+import SectionTitleHome from './../../components/shared/SectionTitleHome';
+import Banner from '@/components/home/Banner';
+import Services from '@/components/home/Services';
 
 const Home = () => {
   return (
-    <div className='min-h-screen flex items-center justify-center'>
-      <Button>Click Me</Button>
-      
+    <div className=''>
+      <Banner/>
+      <Services/>
+      <SectionTitleHome />
     </div>
   )
 }
