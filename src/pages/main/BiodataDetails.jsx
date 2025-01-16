@@ -12,7 +12,7 @@ const BiodataDetails = () => {
     const { user } = useAuth();
     const [, refetch] = useFavourites();
     const navigate = useNavigate();
-    const location= useLocation();
+    const location = useLocation();
     const axiosSecure = useAxiosSecure();
     const [biodata, setBiodata] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -40,30 +40,56 @@ const BiodataDetails = () => {
                 email: user.email,
                 favouriteName: name,
                 favouriteProfileImage: profileImage,
+                favouriteEmail: userEmail,
             }
 
-            axiosSecure.post('/favourites', favouriteBiodata).then((res) => {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Success',
-                    text: 'Profile added to favourites!',
-                    timer: 1000,
+            axiosSecure.post('/favourites', favouriteBiodata)
+                .then((res) => {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text: 'Profile added to favourites!',
+                        timer: 1000,
+                    });
+                    refetch();
+                })
+                .catch((err) => {
+                    // Handle various error cases
+                    if (err.response && err.response.data) {
+                        if (err.response.data.message === 'Already added to favourites!') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Already Added',
+                                text: 'This profile is already in your favourites!',
+                            });
+                        } else if (err.response.data.message === 'You cannot add your own profile to favourites.') {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Cannot Add Own Profile',
+                                text: 'You cannot add your own profile to favourites.',
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Something went wrong. Please try again!',
+                            });
+                        }
+                    } else {
+                        console.log(err);
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Something went wrong. Please try again!',
+                        });
+                    }
                 });
-                refetch();
-            }).catch((err) => {
-                console.log(err)
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Something went wrong. Please try again!',
-                });
-            });
 
         } else {
             Swal.fire({
                 icon: 'warning',
                 title: 'You\'re not logged in!',
-                text: 'Please login to order!',
+                text: 'Please login to add to favourites!',
                 showCancelButton: true,
                 confirmButtonText: 'Login',
                 cancelButtonText: 'Cancel',
