@@ -1,4 +1,3 @@
-import { useState } from "react";
 const BiodataCard = ({ biodata, handleViewProfile }) => {
   const age = new Date().getFullYear() - new Date(biodata.dob).getFullYear();
   return (

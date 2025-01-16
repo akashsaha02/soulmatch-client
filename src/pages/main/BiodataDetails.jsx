@@ -1,15 +1,22 @@
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import useAxiosSecure from './../../hooks/useAxiosSecure';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/shared/Loader';
 import { Button } from '@/components/ui/button';
+import useAuth from '@/hooks/useAuth';
+import Swal from 'sweetalert2';
+import useFavourites from '@/hooks/useFavourites';
 
 const BiodataDetails = () => {
     const { id } = useParams();
+    const { user } = useAuth();
+    const [, refetch] = useFavourites();
+    const navigate = useNavigate();
+    const location= useLocation();
+    const axiosSecure = useAxiosSecure();
     const [biodata, setBiodata] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         axiosSecure
@@ -23,6 +30,50 @@ const BiodataDetails = () => {
                 setLoading(false);
             });
     }, [axiosSecure, id]);
+
+    const handleAddToFavourite = () => {
+        if (user && user.email) {
+            // Send data logic
+            const favouriteBiodata = {
+                favouriteId: id,
+                favouriteBiodataId: biodataId,
+                email: user.email,
+                favouriteName: name,
+                favouriteProfileImage: profileImage,
+            }
+
+            axiosSecure.post('/favourites', favouriteBiodata).then((res) => {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: 'Profile added to favourites!',
+                    timer: 1000,
+                });
+                refetch();
+            }).catch((err) => {
+                console.log(err)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Something went wrong. Please try again!',
+                });
+            });
+
+        } else {
+            Swal.fire({
+                icon: 'warning',
+                title: 'You\'re not logged in!',
+                text: 'Please login to order!',
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Cancel',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    navigate('/login', { state: { from: location } });
+                }
+            });
+        }
+    };
 
     if (loading) return <Loader />;
 
@@ -50,6 +101,7 @@ const BiodataDetails = () => {
         permanentDivision,
         presentDivision,
         mobileNumber,
+        biodataId,
         race,
         userEmail,
     } = biodata;
@@ -72,11 +124,13 @@ const BiodataDetails = () => {
                 <div className="p-6 space-y-6">
                     {/* Personal Information */}
                     <div>
-                        <div className="border-b pb-2 mb-4">
+                        <div className="border-b pb-2 mb-4 flex gap-4 items-center">
                             <h2 className="text-xl font-semibold ">
-                                Personal Information
+                                Personal Information {biodataId}
                             </h2>
-                            <Button>Add to Favourites</Button>
+                            <Button
+                                onClick={() => handleAddToFavourite()}
+                            >Add to Favourites</Button>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
