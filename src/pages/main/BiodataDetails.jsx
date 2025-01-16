@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import useAxiosSecure from './../../hooks/useAxiosSecure';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/shared/Loader';
+import { Button } from '@/components/ui/button';
 
 const BiodataDetails = () => {
     const { id } = useParams();
@@ -71,9 +72,12 @@ const BiodataDetails = () => {
                 <div className="p-6 space-y-6">
                     {/* Personal Information */}
                     <div>
-                        <h2 className="text-xl font-semibold border-b pb-2 mb-4">
-                            Personal Information
-                        </h2>
+                        <div className="border-b pb-2 mb-4">
+                            <h2 className="text-xl font-semibold ">
+                                Personal Information
+                            </h2>
+                            <Button>Add to Favourites</Button>
+                        </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="font-medium">Date of Birth:</p>
