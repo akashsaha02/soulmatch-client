@@ -22,14 +22,15 @@ const useBiodatas = () => {
             })
 
 
-        axiosPublic.get(`/biodatas/${user.email}`).then((res) => {
-            setMyBiodata(res.data);
-            setLoading(false);
-        }).then((err) => {
-            console.log(err);
-        })
-
-    }, [axiosPublic, user.email])
+        if (user?.email) {
+            axiosPublic.get(`/biodatas/${user.email}`).then((res) => {
+                setMyBiodata(res.data);
+                setLoading(false);
+            }).then((err) => {
+                console.log(err);
+            })
+        }
+    }, [axiosPublic, user?.email])
     return [biodatas, loading, myBiodata];
 }
 
