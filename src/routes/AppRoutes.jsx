@@ -13,6 +13,7 @@ import MyContactRequests from "@/pages/dashboard/user/MyContactRequests"
 import MyFavourites from "@/pages/dashboard/user/MyFavourites"
 import UserHome from "@/pages/dashboard/user/UserHome"
 import AllBiodatas from "@/pages/main/AllBiodatas"
+import BiodataDetails from "@/pages/main/BiodataDetails"
 
 
 export const router = createBrowserRouter([
@@ -36,6 +37,11 @@ export const router = createBrowserRouter([
             {
                 path: "/biodatas",
                 element: <AllBiodatas />
+            },
+            {
+                path: "/biodatas/:id",
+                element: <BiodataDetails />,
+
             }
         ],
 

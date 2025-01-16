@@ -48,7 +48,7 @@ const BiodatasPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen p-4">
       <div className="container mx-auto flex flex-col md:flex-row gap-6">
         {/* Filter Section */}
         <aside className="w-full md:w-1/4 bg-white p-4 rounded-lg shadow-md">
@@ -112,7 +112,7 @@ const BiodatasPage = () => {
 
         {/* Biodatas Display Section */}
         <section className="flex-1 bg-white p-4 rounded-lg shadow-md">
-          <h2 className="text-lg font-semibold mb-4">All Biodatas</h2>
+          <h2 className="text-lg font-semibold mb-4">All Biodatas ({biodatas.length})</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredBiodatas.slice(0, 20).map((biodata) => {
               const age = new Date().getFullYear() - new Date(biodata.dob).getFullYear();
