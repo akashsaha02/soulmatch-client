@@ -1,4 +1,4 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import useAxiosSecure from './../../hooks/useAxiosSecure';
 import { useEffect, useState } from 'react';
 import Loader from '@/components/shared/Loader';
@@ -30,6 +30,8 @@ const BiodataDetails = () => {
                 setLoading(false);
             });
     }, [axiosSecure, id]);
+
+    const isPremium = false;
 
     const handleAddToFavourite = () => {
         if (user && user.email) {
@@ -112,6 +114,7 @@ const BiodataDetails = () => {
     }
 
     const {
+        _id,
         name,
         profileImage,
         biodataType,
@@ -229,20 +232,24 @@ const BiodataDetails = () => {
                         <h2 className="text-xl font-semibold border-b pb-2 mb-4">
                             Contact Information
                         </h2>
-                        <div className="grid grid-cols-2 gap-4">
+                        {isPremium ? (<div className="grid grid-cols-2 gap-4">
                             <div>
                                 <p className="font-medium">Mobile:</p>
                                 <p>{mobileNumber}</p>
                             </div>
-                            <div>
-                                <p className="font-medium">Email:</p>
-                                <p>{userEmail}</p>
-                            </div>
-                        </div>
+                        </div>) : (
+                            <Link to={`/checkout/${_id}`} >
+                                <Button>
+                                    View Contact Information
+                                </Button>
+                            </Link>
+                        )
+
+                        }
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
 

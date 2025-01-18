@@ -16,6 +16,7 @@ import AllBiodatas from "@/pages/main/AllBiodatas"
 import BiodataDetails from "@/pages/main/BiodataDetails"
 import ApprovePremium from "@/pages/dashboard/admin/ApprovePremium"
 import ApproveContact from "@/pages/dashboard/admin/ApproveContact"
+import Checkout from "@/pages/main/Checkout"
 
 export const router = createBrowserRouter([
     {
@@ -43,6 +44,10 @@ export const router = createBrowserRouter([
                 path: "/biodatas/:id",
                 element: <BiodataDetails />,
 
+            },
+            {
+                path: "/checkout",
+                element: <Checkout />
             }
         ],
 
