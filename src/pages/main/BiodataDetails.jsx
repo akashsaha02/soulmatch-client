@@ -238,7 +238,7 @@ const BiodataDetails = () => {
                                 <p>{mobileNumber}</p>
                             </div>
                         </div>) : (
-                            <Link to={`/checkout/${_id}`} >
+                            <Link to={`/checkout/${ biodataId}`} >
                                 <Button>
                                     View Contact Information
                                 </Button>
