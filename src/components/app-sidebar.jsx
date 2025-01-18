@@ -9,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "./ui/sidebar"
-import { BookHeart, Home, MailCheck, MailWarning, Send, Settings, SquareUser, UserCheck, UserCog, } from "lucide-react"
+import { BookHeart, Home, MailCheck, MailWarning, Send, SquareUser, UserCheck, UserCog, } from "lucide-react"
 import useAdmin from "@/hooks/useAdmin"
 
 const sharedItems = [
@@ -51,6 +51,8 @@ const adminItems = [
         to: "/dashboard/approve-contact-requests",
         icon: MailCheck,
     },
+
+    // TODO:Logout Button 
 ]
 
 const userItems = [
