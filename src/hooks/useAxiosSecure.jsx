@@ -4,13 +4,10 @@ import useAuth from './useAuth';
 
 export const axiosSecure = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
-
 })
 
 const useAxiosSecure = () => {
-
     const { logoutUser } = useAuth();
-
     const navigate = useNavigate();
     // request interceptor to add autorization token to secure requests
     axiosSecure.interceptors.request.use((config) => {
