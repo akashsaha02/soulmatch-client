@@ -14,9 +14,7 @@ const useAxiosSecure = () => {
     const navigate = useNavigate();
     // request interceptor to add autorization token to secure requests
     axiosSecure.interceptors.request.use((config) => {
-        console.log('interceptor secure');
         const token = localStorage.getItem('access-token');
-
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -24,7 +22,6 @@ const useAxiosSecure = () => {
     }, function (error) {
         return Promise.reject(error);
     });
-
 
     // Intercept response and check for token expiration
     axiosSecure.interceptors.response.use(
@@ -36,11 +33,8 @@ const useAxiosSecure = () => {
 
             if (status === 401 || status === 403) {
                 await logoutUser();
-
                 navigate('/login');
             }
-
-
             return Promise.reject(error);
         }
     );

@@ -5,7 +5,7 @@ import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 
-const CheckoutForm = () => {
+const CheckoutForm = ({ id, email }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const stripe = useStripe();
@@ -45,15 +45,16 @@ const CheckoutForm = () => {
             } else if (paymentIntent?.status === "succeeded") {
                 setTransactionId(paymentIntent.id);
 
-                const paymentInfo = {
-                    email: user?.email,
-                    amount: paymentIntent.amount,
+                const contactRequest = {
+                    email:user.email,
+                    biodataId: id,
                     transactionId: paymentIntent.id,
+                    amount: paymentIntent.amount,
                     date: new Date().toISOString(),
-                    status: 'pending'
+                    status: 'pending',
                 };
 
-                const res = await axiosSecure.post("/payments", paymentInfo);
+                const res = await axiosSecure.post("/payments", contactRequest);
                 console.log(res.data);
 
                 if (res.data.result.insertedId) {

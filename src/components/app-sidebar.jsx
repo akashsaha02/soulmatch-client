@@ -82,20 +82,10 @@ const userItems = [
 
 
 const AppSidebar = () => {
-
-
-
-
     const [isAdmin, isAdminLoading] = useAdmin();
-
     const isAdminRole = isAdmin;
-
-
     const varriable = isAdminRole ? adminItems : userItems;
-    // if (isAdminLoading) {
-    //     return <p>Loading...</p>
-    // }
-    console.log(isAdmin);
+ 
     return (
         <div>
             <Sidebar>

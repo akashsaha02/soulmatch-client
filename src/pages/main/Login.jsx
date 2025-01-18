@@ -1,7 +1,7 @@
 // import loginImg from '../assets/others/authentication1.png';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import { useContext, useEffect, useState, } from 'react';
+import { useEffect, useState, } from 'react';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
@@ -11,12 +11,8 @@ import SocialSignIn from '@/components/shared/SocialSignIn';
 const Login = () => {
     const navigate = useNavigate();
     const { loginUser, logoutUser } = useAuth();
-
     const location = useLocation();
-
     const from = location.state?.from?.pathname || '/';
-    console.log(from)
-
     const [captchaInput, setCaptchaInput] = useState('');
     const [captchaError, setCaptchaError] = useState('');
     const [disable, setDisable] = useState(true);

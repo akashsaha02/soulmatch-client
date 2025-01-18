@@ -103,7 +103,7 @@ const Checkout = () => {
                 </form>
                 {clientSecret ? (
                     <Elements stripe={stripePromise} options={options}>
-                        <CheckoutForm id={id} email={user?.email} />
+                        <CheckoutForm id={id} />
                     </Elements>
                 ) : (
                     <p>Loading payment details...</p>
