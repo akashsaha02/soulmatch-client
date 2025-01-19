@@ -128,7 +128,7 @@ const ManageBiodata = () => {
             partnerHeight: data.partnerHeight?.value,
             partnerWeight: data.partnerWeight,
           };
-          console.log(payload);
+          // console.log(payload);
 
           const response = await axiosSecure.post("/biodatas", payload);
           console.log(response.data);

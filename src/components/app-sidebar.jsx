@@ -9,7 +9,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from "./ui/sidebar"
-import { BookHeart, Home, MailCheck, MailWarning, Send, SquareUser, UserCheck, UserCog, } from "lucide-react"
+import { BookHeart, Gem, Home, MailCheck, MailWarning, Send, SquareUser, UserCheck, UserCog, } from "lucide-react"
 import useAdmin from "@/hooks/useAdmin"
 
 const sharedItems = [
@@ -77,6 +77,11 @@ const userItems = [
         to:'/dashboard/my-favourites',
         icon:BookHeart,
 
+    },
+    {
+        title:'Got Married',
+        to:'/dashboard/got-married',
+        icon:Gem,
     }
 ]
 

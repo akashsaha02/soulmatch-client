@@ -10,7 +10,7 @@ const Dashboard = () => {
     if (loading) {
         return <Loader />
     }
-    console.log(user);
+    // console.log(user);
     return (
         <SidebarProvider>
             <AppSidebar />

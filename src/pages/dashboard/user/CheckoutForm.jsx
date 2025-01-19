@@ -55,7 +55,7 @@ const CheckoutForm = ({ id, email }) => {
                 };
 
                 const res = await axiosSecure.post("/payments", contactRequest);
-                console.log(res.data);
+                // console.log(res.data);
 
                 if (res.data.result.insertedId) {
                     console.log("Payment completed successfully");

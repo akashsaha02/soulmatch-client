@@ -46,7 +46,7 @@ const UserHome = () => {
 
     const res = await axiosSecure.post(`/request-premium/${id}`)
 
-    console.log(res)
+    // console.log(res)
 
   }
 

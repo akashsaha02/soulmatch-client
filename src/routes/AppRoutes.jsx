@@ -17,6 +17,8 @@ import BiodataDetails from "@/pages/main/BiodataDetails"
 import ApprovePremium from "@/pages/dashboard/admin/ApprovePremium"
 import ApproveContact from "@/pages/dashboard/admin/ApproveContact"
 import Checkout from "@/pages/main/Checkout"
+import GotMarried from "@/pages/dashboard/user/GotMarried"
+import AdminSuccessStory from "@/pages/dashboard/admin/SuccessStory"
 
 export const router = createBrowserRouter([
     {
@@ -82,6 +84,12 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <MyFavourites />
                 </PrivateRoute>
+            },
+            {
+                path: "/dashboard/got-married",
+                element: <PrivateRoute>
+                    <GotMarried />
+                </PrivateRoute>
             }
 
             // Admin Routes
@@ -102,13 +110,18 @@ export const router = createBrowserRouter([
             {
                 path: "/dashboard/approve-premium",
                 element: <AdminRoute>
-                    <ApprovePremium/>
+                    <ApprovePremium />
                 </AdminRoute>
             },
             {
                 path: "/dashboard/approve-contact-requests",
                 element: <AdminRoute>
-                    <ApproveContact/>
+                    <ApproveContact />
+                </AdminRoute>
+            }, {
+                path: "/dashboard/success-stories",
+                element: <AdminRoute>
+                    <AdminSuccessStory />
                 </AdminRoute>
             }
 
