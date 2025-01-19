@@ -2,102 +2,131 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-gray-300 py-8">
-      <div className="max-w-[1920px] mx-auto px-4">
+    <footer className="bg-gradient-to-r from-gray-800 via-gray-900 to-black text-gray-300 py-8">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12">
         {/* Top Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-center lg:items-start mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
           {/* Logo and Description */}
-          <div className="mb-4 lg:mb-0">
-            <div className="text-2xl font-bold text-white">ShadcnKit</div>
+          <div>
+            <h2 className="text-2xl font-bold text-white">SoulMatch</h2>
             <p className="mt-2 text-sm text-gray-400">
-              A powerful and responsive UI kit to build modern web applications.
+              Connecting hearts and creating stories. SoulMatch brings you closer to your soulmate with trust and innovation.
             </p>
           </div>
 
-          {/* Links */}
-          <div className="flex space-x-8">
-            {/* Column 1 */}
-            <div>
-              <h4 className="text-lg font-semibold text-white">Resources</h4>
-              <ul className="mt-2 space-y-2">
-                <li>
-                  <Link
-                    to="/docs"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/tutorials"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    Tutorials
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/blog"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-lg font-semibold text-white">Quick Links</h3>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link to="/home" className="hover:text-blue-500 transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>
+                <Link to="/about" className="hover:text-blue-500 transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="hover:text-blue-500 transition-colors">
+                  Contact
+                </Link>
+              </li>
+              <li>
+                <Link to="/faq" className="hover:text-blue-500 transition-colors">
+                  FAQ
+                </Link>
+              </li>
+            </ul>
+          </div>
 
-            {/* Column 2 */}
-            <div>
-              <h4 className="text-lg font-semibold text-white">Company</h4>
-              <ul className="mt-2 space-y-2">
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/careers"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/contact"
-                    className="hover:text-blue-500 transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          {/* Resources */}
+          <div>
+            <h3 className="text-lg font-semibold text-white">Resources</h3>
+            <ul className="mt-4 space-y-2">
+              <li>
+                <Link to="/privacy" className="hover:text-blue-500 transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link to="/terms" className="hover:text-blue-500 transition-colors">
+                  Terms of Service
+                </Link>
+              </li>
+              <li>
+                <Link to="/blog" className="hover:text-blue-500 transition-colors">
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter Subscription */}
+          <div>
+            <h3 className="text-lg font-semibold text-white">Stay Connected</h3>
+            <p className="mt-2 text-sm text-gray-400">
+              Subscribe to our newsletter for updates and stories.
+            </p>
+            <form className="mt-4 flex flex-col sm:flex-row items-center max-w-xs">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="w-full sm:w-auto flex-grow px-4 py-2 mb-2 sm:mb-0 rounded-l-md text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+              <button
+                type="submit"
+                className="w-full sm:w-auto bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-r-md transition-colors"
+              >
+                Subscribe
+              </button>
+            </form>
           </div>
         </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-gray-700 pt-4 flex flex-col lg:flex-row justify-between items-center">
-          <p className="text-sm text-gray-400">
-            © {new Date().getFullYear()} ShadcnKit. All rights reserved.
+        {/* Social Media and Copyright */}
+        <div className="border-t border-gray-700 pt-4 flex flex-col sm:flex-row justify-between items-center">
+          <p className="text-sm text-gray-400 mb-4 sm:mb-0">
+            © {new Date().getFullYear()} SoulMatch. All rights reserved.
           </p>
-          <div className="mt-4 lg:mt-0 flex space-x-4">
-            <Link
-              to="/privacy"
-              className="text-sm text-gray-400 hover:text-blue-500"
+          <div className="flex space-x-6">
+            <a
+              href="https://facebook.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+              aria-label="Facebook"
             >
-              Privacy Policy
-            </Link>
-            <Link
-              to="/terms"
-              className="text-sm text-gray-400 hover:text-blue-500"
+              <i className="fab fa-facebook-f"></i>
+            </a>
+            <a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+              aria-label="Twitter"
             >
-              Terms of Service
-            </Link>
+              <i className="fab fa-twitter"></i>
+            </a>
+            <a
+              href="https://instagram.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+              aria-label="Instagram"
+            >
+              <i className="fab fa-instagram"></i>
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-gray-400 hover:text-blue-500 transition-colors"
+              aria-label="LinkedIn"
+            >
+              <i className="fab fa-linkedin-in"></i>
+            </a>
           </div>
         </div>
       </div>
