@@ -1,9 +1,10 @@
-import React from 'react'
-import SectionTitleHome from '../shared/SectionTitleHome'
+import React from "react";
+import SectionTitleHome from "../shared/SectionTitleHome";
+import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
+import "react-vertical-timeline-component/style.min.css";
 import { FaUserPlus, FaUserEdit, FaSearch, FaHeart, FaCrown } from "react-icons/fa";
 
 const HowItWorks = () => {
-
     const steps = [
         {
             icon: FaUserPlus,
@@ -31,27 +32,31 @@ const HowItWorks = () => {
             description: "Enjoy exclusive benefits like priority visibility and direct messaging.",
         },
     ];
+
     return (
         <div>
-
             <SectionTitleHome heading="How It Works" subHeading="Simple Steps" />
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto my-8">
+
+            {/* Timeline */}
+            <VerticalTimeline>
                 {steps.map((step, index) => (
-                    <div key={index} className="bg-white rounded-lg shadow-md p-6">
-                        {/* Icon */}
-                        <div className="flex justify-center mb-4 text-indigo-600">
-                            <step.icon className="text-5xl" />
-                        </div>
-                        {/* Title */}
-                        <h3 className="text-xl font-bold mb-3">{step.title}</h3>
-                        {/* Description */}
+                    <VerticalTimelineElement
+                        key={index}
+                        className="vertical-timeline-element--work"
+                        contentStyle={{ background: "#fff", color: "#333" }}
+                        contentArrowStyle={{ borderRight: "7px solid #4f46e5" }}
+                        iconStyle={{ background: "#4f46e5", color: "#fff" }}
+                        icon={<step.icon />}
+                    >
+                        <h3 className="vertical-timeline-element-title text-xl font-bold">
+                            {step.title}
+                        </h3>
                         <p className="text-gray-600">{step.description}</p>
-                    </div>
+                    </VerticalTimelineElement>
                 ))}
-            </div>
-
+            </VerticalTimeline>
         </div>
-    )
-}
+    );
+};
 
-export default HowItWorks
+export default HowItWorks;

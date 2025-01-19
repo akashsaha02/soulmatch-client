@@ -1,20 +1,24 @@
-import React from 'react';
 import SectionTitleHome from '../shared/SectionTitleHome';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
+import {Link} from 'react-router-dom'
 
-import slide1 from '../../assets/ban-bg.jpg';
+import slide1 from '../../assets/couple1.jpg';
+import slide2 from '../../assets/couple2.jpg';
+import slide3 from '../../assets/couple3.jpg';
+import slide4 from '../../assets/couple6.jpg';
+import slide5 from '../../assets/couple7.jpg';
 import { School } from 'lucide-react';
 
 const slides = [
     { image: slide1, title: 'Find Your Match', description: 'Connect with your soulmate.', icon: School, link: '/find-match' },
-    { image: slide1, title: 'Wedding Services', description: 'Plan your dream wedding.', icon: School, link: '/wedding-services' },
-    { image: slide1, title: 'Premium Membership', description: 'Enjoy exclusive benefits.', icon: School, link: '/premium-membership' },
-    { image: slide1, title: 'Success Stories', description: 'Hear from happy couples.', icon: School, link: '/success-stories' },
-    { image: slide1, title: 'FAQs', description: 'Get answers to your questions.', icon: School, link: '/faqs' },
+    { image: slide2, title: 'Wedding Services', description: 'Plan your dream wedding.', icon: School, link: '/wedding-services' },
+    { image: slide3, title: 'Premium Membership', description: 'Enjoy exclusive benefits.', icon: School, link: '/premium-membership' },
+    { image: slide4, title: 'Success Stories', description: 'Hear from happy couples.', icon: School, link: '/success-stories' },
+    { image: slide5, title: 'FAQs', description: 'Get answers to your questions.', icon: School, link: '/faqs' },
 ];
 
 const Services = () => {
@@ -54,7 +58,7 @@ const Services = () => {
                             />
 
                             {/* Content */}
-                            <div className="absolute inset-0 bg-black/60 rounded-lg flex flex-col items-center justify-center text-white text-center p-4">
+                            <div className="absolute inset-0 rounded-lg flex flex-col items-center justify-center text-white text-center p-4">
                                 <slide.icon className="text-4xl mb-2" />
                                 <h3 className="text-lg md:text-xl font-bold uppercase playfair">
                                     {slide.title}
@@ -65,13 +69,13 @@ const Services = () => {
                             </div>
 
                             {/* Hover Button */}
-                            <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <a
+                            <div className="absolute inset-0 flex items-center justify-center bg-me-pink/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <Link
                                     href={slide.link}
                                     className="bg-white text-black py-2 px-4 rounded-lg font-semibold text-sm md:text-base hover:bg-gray-200 transition playfair"
                                 >
                                     Learn More
-                                </a>
+                                </Link>
                             </div>
                         </SwiperSlide>
                     ))}
