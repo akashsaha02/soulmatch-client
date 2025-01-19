@@ -51,7 +51,7 @@ const SuccessStories = () => {
                         {/* Card Body */}
                         <div className="p-6 bg-white rounded-b-2xl">
                             {/* Couple's Name */}
-                            <h3 className="text-2xl font-semibold text-gray-800 playfair">{story.names}</h3>
+                            <h3 className="text-2xl font-semibold text-me-pink playfair">{story.names}</h3>
 
                             {/* Marriage Date */}
                             <p className="text-sm text-gray-800 font-bold mb-4 cinzel mt-2">{new Date(story.marriageDate).toLocaleDateString()}</p>

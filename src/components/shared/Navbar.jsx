@@ -10,11 +10,9 @@ import { Button } from "@/components/ui/button";
 import { NavLink, Link } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import Swal from "sweetalert2";
-
-
+import logo from '../../assets/icons/logo.svg'
 
 const Navbar = () => {
-
     const { user, logoutUser } = useAuth();
 
     const handleLogOut = async () => {
@@ -29,41 +27,75 @@ const Navbar = () => {
             console.error(err);
         }
     };
+
     return (
         <div className="sticky top-0 z-50 shadow-md">
             <Card className=" py-3 px-4 max-w-[1920px] bg-white border-0 flex items-center justify-between gap-6 rounded-none">
-                {/* <ShadcnKit className="text-primary cursor-pointer" /> */}
-
                 {/* logo & site name */}
-                <div className="playfair">
-                    Matrimonealsite
+                <div className="cinzel font-semibold text-2xl text-me-pink flex items-center">
+                    {/* <img src={logo} className="w-10 h-10 rounded-full" alt="" /> */}
+                    SoulMatch
                 </div>
 
                 <ul className="hidden md:flex items-center gap-10 text-card-foreground">
-                    <li className="text-primary font-medium">
-                        <NavLink to="/">Home</NavLink>
+                    <li>
+                        <NavLink
+                            to="/"
+                            className={({ isActive }) =>
+                                isActive ? "text-me-orange font-medium" : "text-gray-700"
+                            }
+                        >
+                            Home
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/biodatas">Biodatas</NavLink>
+                        <NavLink
+                            to="/biodatas"
+                            className={({ isActive }) =>
+                                isActive ? "text-me-orange font-medium" : "text-gray-700"
+                            }
+                        >
+                            Biodatas
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/about">About Us</NavLink>
+                        <NavLink
+                            to="/about"
+                            className={({ isActive }) =>
+                                isActive ? "text-me-orange font-medium" : "text-gray-700"
+                            }
+                        >
+                            About Us
+                        </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/contact">Contact Us</NavLink>
+                        <NavLink
+                            to="/contact"
+                            className={({ isActive }) =>
+                                isActive ? "text-me-orange font-medium" : "text-gray-700"
+                            }
+                        >
+                            Contact Us
+                        </NavLink>
                     </li>
 
                     {user && (
                         <li>
-                            <NavLink to="/dashboard">Dashboard</NavLink>
+                            <NavLink
+                                to="/dashboard"
+                                className={({ isActive }) =>
+                                    isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                }
+                            >
+                                Dashboard
+                            </NavLink>
                         </li>
                     )}
-
                 </ul>
 
                 <div className="flex items-center gap-2">
                     {user ? (
-                        <Button variant="outline" size="sm" onClick={() => handleLogOut()} >
+                        <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
                             Logout
                         </Button>
                     ) : (
@@ -78,7 +110,6 @@ const Navbar = () => {
                     )}
 
                     <div className="flex md:hidden items-center gap-2">
-
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -88,30 +119,63 @@ const Navbar = () => {
 
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem>
-                                    <NavLink to="/">Home</NavLink>
+                                    <NavLink
+                                        to="/"
+                                        className={({ isActive }) =>
+                                            isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                        }
+                                    >
+                                        Home
+                                    </NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <NavLink to="/biodatas">Biodatas</NavLink>
+                                    <NavLink
+                                        to="/biodatas"
+                                        className={({ isActive }) =>
+                                            isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                        }
+                                    >
+                                        Biodatas
+                                    </NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <NavLink to="/about">About Us</NavLink>
+                                    <NavLink
+                                        to="/about"
+                                        className={({ isActive }) =>
+                                            isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                        }
+                                    >
+                                        About Us
+                                    </NavLink>
                                 </DropdownMenuItem>
                                 <DropdownMenuItem>
-                                    <NavLink to="/contact">Contact Us</NavLink>
+                                    <NavLink
+                                        to="/contact"
+                                        className={({ isActive }) =>
+                                            isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                        }
+                                    >
+                                        Contact Us
+                                    </NavLink>
                                 </DropdownMenuItem>
                                 {user && (
                                     <DropdownMenuItem>
-                                        <NavLink to="/dashboard">Dashboard</NavLink>
+                                        <NavLink
+                                            to="/dashboard"
+                                            className={({ isActive }) =>
+                                                isActive ? "text-me-orange font-medium" : "text-gray-700"
+                                            }
+                                        >
+                                            Dashboard
+                                        </NavLink>
                                     </DropdownMenuItem>
                                 )}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-
-                    {/* <ThemeToggle /> */}
                 </div>
-            </Card >
-        </div >
+            </Card>
+        </div>
     );
 };
 
