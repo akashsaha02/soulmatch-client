@@ -1,8 +1,12 @@
 import React from "react";
 import useBiodatas from "@/hooks/useBiodatas";
+import { Button } from "@/components/ui/button";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
 
 const UserHome = () => {
   const [, , myBiodata] = useBiodatas();
+
+  const axiosSecure = useAxiosSecure();
 
   if (!myBiodata) {
     return (
@@ -15,6 +19,7 @@ const UserHome = () => {
   }
 
   const {
+    _id,
     name,
     profileImage,
     biodataType,
@@ -33,6 +38,17 @@ const UserHome = () => {
     race,
     userEmail,
   } = myBiodata;
+
+
+
+  const handleRequestPremium = async (id) => {
+    // alert("Request for premium biodata sent successfully")
+
+    const res = await axiosSecure.post(`/request-premium/${id}`)
+
+    console.log(res)
+
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center items-center p-4">
@@ -128,6 +144,12 @@ const UserHome = () => {
               </li>
             </ul>
           </div>
+
+          <div onClick={() => { handleRequestPremium(_id) }}>
+            <Button>Make Biodata Premium</Button>
+          </div>
+
+
         </div>
       </div>
     </div>

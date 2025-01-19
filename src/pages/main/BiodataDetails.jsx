@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import useAuth from '@/hooks/useAuth';
 import Swal from 'sweetalert2';
 import useFavourites from '@/hooks/useFavourites';
+import usePremium from '@/hooks/usePremium';
 
 const BiodataDetails = () => {
     const { id } = useParams();
@@ -16,7 +17,10 @@ const BiodataDetails = () => {
     const axiosSecure = useAxiosSecure();
     const [biodata, setBiodata] = useState(null);
     const [loading, setLoading] = useState(true);
+    // const isPremium = usePremium();
 
+    // console.log(isPremium);
+    const [ isPremium, isLoading, userData ] = usePremium();
 
     useEffect(() => {
         axiosSecure
@@ -31,7 +35,7 @@ const BiodataDetails = () => {
             });
     }, [axiosSecure, id]);
 
-    const isPremium = false;
+    // const isPremium = false;
 
     const handleAddToFavourite = () => {
         if (user && user.email) {
@@ -112,6 +116,7 @@ const BiodataDetails = () => {
             </div>
         );
     }
+
 
     const {
         _id,
