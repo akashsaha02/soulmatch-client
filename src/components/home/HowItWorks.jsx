@@ -38,20 +38,24 @@ const HowItWorks = () => {
             <SectionTitleHome heading="How It Works" subHeading="Simple Steps" />
 
             {/* Timeline */}
-            <VerticalTimeline>
+            <VerticalTimeline lineColor="#66451c">
                 {steps.map((step, index) => (
                     <VerticalTimelineElement
                         key={index}
                         className="vertical-timeline-element--work"
-                        contentStyle={{ background: "#fff", color: "#333" }}
-                        contentArrowStyle={{ borderRight: "7px solid #4f46e5" }}
-                        iconStyle={{ background: "#4f46e5", color: "#fff" }}
+                        contentStyle={{
+                            background: "#fff",
+                            color: "#333",
+                            border: "1px solid #e50265",
+                        }}
+                        contentArrowStyle={{ borderRight: "7px solid #e50265" }}
+                        iconStyle={{ background: "#f6af04", color: "#fff" }}
                         icon={<step.icon />}
                     >
-                        <h3 className="vertical-timeline-element-title text-xl font-bold">
+                        <h3 className="vertical-timeline-element-title text-me-pink text-2xl font-bold playfair">
                             {step.title}
                         </h3>
-                        <p className="text-gray-600">{step.description}</p>
+                        <p className="text-gray-800 uppercase">{step.description}</p>
                     </VerticalTimelineElement>
                 ))}
             </VerticalTimeline>
