@@ -21,7 +21,7 @@ const Services = () => {
     return (
         <div className="pb-16 px-4">
             {/* Section Title */}
-            <SectionTitleHome heading="Our Services" subHeading="Quick Access to Matrimonial Solutions" />
+            <SectionTitleHome heading="Our Services" subHeading="Quick Access" />
 
             {/* Swiper Container */}
             <div className="relative">
@@ -56,10 +56,10 @@ const Services = () => {
                             {/* Content */}
                             <div className="absolute inset-0 bg-black/60 rounded-lg flex flex-col items-center justify-center text-white text-center p-4">
                                 <slide.icon className="text-4xl mb-2" />
-                                <h3 className="text-lg md:text-xl font-bold uppercase">
+                                <h3 className="text-lg md:text-xl font-bold uppercase playfair">
                                     {slide.title}
                                 </h3>
-                                <p className="mt-2 text-sm md:text-base">
+                                <p className="mt-2 text-sm md:text-base cinzel">
                                     {slide.description}
                                 </p>
                             </div>
@@ -68,7 +68,7 @@ const Services = () => {
                             <div className="absolute inset-0 flex items-center justify-center bg-black/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <a
                                     href={slide.link}
-                                    className="bg-white text-black py-2 px-4 rounded-lg font-semibold text-sm md:text-base hover:bg-gray-200 transition"
+                                    className="bg-white text-black py-2 px-4 rounded-lg font-semibold text-sm md:text-base hover:bg-gray-200 transition playfair"
                                 >
                                     Learn More
                                 </a>

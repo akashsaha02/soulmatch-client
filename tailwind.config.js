@@ -19,7 +19,8 @@ export default {
 				orange:'#f6af04',
 				darkOrange:'#c48c46',
 				red:'#ff0000',
-				bg:'#fdfcf7'
+				bg:'#fdfcf7',
+				teal:'#607d8b',
 
 			},
   			background: 'hsl(var(--background))',

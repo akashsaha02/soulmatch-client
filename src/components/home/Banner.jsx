@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -5,19 +6,17 @@ import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import slide1 from '../../assets/ban-bg.jpg';
+import slide2 from '../../assets/banner.jpg';
 
 const slides = [
-    { image: slide1, title: 'Find Your Match' },
-    { image: slide1, title: 'Wedding Services' },
-    { image: slide1, title: 'Success Stories' },
-    { image: slide1, title: 'Premium Membership' },
-    { image: slide1, title: 'FAQs' },
+    { image: slide1, },
+    { image: slide2, },
 ];
 
 const Banner = () => {
     return (
         <div
-            className="relative min-h-[70vh] flex justify-center items-center text-white"
+            className="relative min-h-[80vh] flex justify-center items-center text-white"
         >
             {/* Overlay */}
             <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/60"></div>
@@ -25,36 +24,50 @@ const Banner = () => {
             {/* Swiper */}
             <Swiper
                 modules={[Autoplay, Pagination, Navigation]}
-                autoplay={{ delay: 3000, disableOnInteraction: false }}
+                autoplay={{ delay: 2000, disableOnInteraction: false }}
                 loop={true}
                 pagination={{ clickable: true }}
                 navigation={true}
                 className="relative w-full max-w-[1920px] z-10"
             >
                 {slides.map((slide, index) => (
-                    <SwiperSlide key={index}>
-                        <div
-                            className="flex flex-col items-center justify-center min-h-[70vh] bg-cover bg-center"
-                            style={{ backgroundImage: `url(${slide.image})` }}
-                        >
 
-                            <div className="bg-black/60 w-full h-full inset-0"></div>
+                    <SwiperSlide key={index}>
+                        <div className="relative flex flex-col items-center justify-center min-h-[80vh] overflow-hidden">
+                            {/* Zoom-in effect with Framer Motion */}
+                            <motion.div
+                                className="absolute inset-0 bg-cover bg-center"
+                                style={{ backgroundImage: `url(${slide.image})` }}
+                                animate={{ scale: [1, 1.4, 1] }} // Scale animation loop
+                                transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+                            ></motion.div>
+                    
+                            {/* Black Overlay */}
+                            <div className="absolute inset-0 bg-black/70"></div>
+                    
+                            {/* Content on top of the overlay */}
+                            <div className="relative z-10 text-center text-white">
+                                <h2 className="text-4xl font-bold">{slide.title}</h2>
+                            </div>
                         </div>
                     </SwiperSlide>
+                    
                 ))}
             </Swiper>
 
             {/* Main Content */}
             <div className="absolute z-20 text-center px-6">
-                <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
-                    Find Your Perfect Match
+                <p className='playfair text-xl uppercase'><span className="text-4xl">#1</span> Matrimony</p>
+                <h1 className="text-4xl md:text-7xl font-bold mb-4 leading-10 playfair">
+                    Find your<br />
+                    <span className="text-me-red">Right Match</span> here
                 </h1>
-                <p className="mt-2 text-lg md:text-2xl">
-                    Join the most trusted Matrimonial Brand in the World.
+                <p className="mt-2 md:text-xl">
+                Most trusted Matrimony Brand in the World.
                 </p>
 
                 {/* Search Fields */}
-                <div className="mt-8 bg-white p-6 rounded-lg shadow-lg text-black w-full max-w-3xl mx-auto">
+                <div className="mt-8 bg-black/30 backdrop-blur-sm p-6 rounded-lg shadow-lg text-black w-full max-w-3xl mx-auto">
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         {/* Name Input */}
                         <input
@@ -79,7 +92,7 @@ const Banner = () => {
                     </div>
                     {/* Search Button */}
                     <button
-                        className="w-full mt-4 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-200"
+                        className="w-full mt-4 bg-me-teal text-white py-3 rounded-lg hover:bg-me-pink font-bold transition duration-200"
                     >
                         Search Now
                     </button>
