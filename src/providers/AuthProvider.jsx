@@ -14,6 +14,7 @@ const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const axiosPublic = useAxiosPublic();
+    const [role, setRole] = useState('');
 
 
     const createUser = (email, password) => {
@@ -55,20 +56,24 @@ const AuthProvider = ({ children }) => {
                     email: currentUser.email,
                 }
                 axiosPublic.post('/jwt', userInfo).then(res => {
-                    if(res.data.token){
+                    if (res.data.token) {
                         localStorage.setItem('access-token', res.data.token);
+                        setLoading(false);
+
                     }
                 })
+
 
                 //get token and store token
             } else {
                 //do something
                 //remove token (if stored in client side)
                 localStorage.removeItem('access-token');
+                setLoading(false);
+
             }
 
             // console.log(user);
-            setLoading(false);
         })
 
         return () => unsubscribe();

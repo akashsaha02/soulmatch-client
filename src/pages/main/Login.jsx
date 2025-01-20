@@ -1,52 +1,23 @@
 // import loginImg from '../assets/others/authentication1.png';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { loadCaptchaEnginge, LoadCanvasTemplate, validateCaptcha } from 'react-simple-captcha';
-import { useEffect, useState, } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
-
 
 const Login = () => {
     const navigate = useNavigate();
     const { loginUser, logoutUser } = useAuth();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
-    const [captchaInput, setCaptchaInput] = useState('');
-    const [captchaError, setCaptchaError] = useState('');
-    const [disable, setDisable] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-
-    useEffect(() => {
-        loadCaptchaEnginge(6); // Initialize captcha
-    }, []);
-
-    const handleCaptchaValidation = () => {
-        if (validateCaptcha(captchaInput)) {
-            setDisable(false);
-            setCaptchaError('');
-        } else {
-            setDisable(true);
-            setCaptchaError('Invalid captcha');
-        }
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = e.target.email.value;
         const password = e.target.password.value;
-
-        if (!validateCaptcha(captchaInput)) {
-            setCaptchaError('Invalid captcha');
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Invalid captcha. Please try again!',
-            });
-            return;
-        }
 
         setLoading(true);
         setError('');
@@ -89,7 +60,6 @@ const Login = () => {
             });
         }
     };
-
 
     const handleNewAccountClick = () => navigate('/register');
 
@@ -135,39 +105,10 @@ const Login = () => {
                             />
                         </div>
 
-                        <div className="flex flex-col w-full gap-2">
-                            <label htmlFor="captcha" className="text-dark-2">
-                                <LoadCanvasTemplate />
-                            </label>
-                            <div className="flex gap-2">
-                                <input
-                                    type="text"
-                                    id="captcha"
-                                    name="captcha"
-                                    value={captchaInput}
-                                    onChange={(e) => setCaptchaInput(e.target.value)}
-                                    placeholder="Enter Captcha"
-                                    className="w-full border border-slate-200 rounded-lg py-3 px-5 outline-none bg-transparent"
-                                    autoComplete="off"
-                                    required
-                                />
-                                <button
-                                    type="button"
-                                    onClick={handleCaptchaValidation}
-                                    className="text-white bg-beige rounded-lg px-2 py-1"
-                                >
-                                    Validate
-                                </button>
-                            </div>
-                            {captchaError && <p className="text-red-500 text-sm">{captchaError}</p>}
-                        </div>
-
                         <div>
                             <button
                                 type="submit"
-                                disabled={disable || loading}
-                                className={`block text-center py-3 px-4 text-white font-semibold w-full rounded-lg my-4 ${disable || loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-beige'
-                                    }`}
+                                className={`block text-center py-3 px-4 text-white font-semibold w-full rounded-lg my-4 ${loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-me-teal'}`}
                             >
                                 {loading ? 'Loading...' : 'Login now'}
                             </button>
@@ -186,15 +127,15 @@ const Login = () => {
 
                     <div className="flex items-center flex-col justify-center gap-4">
                         <p>Or sign in with</p>
-                        <SocialSignIn/>
+                        <SocialSignIn />
                         <div className="">
                             <button
                                 onClick={() => navigate('/forgot-password')}
-                                className="text-beige font-semibold cursor-pointer"
+                                className="text-me-teal font-semibold cursor-pointer"
                             >
                                 Forgot Password?
                             </button>
-                            <button onClick={() => handleLogout()} type="" className="">logout</button>
+                            <button onClick={() => handleLogout()} className="">Logout</button>
                         </div>
                     </div>
                 </div>

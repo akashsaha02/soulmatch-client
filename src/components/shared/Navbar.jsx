@@ -13,7 +13,7 @@ import Swal from "sweetalert2";
 import logo from '../../assets/icons/logo.svg'
 
 const Navbar = () => {
-    const { user, logoutUser } = useAuth();
+    const { user, logoutUser, } = useAuth();
 
     const handleLogOut = async () => {
         try {
@@ -27,6 +27,9 @@ const Navbar = () => {
             console.error(err);
         }
     };
+
+
+
 
     return (
         <div className="sticky top-0 z-50 shadow-md">
@@ -95,9 +98,22 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-2">
                     {user ? (
-                        <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
-                            Logout
-                        </Button>
+
+                        <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-2">
+                                <div className="text-right">
+                                    <p className="text-sm">Welcome, {user.displayName.split(' ')[0]}</p>
+                                    <p className="text-sm uppercase">
+                                        {/* {role} */}
+                                    </p>
+                                </div>
+                                <img src={user.photoURL} alt={user.email} className="w-12 h-12 rounded-full block" />
+                            </div>
+
+                            <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
+                                Logout
+                            </Button>
+                        </div>
                     ) : (
                         <>
                             <Button asChild variant="secondary" className="w-full text-sm">

@@ -19,6 +19,8 @@ import ApproveContact from "@/pages/dashboard/admin/ApproveContact"
 import Checkout from "@/pages/main/Checkout"
 import GotMarried from "@/pages/dashboard/user/GotMarried"
 import AdminSuccessStory from "@/pages/dashboard/admin/SuccessStory"
+import Contact from "@/pages/main/Contact"
+import About from "@/pages/main/About"
 
 export const router = createBrowserRouter([
     {
@@ -50,6 +52,14 @@ export const router = createBrowserRouter([
             {
                 path: "/checkout/:id",
                 element: <Checkout />
+            },
+            {
+                path: "/contact",
+                element: <Contact />
+            },
+            {
+                path: "/about",
+                element: <About />
             }
         ],
 

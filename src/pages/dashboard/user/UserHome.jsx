@@ -37,6 +37,7 @@ const UserHome = () => {
     mobileNumber,
     race,
     userEmail,
+    isPremium
   } = myBiodata;
 
 
@@ -145,14 +146,21 @@ const UserHome = () => {
             </ul>
           </div>
 
-          <div onClick={() => { handleRequestPremium(_id) }}>
-            <Button>Make Biodata Premium</Button>
-          </div>
+          {
+            isPremium ? (<div>
+              <Button>Premium</Button>
+            </div>) : (
+              <div onClick={() => { handleRequestPremium(_id) }}>
+                <Button>Make Biodata Premium</Button>
+              </div>
+            )
+
+          }
 
 
         </div>
-      </div>
-    </div>
+      </div >
+    </div >
   );
 };
 
