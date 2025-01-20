@@ -73,7 +73,7 @@ const Services = () => {
                             </div>
 
                             {/* Hover Button */}
-                            <div className="absolute inset-0 flex items-center justify-center bg-me-pink/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <div className="absolute inset-0 flex items-center justify-center bg-me-darkOrange/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <Link
                                     href={slide.link}
                                     className="bg-white text-black py-2 px-4 rounded-lg font-semibold text-sm md:text-base hover:bg-gray-200 transition playfair"

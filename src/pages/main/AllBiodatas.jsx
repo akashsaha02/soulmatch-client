@@ -4,17 +4,20 @@ import useAuth from "@/hooks/useAuth";
 import useBiodatas from "@/hooks/useBiodatas";
 import Filters from "@/components/allBiodatas/Filters";
 import BiodatasList from "@/components/allBiodatas/BiodataList";
+import Loader from "@/components/shared/Loader";
 
 
 const BiodatasPage = () => {
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     ageRange: [18, 50],
     biodataType: "",
     division: "",
   });
   const { user } = useAuth();
-  const [biodatas] = useBiodatas();
-  const navigate = useNavigate();
+  const [biodatas, loading] = useBiodatas();
+
+  if (loading) return <Loader />
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;

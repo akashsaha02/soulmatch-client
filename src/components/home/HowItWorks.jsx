@@ -45,13 +45,13 @@ const HowItWorks = () => {
                         contentStyle={{
                             background: "#fff",
                             color: "#333",
-                            border: "1px solid #e50265",
+                            border: "1px solid #c48c46",
                         }}
-                        contentArrowStyle={{ borderRight: "7px solid #e50265" }}
+                        contentArrowStyle={{ borderRight: "7px solid #c48c46" }}
                         iconStyle={{ background: "#f6af04", color: "#fff" }}
                         icon={<step.icon />}
                     >
-                        <h3 className="vertical-timeline-element-title text-me-pink text-xl md:text-2xl font-bold playfair">
+                        <h3 className="vertical-timeline-element-title text-me-darkOrange text-xl md:text-2xl font-bold playfair">
                             {step.title}
                         </h3>
                         <p className="text-gray-800 uppercase text-sm md:text-md">{step.description}</p>
