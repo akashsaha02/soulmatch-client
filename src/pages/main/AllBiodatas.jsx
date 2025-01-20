@@ -48,7 +48,7 @@ const BiodatasPage = () => {
 
   return (
     <div className="min-h-screen p-4">
-      <div className="container mx-auto flex flex-col md:flex-row gap-6">
+      <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row gap-2">
         <Filters
           filters={filters}
           handleFilterChange={handleFilterChange}

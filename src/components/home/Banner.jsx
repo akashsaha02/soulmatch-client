@@ -41,17 +41,17 @@ const Banner = () => {
                                 animate={{ scale: [1, 1.4, 1] }} // Scale animation loop
                                 transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
                             ></motion.div>
-                    
+
                             {/* Black Overlay */}
                             <div className="absolute inset-0 bg-black/70"></div>
-                    
+
                             {/* Content on top of the overlay */}
                             <div className="relative z-10 text-center text-white">
                                 <h2 className="text-4xl font-bold">{slide.title}</h2>
                             </div>
                         </div>
                     </SwiperSlide>
-                    
+
                 ))}
             </Swiper>
 
@@ -63,21 +63,21 @@ const Banner = () => {
                     <span className="text-me-red">Right Match</span> here
                 </h1>
                 <p className="mt-2 md:text-xl">
-                Most trusted Matrimony Brand in the World.
+                    Most trusted Matrimony Brand in the World.
                 </p>
 
                 {/* Search Fields */}
-                <div className="mt-8 bg-black/30 backdrop-blur-sm p-6 rounded-lg shadow-lg text-black w-full max-w-3xl mx-auto">
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="mt-8 bg-black/30 backdrop-blur-sm p-4 rounded-lg shadow-lg text-black w-full max-w-3xl mx-auto">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
                         {/* Name Input */}
                         <input
                             type="text"
                             placeholder="Enter Name"
-                            className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="border border-gray-300 p-3 font-bold text-me-brown placeholder:font-bold placeholder:text-me-brown rounded focus:outline-none focus:ring-2 focus:ring-me-orange"
                         />
                         {/* Gender Dropdown */}
                         <select
-                            className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="border border-gray-300 p-3 font-bold text-me-brown rounded placeholder:font-bold placeholder:text-me-brown focus:outline-none focus:ring-2 focus:ring-me-orange"
                         >
                             <option value="">Select Gender</option>
                             <option value="male">Male</option>
@@ -87,15 +87,16 @@ const Banner = () => {
                         <input
                             type="number"
                             placeholder="Enter Age"
-                            className="border border-gray-300 p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            className="border border-gray-300 p-3 font-bold text-me-brown rounded placeholder:font-bold placeholder:text-me-brown focus:outline-none focus:ring-2 focus:ring-me-orange"
                         />
+                        <button
+                            className="w-full bg-me-teal text-white py-3 rounded hover:bg-me-pink font-bold transition duration-200 uppercase"
+                        >
+                            Search Now
+                        </button>
                     </div>
                     {/* Search Button */}
-                    <button
-                        className="w-full mt-4 bg-me-teal text-white py-3 rounded-lg hover:bg-me-pink font-bold transition duration-200"
-                    >
-                        Search Now
-                    </button>
+
                 </div>
             </div>
         </div>

@@ -51,10 +51,10 @@ const HowItWorks = () => {
                         iconStyle={{ background: "#f6af04", color: "#fff" }}
                         icon={<step.icon />}
                     >
-                        <h3 className="vertical-timeline-element-title text-me-pink text-2xl font-bold playfair">
+                        <h3 className="vertical-timeline-element-title text-me-pink text-xl md:text-2xl font-bold playfair">
                             {step.title}
                         </h3>
-                        <p className="text-gray-800 uppercase">{step.description}</p>
+                        <p className="text-gray-800 uppercase text-sm md:text-md">{step.description}</p>
                     </VerticalTimelineElement>
                 ))}
             </VerticalTimeline>

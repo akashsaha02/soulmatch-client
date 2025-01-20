@@ -32,9 +32,9 @@ const Navbar = () => {
         <div className="sticky top-0 z-50 shadow-md">
             <Card className=" py-3 px-4 max-w-[1920px] bg-white border-0 flex items-center justify-between gap-6 rounded-none">
                 {/* logo & site name */}
-                <div className="cinzel font-semibold text-2xl text-me-pink flex items-center">
+                <div className="text-xl md:text-2xl 2xl:text-3xl text-me-orange cinzel font-bold flex items-center uppercase">
                     {/* <img src={logo} className="w-10 h-10 rounded-full" alt="" /> */}
-                    SoulMatch
+                    soul<span className="text-me-brown">Match</span>
                 </div>
 
                 <ul className="hidden md:flex items-center gap-10 text-card-foreground">
