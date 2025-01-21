@@ -32,12 +32,12 @@ const Navbar = () => {
 
 
     return (
-        <div className="sticky top-0 z-50 shadow-md">
-            <Card className=" py-3 px-4 max-w-[1920px] bg-white border-0 flex items-center justify-between gap-6 rounded-none">
+        <div className="sticky top-0 z-50 shadow-md bg-white">
+            <Card className=" py-3 px-4 max-w-7xl mx-auto border-0 flex items-center justify-between gap-6 rounded-none">
                 {/* logo & site name */}
-                <div className="text-xl md:text-2xl 2xl:text-3xl text-me-orange cinzel font-bold flex items-center uppercase">
+                <div className="text-xl md:text-2xl 2xl:text-3xl text-me-darkOrange font-bold flex items-center cinzel">
                     {/* <img src={logo} className="w-10 h-10 rounded-full" alt="" /> */}
-                    soul<span className="text-me-brown">Match</span>
+                    Soul<span className="text-me-brown">Match</span>
                 </div>
 
                 <ul className="hidden md:flex items-center gap-10 text-card-foreground">

@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useBiodatas from "@/hooks/useBiodatas";
+import Swal from "sweetalert2";
 
 const GotMarried = () => {
   const axiosSecure = useAxiosSecure();
@@ -16,13 +16,29 @@ const GotMarried = () => {
   const selfBiodataId = myBiodata?.biodataId;
 
   const onSubmit = async (data) => {
+
+    // console.log(data)
     try {
-      await axiosSecure.post("/success-stories", data);
-      toast.success("Success story submitted!");
-      reset(); // Reset the form
+      const res = await axiosSecure.post("/success-stories", data);
+
+      if (res.data) {
+        console.log(res.data)
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Success story submitted!",
+      });
+      // reset(); // Reset the form
     } catch (error) {
       console.error("Error submitting success story:", error);
-      toast.error("Failed to submit success story.");
+      // toast.error("Failed to submit success story.");
+      Swal.fire({
+        icon: "error",
+        title: "Failed!",
+        text: "Failed to submit success story.",
+      });
     }
   };
 
@@ -43,9 +59,6 @@ const GotMarried = () => {
             readOnly
             className="mt-1 p-2 w-full border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
           />
-          {errors.selfBiodataId && (
-            <p className="text-red-500 text-sm mt-1">{errors.selfBiodataId.message}</p>
-          )}
         </div>
 
         {/* Partner Biodata ID */}
@@ -61,6 +74,22 @@ const GotMarried = () => {
           />
           {errors.partnerBiodataId && (
             <p className="text-red-500 text-sm mt-1">{errors.partnerBiodataId.message}</p>
+          )}
+        </div>
+
+        {/* Marriage Date */}
+        <div className="mb-4">
+          <label htmlFor="marriageDate" className="block text-sm font-medium">
+            Marriage Date
+          </label>
+          <input
+            type="date"
+            id="marriageDate"
+            {...register("marriageDate", { required: "Marriage date is required" })}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          />
+          {errors.marriageDate && (
+            <p className="text-red-500 text-sm mt-1">{errors.marriageDate.message}</p>
           )}
         </div>
 
@@ -93,6 +122,26 @@ const GotMarried = () => {
           ></textarea>
           {errors.successStory && (
             <p className="text-red-500 text-sm mt-1">{errors.successStory.message}</p>
+          )}
+        </div>
+
+        {/* Rating */}
+        <div className="mb-4">
+          <label htmlFor="rating" className="block text-sm font-medium">
+            Rating (out of 10)
+          </label>
+          <input
+            type="number"
+            id="rating"
+            {...register("rating", {
+              required: "Rating is required",
+              min: { value: 1, message: "Minimum rating is 1" },
+              max: { value: 10, message: "Maximum rating is 10" },
+            })}
+            className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+          />
+          {errors.rating && (
+            <p className="text-red-500 text-sm mt-1">{errors.rating.message}</p>
           )}
         </div>
 

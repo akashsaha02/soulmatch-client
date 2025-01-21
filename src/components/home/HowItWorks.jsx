@@ -25,7 +25,21 @@ const HowItWorks = () => {
             title: "Express Interest",
             description: "Send interest requests to profiles you like and start a conversation.",
         },
+
         {
+            icon: FaCrown,
+            title: "Get Profile Information",
+            description: "Get detailed information about the biodata you are interested in.",
+        },
+        {
+            icon: FaCrown,
+            title: "Start Meetups",
+            description: "Start meeting up with the biodata you are interested in.",
+        }, {
+            icon: FaCrown,
+            title: "Get Married",
+            description: "Get married to the biodata you are interested in.",
+        }, {
             icon: FaCrown,
             title: "Upgrade to Premium",
             description: "Enjoy exclusive benefits like priority visibility and direct messaging.",

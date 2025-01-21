@@ -26,7 +26,7 @@ const slides = [
 
 const Services = () => {
     return (
-        <div className="pb-16 px-4">
+        <div className="pb-16 px-4 max-w-7xl mx-auto">
             {/* Section Title */}
             <SectionTitleHome heading="Our Services" subHeading="Quick Access" />
 
@@ -41,7 +41,7 @@ const Services = () => {
                         440: { slidesPerView: 2, spaceBetween: 10 },
                         768: { slidesPerView: 3, spaceBetween: 15 },
                         1024: { slidesPerView: 4, spaceBetween: 20 },
-                        1400: { slidesPerView: 5, spaceBetween: 25 },
+                        // 1400: { slidesPerView: 5, spaceBetween: 25 },
                     }}
                     loop={true}
                     pagination={{
