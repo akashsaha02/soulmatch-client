@@ -41,14 +41,6 @@ const BiodatasPage = () => {
     );
   });
 
-  const handleViewProfile = (id) => {
-    if (!user) {
-      navigate("/login");
-    } else {
-      navigate(`/biodatas/${id}`);
-    }
-  };
-
   return (
     <div className="min-h-screen p-4">
       <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row gap-2">
@@ -59,7 +51,6 @@ const BiodatasPage = () => {
         />
         <BiodatasList
           biodatas={filteredBiodatas}
-          handleViewProfile={handleViewProfile}
         />
       </div>
     </div>

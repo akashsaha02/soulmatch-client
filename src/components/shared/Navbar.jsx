@@ -11,6 +11,7 @@ import { NavLink, Link } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import Swal from "sweetalert2";
 import logo from '../../assets/icons/logo.svg'
+import useAdmin from "@/hooks/useAdmin";
 
 const Navbar = () => {
     const { user, logoutUser, } = useAuth();
@@ -27,6 +28,9 @@ const Navbar = () => {
             console.error(err);
         }
     };
+
+    const [isAdmin] = useAdmin();
+    // console.log(isAdmin)
 
 
 
@@ -85,7 +89,7 @@ const Navbar = () => {
                     {user && (
                         <li>
                             <NavLink
-                                to="/dashboard"
+                                to={isAdmin ? "/dashboard/admin-home" : "/dashboard/user-home"}
                                 className={({ isActive }) =>
                                     isActive ? "text-me-orange font-medium" : "text-gray-700"
                                 }

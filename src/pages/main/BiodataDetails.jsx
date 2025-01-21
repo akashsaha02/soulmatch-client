@@ -141,120 +141,126 @@ const BiodataDetails = () => {
     } = biodata;
 
     return (
-        <div className="min-h-screen p-4 flex justify-center">
-            <div className="bg-white max-w-4xl w-full rounded-lg shadow-lg overflow-hidden">
-                {/* Header Section */}
-                <div className="bg-gradient-to-r from-indigo-600 to-blue-500 text-white p-6 flex flex-col items-center">
-                    <img
-                        src={profileImage}
-                        alt={name}
-                        className="w-32 h-32 rounded-full border-4 border-white object-cover"
-                    />
-                    <h1 className="text-2xl font-bold mt-4">{name}</h1>
-                    <p className="text-sm mt-1">{biodataType}</p>
-                </div>
+        <div className="min-h-screen bg-gray-50 flex justify-center items-center p-6">
+  <div className="bg-white max-w-4xl w-full rounded-xl shadow-xl overflow-hidden">
+    {/* Header Section */}
+    <div className="bg-gradient-to-r from-purple-500 via-indigo-500 to-blue-500 text-white p-8 text-center">
+      <img
+        src={profileImage}
+        alt={name}
+        className="w-32 h-32 rounded-full border-4 border-white object-cover shadow-lg mx-auto"
+      />
+      <h1 className="text-3xl font-bold mt-4">{name}</h1>
+      <p className="text-sm font-light mt-2">{biodataType}</p>
+    </div>
 
-                {/* Details Section */}
-                <div className="p-6 space-y-6">
-                    {/* Personal Information */}
-                    <div>
-                        <div className="border-b pb-2 mb-4 flex gap-4 items-center">
-                            <h2 className="text-xl font-semibold ">
-                                Personal Information {biodataId}
-                            </h2>
-                            <Button
-                                onClick={() => handleAddToFavourite()}
-                            >Add to Favourites</Button>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="font-medium">Date of Birth:</p>
-                                <p>{new Date(dob).toLocaleDateString()}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Father's Name:</p>
-                                <p>{fatherName}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Mother's Name:</p>
-                                <p>{motherName}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Height:</p>
-                                <p>{height}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Weight:</p>
-                                <p>{weight} kg</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Race:</p>
-                                <p>{race}</p>
-                            </div>
-                        </div>
-                    </div>
+    {/* Details Section */}
+    <div className="p-8 space-y-8">
+      {/* Personal Information */}
+      <section>
+        <div className="flex items-center justify-between border-b pb-4 mb-6">
+          <h2 className="text-2xl font-semibold text-gray-700">
+            Personal Information
+          </h2>
+          <button
+            onClick={handleAddToFavourite}
+            className="bg-indigo-500 text-white px-4 py-2 rounded-lg hover:bg-indigo-600 shadow-md"
+          >
+            Add to Favourites
+          </button>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p className="text-gray-500">Date of Birth</p>
+            <p className="font-medium text-gray-800">
+              {new Date(dob).toLocaleDateString()}
+            </p>
+          </div>
+          <div>
+            <p className="text-gray-500">Father's Name</p>
+            <p className="font-medium text-gray-800">{fatherName}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Mother's Name</p>
+            <p className="font-medium text-gray-800">{motherName}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Height</p>
+            <p className="font-medium text-gray-800">{height}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Weight</p>
+            <p className="font-medium text-gray-800">{weight} kg</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Race</p>
+            <p className="font-medium text-gray-800">{race}</p>
+          </div>
+        </div>
+      </section>
 
-                    {/* Partner Preferences */}
-                    <div>
-                        <h2 className="text-xl font-semibold border-b pb-2 mb-4">
-                            Partner Preferences
-                        </h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="font-medium">Preferred Age:</p>
-                                <p>{partnerAge} years</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Preferred Height:</p>
-                                <p>{partnerHeight}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Preferred Weight:</p>
-                                <p>{partnerWeight} kg</p>
-                            </div>
-                        </div>
-                    </div>
+      {/* Partner Preferences */}
+      <section>
+        <h2 className="text-2xl font-semibold text-gray-700 border-b pb-4 mb-6">
+          Partner Preferences
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p className="text-gray-500">Preferred Age</p>
+            <p className="font-medium text-gray-800">{partnerAge} years</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Preferred Height</p>
+            <p className="font-medium text-gray-800">{partnerHeight}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Preferred Weight</p>
+            <p className="font-medium text-gray-800">{partnerWeight} kg</p>
+          </div>
+        </div>
+      </section>
 
-                    {/* Location Information */}
-                    <div>
-                        <h2 className="text-xl font-semibold border-b pb-2 mb-4">
-                            Location Information
-                        </h2>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="font-medium">Present Division:</p>
-                                <p>{presentDivision}</p>
-                            </div>
-                            <div>
-                                <p className="font-medium">Permanent Division:</p>
-                                <p>{permanentDivision}</p>
-                            </div>
-                        </div>
-                    </div>
+      {/* Location Information */}
+      <section>
+        <h2 className="text-2xl font-semibold text-gray-700 border-b pb-4 mb-6">
+          Location Information
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p className="text-gray-500">Present Division</p>
+            <p className="font-medium text-gray-800">{presentDivision}</p>
+          </div>
+          <div>
+            <p className="text-gray-500">Permanent Division</p>
+            <p className="font-medium text-gray-800">{permanentDivision}</p>
+          </div>
+        </div>
+      </section>
 
-                    {/* Contact Information */}
-                    <div>
-                        <h2 className="text-xl font-semibold border-b pb-2 mb-4">
-                            Contact Information
-                        </h2>
-                        {isPremium ? (<div className="grid grid-cols-2 gap-4">
-                            <div>
-                                <p className="font-medium">Mobile:</p>
-                                <p>{mobileNumber}</p>
-                            </div>
-                        </div>) : (
-                            <Link to={`/checkout/${ biodataId}`} >
-                                <Button>
-                                    View Contact Information
-                                </Button>
-                            </Link>
-                        )
+      {/* Contact Information */}
+      <section>
+        <h2 className="text-2xl font-semibold text-gray-700 border-b pb-4 mb-6">
+          Contact Information
+        </h2>
+        {isPremium ? (
+          <div>
+            <p className="text-gray-500">Mobile</p>
+            <p className="font-medium text-gray-800">{mobileNumber}</p>
+          </div>
+        ) : (
+          <div className="text-center">
+            <Link to={`/checkout/${biodataId}`}>
+              <button className="bg-indigo-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-indigo-600">
+                View Contact Information
+              </button>
+            </Link>
+          </div>
+        )}
+      </section>
+    </div>
+  </div>
+</div>
 
-                        }
-                    </div>
-                </div>
-            </div>
-        </div >
     );
 };
 

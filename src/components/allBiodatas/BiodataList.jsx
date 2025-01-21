@@ -1,6 +1,6 @@
 import BiodataCard from "./BiodataCard";
 
-const BiodatasList = ({ biodatas, handleViewProfile }) => {
+const BiodatasList = ({ biodatas }) => {
   return (
     <section className="flex-1 p-4">
       <h2 className="text-xl font-bold mb-4 playfair uppercase">All Biodatas ({biodatas.length})</h2>
@@ -9,7 +9,6 @@ const BiodatasList = ({ biodatas, handleViewProfile }) => {
           <BiodataCard
             key={biodata._id}
             biodata={biodata}
-            handleViewProfile={handleViewProfile}
           />
         ))}
       </div>

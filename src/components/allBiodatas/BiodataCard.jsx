@@ -1,7 +1,8 @@
 import { FaUser, FaIdCard, FaMapMarkerAlt, FaBirthdayCake, FaBriefcase } from "react-icons/fa";
 import { IoDiamond } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
-const BiodataCard = ({ biodata, handleViewProfile }) => {
+const BiodataCard = ({ biodata }) => {
   const age = new Date().getFullYear() - new Date(biodata.dob).getFullYear();
 
   return (
@@ -46,12 +47,17 @@ const BiodataCard = ({ biodata, handleViewProfile }) => {
         </div>
 
         {/* View Profile Button */}
-        <button
-          onClick={() => handleViewProfile(biodata._id)}
-          className="mt-4 bg-me-teal text-white px-4 py-2 w-full text-center font-bold hover:bg-me-pink transition cinzel"
+        <Link
+          // onClick={() => handleViewProfile(biodata._id)}
+          to={`/biodatas/${biodata._id}`}
         >
-          View Profile
-        </button>
+          <button type=""
+            className="mt-4 bg-me-teal text-white px-4 py-2 w-full text-center font-bold hover:bg-me-pink transition cinzel"
+
+          >          View Profile
+
+          </button>
+        </Link>
       </div>
     </div>
   );

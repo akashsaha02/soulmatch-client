@@ -47,20 +47,21 @@ const SocialSignIn = () => {
         }
     };
     return (
-        <div className="flex gap-4">
+        <div className="w-full">
             <button
                 onClick={handleGoogleSignIn}
                 type="button"
-                className="p-4 border rounded-full"
+                className="p-4 border border-me-brown rounded-lg flex justify-center items-center gap-4 w-full"
             >
-                <img src={googleIcon} alt="google" className="w-6" />
+                <img src={googleIcon} alt="google" className="w-5" />
+                <p className="font-medium capitalize"> Sign in with google</p>
             </button>
-            <button type="button" className="p-4 border rounded-full">
+            {/* <button type="button" className="p-4 border rounded-full">
                 <img src={facebookIcon} alt="facebook" className="w-6" />
             </button>
             <button type="button" className="p-4 border rounded-full">
                 <img src={githubIcon} alt="github" className="w-6" />
-            </button>
+            </button> */}
         </div>
     )
 }

@@ -106,9 +106,9 @@ export const router = createBrowserRouter([
             , {
                 path: "/dashboard/admin-home",
                 element:
-                    <PrivateRoute>
+                    <AdminRoute>
                         <p>hello admin</p>
-                    </PrivateRoute>
+                    </AdminRoute>
             },
 
             {

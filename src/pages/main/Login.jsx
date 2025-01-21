@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
+import loginImg from '../../assets/couple5.jpg';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -68,15 +69,22 @@ const Login = () => {
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 bg-white items-center">
                 {/* Image Section */}
                 <div className="hidden md:block">
-                    {/* <img src={loginImg} alt="login" className="w-full" /> */}
+                    <img src={loginImg} alt="login" className="w-full" />
                 </div>
 
                 {/* Form Section */}
-                <div className="p-8">
+                <div className="p-8 max-w-md">
                     <Helmet>
                         <title>Login</title>
                     </Helmet>
-                    <h2 className="text-3xl font-bold text-center my-4">Login</h2>
+                    <p className=" uppercase text-me-brown font-medium">start for free</p>
+                    <h2 className="text-3xl font-bold my-2 playfair">Sign in to SoulMatch</h2>
+                    <p className=" capitalize text-me-brown font-medium mb-4">Not a member? <span
+                     onClick={handleNewAccountClick}
+                    className="text-blue-500 cursor-pointer"> Sign Up Now</span></p>
+
+                    <hr className='my-4 md:my-6'></hr>
+
                     {error && <p className="text-red-500 text-center">{error}</p>}
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         <div className="flex flex-col w-full gap-2">
@@ -115,16 +123,6 @@ const Login = () => {
                         </div>
                     </form>
 
-                    <p className="text-beige text-center my-4">
-                        New Here?{' '}
-                        <span
-                            onClick={handleNewAccountClick}
-                            className="font-semibold cursor-pointer"
-                        >
-                            Create New Account
-                        </span>
-                    </p>
-
                     <div className="flex items-center flex-col justify-center gap-4">
                         <p>Or sign in with</p>
                         <SocialSignIn />
@@ -135,7 +133,6 @@ const Login = () => {
                             >
                                 Forgot Password?
                             </button>
-                            <button onClick={() => handleLogout()} className="">Logout</button>
                         </div>
                     </div>
                 </div>
