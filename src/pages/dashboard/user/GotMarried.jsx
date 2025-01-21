@@ -30,7 +30,7 @@ const GotMarried = () => {
         title: "Success!",
         text: "Success story submitted!",
       });
-      // reset(); // Reset the form
+      reset(); // Reset the form
     } catch (error) {
       console.error("Error submitting success story:", error);
       // toast.error("Failed to submit success story.");
