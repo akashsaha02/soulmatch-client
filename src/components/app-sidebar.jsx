@@ -33,7 +33,7 @@ const sharedItems = [
 const adminItems = [
     {
         title: "Admin Home",
-        to: "/dashboard",
+        to: "/dashboard/admin-home",
         icon: Home,
     },
     {
