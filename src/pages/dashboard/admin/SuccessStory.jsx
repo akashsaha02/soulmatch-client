@@ -1,5 +1,7 @@
+import SectionTitleHome from "@/components/shared/SectionTitleHome";
 import { axiosSecure } from "@/hooks/useAxiosSecure";
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet";
 import { toast } from "react-toastify";
 
 const AdminSuccessStory = () => {
@@ -11,7 +13,7 @@ const AdminSuccessStory = () => {
   useEffect(() => {
     const fetchSuccessStories = async () => {
       try {
-        const response = await axiosSecure.get("/admin/success-stories");
+        const response = await axiosSecure.get("/success-stories");
         setSuccessStories(response.data);
       } catch (error) {
         toast.error("Failed to fetch success stories.");
@@ -34,9 +36,13 @@ const AdminSuccessStory = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Success Stories</h2>
 
-      <table className="table-auto w-full border border-gray-200">
+      <Helmet>
+        <title>Success Stories | Dashboard</title>
+      </Helmet>
+      <SectionTitleHome heading="Success Stories" subHeading="All the married couples" />
+
+      <table className="table-auto w-full max-w-5xl mx-auto border border-gray-200">
         <thead className="bg-gray-100">
           <tr>
             <th className="px-4 py-2">Male Biodata ID</th>

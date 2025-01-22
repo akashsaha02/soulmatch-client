@@ -21,6 +21,7 @@ import GotMarried from "@/pages/dashboard/user/GotMarried"
 import AdminSuccessStory from "@/pages/dashboard/admin/SuccessStory"
 import Contact from "@/pages/main/Contact"
 import About from "@/pages/main/About"
+import AdminHome from "@/pages/dashboard/admin/AdminHome"
 
 export const router = createBrowserRouter([
     {
@@ -107,7 +108,7 @@ export const router = createBrowserRouter([
                 path: "/dashboard/admin-home",
                 element:
                     <AdminRoute>
-                        <p>hello admin</p>
+                        <AdminHome/>
                     </AdminRoute>
             },
 
@@ -129,7 +130,7 @@ export const router = createBrowserRouter([
                     <ApproveContact />
                 </AdminRoute>
             }, {
-                path: "/dashboard/success-stories",
+                path: "/dashboard/admin/success-stories",
                 element: <AdminRoute>
                     <AdminSuccessStory />
                 </AdminRoute>

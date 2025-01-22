@@ -3,6 +3,7 @@ import SectionTitleHome from "@/components/shared/SectionTitleHome";
 import usePremiumReq from "@/hooks/usePremiumRequests";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 const ApprovePremium = () => {
   const {
@@ -44,12 +45,15 @@ const ApprovePremium = () => {
 
   return (
     <div>
-      <SectionTitleHome heading="Approve Premium Biodata" />
+       <Helmet>
+        <title>Approve Premium | Dashboard</title>
+      </Helmet>
+      <SectionTitleHome heading="Approve Premium Biodata" subHeading='Premium User Requests' />
 
       {loading ? (
         <Loader />
       ) : premiumReq.length > 0 ? (
-        <table className="table-auto w-full border border-gray-200">
+        <table className="table-auto w-full border max-w-6xl mx-auto border-gray-200">
           <thead className="bg-gray-100">
             <tr>
               <th className="px-4 py-2">Biodata ID</th>

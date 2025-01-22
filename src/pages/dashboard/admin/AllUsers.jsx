@@ -3,6 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
 import useAuth from "@/hooks/useAuth";
+import SectionTitleHome from "@/components/shared/SectionTitleHome";
+import { Helmet } from "react-helmet";
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -86,9 +88,11 @@ const AllUsers = () => {
 
     return (
         <div>
-            <div className="text-center text-2xl font-semibold mb-4">All Users</div>
-
-            <div className="max-w-5xl mx-auto">
+            <Helmet>
+                <title>Manage Users | Dashboard</title>
+            </Helmet>
+            <SectionTitleHome heading="All Users" subHeading="Manage all users" />
+            <div className="max-w-6xl mx-auto">
                 <div className="text-lg font-medium mb-2">Total Users ({users.length})</div>
 
                 <div className="overflow-x-auto">
@@ -117,6 +121,7 @@ const AllUsers = () => {
                                                 user.role === "admin" ? null : (
                                                     <Button
                                                         variant="primary"
+                                                        className='bg-green-500'
                                                         size="sm"
                                                         onClick={() => handleRoleChange(user._id, user.email, "admin")}
                                                     >
@@ -127,6 +132,7 @@ const AllUsers = () => {
                                                 user.role === "premium" ? null : (
                                                     <Button
                                                         variant="secondary"
+                                                        className="bg-yellow-500"
                                                         size="sm"
                                                         onClick={() => handleRoleChange(user._id, user.email, "premium")}
                                                     >
@@ -138,6 +144,7 @@ const AllUsers = () => {
                                                     <Button
                                                         variant="tertiary"
                                                         size="sm"
+                                                        className="bg-blue-500"
                                                         onClick={() => handleRoleChange(user._id, user.email, "normal")}
                                                     >
                                                         Make Normal

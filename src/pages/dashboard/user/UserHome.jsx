@@ -5,18 +5,39 @@ import Swal from "sweetalert2";
 import { FaBirthdayCake, FaPhone, FaEnvelope, FaMale, FaFemale, FaWeight } from "react-icons/fa";
 import { MdLocationOn, MdHeight } from "react-icons/md";
 import { Helmet } from "react-helmet";
+import useAuth from "@/hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 const UserHome = () => {
+  const { user } = useAuth()
   const [, , myBiodata] = useBiodatas();
 
   const axiosSecure = useAxiosSecure();
+  const navigate = useNavigate();
 
   if (!myBiodata) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-center">
-          <p className="text-gray-600 text-lg">Loading your profile...</p>
+      <div className="flex justify-center items-center h-screen bg-gradient-to-b from-gray-100 to-gray-300">
+        <div className="bg-white rounded-lg shadow-lg p-8 text-center max-w-sm">
+          <div className="flex justify-center items-center mx-auto mb-6">
+            <div className="relative w-24 h-24">
+              <img
+                src={user.photoURL}
+                alt={user.displayName}
+                className="w-full h-full rounded-full shadow-md border-4 border-blue-500"
+              />
+            </div>
+          </div>
+          <h1 className="text-2xl font-semibold text-gray-800 mb-2">
+            No Biodata Found
+          </h1>
+          <p className="text-gray-600 mb-2">{user.email}</p>
+          <p className="text-gray-600">{user.displayName}</p>
+          <button onClick={() => navigate('/dashboard/manage-biodata')} className="mt-6 px-6 py-2 bg-blue-500 text-white font-medium rounded-lg shadow-lg hover:bg-blue-600 transition duration-200">
+            Create Biodata
+          </button>
         </div>
       </div>
+
     );
   }
 
