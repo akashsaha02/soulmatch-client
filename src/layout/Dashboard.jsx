@@ -19,7 +19,7 @@ const Dashboard = () => {
             </Helmet>
             <AppSidebar />
             <div className="w-full">
-                <div className="flex justify-between items-center bg-me-darkOrange text-white w-full px-4 py-2 sticky top-0">
+                <div className="flex justify-between items-center bg-me-darkOrange text-white w-full px-4 py-2 sticky top-0 z-50">
                     <div className="">
                         <SidebarTrigger />
                     </div>

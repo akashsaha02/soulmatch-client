@@ -1,25 +1,42 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import CountUp from "react-countup";
 import { FaFemale, FaMale, FaRing } from "react-icons/fa";
 import SectionTitleHome from "../shared/SectionTitleHome";
+import useBiodatas from "@/hooks/useBiodatas";
+import { axiosPublic } from "@/hooks/useAxiosPublic";
 
 const SuccessCounter = () => {
+
+    const [biodatas] = useBiodatas();
+    const [successStories, setSuccessStories] = useState([]); // State to store success stories
+    useEffect(() => {
+        async function fetchData() {
+            const res = await axiosPublic.get("/success-stories");
+            if (res.data) {
+                setSuccessStories(res.data);
+            }
+        }
+        fetchData();
+    }, []);
+
+    const maleBiodataCount = biodatas.filter(biodata => biodata.biodataType == 'Male').length;
+    const femaleBiodataCount = biodatas.filter(biodata => biodata.biodataType == 'Female').length;
     const counters = [
         {
             icon: FaFemale,
-            count: 15000,
+            count: femaleBiodataCount,
             label: "Girls' Profiles",
             color: "text-pink-500",
         },
         {
             icon: FaMale,
-            count: 20000,
+            count: maleBiodataCount,
             label: "Boys' Profiles",
             color: "text-blue-500",
         },
         {
             icon: FaRing,
-            count: 5000,
+            count: successStories.length,
             label: "Successful Marriages",
             color: "text-green-500",
         },
@@ -28,7 +45,7 @@ const SuccessCounter = () => {
     return (
         <div className=" py-16">
             <div className="max-w-6xl mx-auto px-6 text-center">
-               <SectionTitleHome heading="Our Success" subHeading="Numbers Speak" />
+                <SectionTitleHome heading="Our Success" subHeading="Numbers Speak" />
 
                 <div className="grid grid-cols-1 md:grid-cols-3">
                     {counters.map((counter, index) => (
