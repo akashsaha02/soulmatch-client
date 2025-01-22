@@ -2,6 +2,7 @@ import useAxiosSecure from "./../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { Button } from "@/components/ui/button";
+import useAuth from "@/hooks/useAuth";
 
 const AllUsers = () => {
     const axiosSecure = useAxiosSecure();
@@ -13,7 +14,7 @@ const AllUsers = () => {
         },
     });
 
-    const handleRoleChange = (id, newRole) => {
+    const handleRoleChange = (id, email, newRole) => {
         Swal.fire({
             title: `Are you sure?`,
             text: `The user will be assigned the role of ${newRole}.`,
@@ -25,7 +26,7 @@ const AllUsers = () => {
         }).then((result) => {
             if (result.isConfirmed) {
                 axiosSecure
-                    .patch(`/users/role/${id}`, { role: newRole })
+                    .patch(`/users/role/${id}`, { role: newRole, email })
                     .then((res) => {
                         if (res.data.modifiedCount > 0) {
                             refetch();
@@ -117,7 +118,7 @@ const AllUsers = () => {
                                                     <Button
                                                         variant="primary"
                                                         size="sm"
-                                                        onClick={() => handleRoleChange(user._id, "admin")}
+                                                        onClick={() => handleRoleChange(user._id, user.email, "admin")}
                                                     >
                                                         Make Admin
                                                     </Button>)
@@ -127,7 +128,7 @@ const AllUsers = () => {
                                                     <Button
                                                         variant="secondary"
                                                         size="sm"
-                                                        onClick={() => handleRoleChange(user._id, "premium")}
+                                                        onClick={() => handleRoleChange(user._id, user.email, "premium")}
                                                     >
                                                         Make Premium
                                                     </Button>)
@@ -137,7 +138,7 @@ const AllUsers = () => {
                                                     <Button
                                                         variant="tertiary"
                                                         size="sm"
-                                                        onClick={() => handleRoleChange(user._id, "normal")}
+                                                        onClick={() => handleRoleChange(user._id, user.email, "normal")}
                                                     >
                                                         Make Normal
                                                     </Button>)
