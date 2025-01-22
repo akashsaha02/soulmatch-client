@@ -198,7 +198,7 @@ const BiodataDetails = () => {
               </p>
               <p>
                 <span className="font-medium text-gray-700">Weight:</span>{" "}
-                {weight} kg
+                {weight.value} kg
               </p>
               <p>
                 <span className="font-medium text-gray-700">Race:</span>{" "}
@@ -214,7 +214,7 @@ const BiodataDetails = () => {
                 <span className="font-medium text-gray-700">
                   Preferred Age:
                 </span>{" "}
-                {partnerAge} years
+                {partnerAge.value} years
               </p>
               <p>
                 <span className="font-medium text-gray-700">
@@ -226,7 +226,7 @@ const BiodataDetails = () => {
                 <span className="font-medium text-gray-700">
                   Preferred Weight:
                 </span>{" "}
-                {partnerWeight} kg
+                {partnerWeight.value} kg
               </p>
             </div>
 

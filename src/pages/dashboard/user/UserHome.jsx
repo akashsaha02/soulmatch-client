@@ -123,7 +123,7 @@ const UserHome = () => {
               <li className="flex items-center">
                 <FaWeight className="text-indigo-500 mr-3" />
                 <span className="font-medium text-gray-600">Weight:</span>
-                <span className="ml-auto text-gray-800">{weight} kg</span>
+                <span className="ml-auto text-gray-800">{weight.value} kg</span>
               </li>
               <li className="flex items-center">
                 <MdLocationOn className="text-indigo-500 mr-3" />
@@ -152,7 +152,7 @@ const UserHome = () => {
               <li className="flex items-center">
                 <FaBirthdayCake className="text-indigo-500 mr-3" />
                 <span className="font-medium text-gray-600">Age:</span>
-                <span className="ml-auto text-gray-800">{partnerAge} years</span>
+                <span className="ml-auto text-gray-800">{partnerAge.value} years</span>
               </li>
               <li className="flex items-center">
                 <MdHeight className="text-indigo-500 mr-3" />
@@ -162,7 +162,7 @@ const UserHome = () => {
               <li className="flex items-center">
                 <FaWeight className="text-indigo-500 mr-3" />
                 <span className="font-medium text-gray-600">Weight:</span>
-                <span className="ml-auto text-gray-800">{partnerWeight} kg</span>
+                <span className="ml-auto text-gray-800">{partnerWeight.value} kg</span>
               </li>
             </ul>
           </section>

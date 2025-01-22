@@ -256,7 +256,6 @@ const AppSidebar = () => {
                             : "flex items-center space-x-2 p-2 text-gray-700 hover:bg-gray-100 rounded-md"
                         }
                       >
-                        {console.log(location.pathname, item.to)}
                         <item.icon />
                         <span>{item.title}</span>
                       </NavLink>

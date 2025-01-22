@@ -42,7 +42,7 @@ const BiodataCard = ({ biodata }) => {
           </div>
           <div className="flex items-center space-x-2">
             <FaBriefcase className="text-me-orange" />
-            <span className="font-semibold text-me-brown">{biodata.occupation}</span>
+            <span className="font-semibold text-me-brown">{biodata.occupation.value}</span>
           </div>
         </div>
 

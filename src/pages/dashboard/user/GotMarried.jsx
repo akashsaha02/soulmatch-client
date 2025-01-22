@@ -2,22 +2,32 @@ import { useForm } from "react-hook-form";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useBiodatas from "@/hooks/useBiodatas";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
 
 const GotMarried = () => {
   const axiosSecure = useAxiosSecure();
   const {
     register,
     handleSubmit,
+    setValue,
     reset,
     formState: { errors },
   } = useForm();
 
+
+
+
   const [, , myBiodata] = useBiodatas();
-  const selfBiodataId = myBiodata?.biodataId;
+
+  useEffect(() => {
+    if (myBiodata) {
+      setValue("selfBiodataId", myBiodata.biodataId);
+    }
+  }, [myBiodata, setValue]);
 
   const onSubmit = async (data) => {
 
-    // console.log(data)
+    console.log(data)
     try {
       const res = await axiosSecure.post("/success-stories", data);
 
@@ -30,7 +40,7 @@ const GotMarried = () => {
         title: "Success!",
         text: "Success story submitted!",
       });
-      reset(); // Reset the form
+      // reset(); // Reset the form
     } catch (error) {
       console.error("Error submitting success story:", error);
       // toast.error("Failed to submit success story.");
@@ -54,7 +64,7 @@ const GotMarried = () => {
           <input
             type="text"
             id="selfBiodataId"
-            value={selfBiodataId || ""}
+            value={myBiodata?.biodataId}
             {...register("selfBiodataId")}
             readOnly
             className="mt-1 p-2 w-full border border-gray-300 rounded-md bg-gray-100 cursor-not-allowed"
