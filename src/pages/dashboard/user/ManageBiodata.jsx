@@ -8,6 +8,18 @@ import useAxiosSecure from "@/hooks/useAxiosSecure";
 import useBiodatas from "@/hooks/useBiodatas";
 import Swal from "sweetalert2";
 import Loader from "@/components/shared/Loader";
+import { Helmet } from "react-helmet";
+import SectionTitleHome from "@/components/shared/SectionTitleHome";
+const weightOptions = Array.from({ length: 101 }, (_, i) => ({ value: i + 30, label: `${i + 30} kg` })); // 30kg to 130kg
+const partnerAgeOptions = Array.from({ length: 52 }, (_, i) => ({ value: i + 18, label: `${i + 18} years` })); // 18 to 70 years
+const occupationOptions = [
+  { value: "Engineer", label: "Engineer" },
+  { value: "Doctor", label: "Doctor" },
+  { value: "Teacher", label: "Teacher" },
+  { value: "Business", label: "Business" },
+  { value: "Student", label: "Student" },
+  { value: "Other", label: "Other" },
+];
 
 const divisions = [
   { value: "Dhaka", label: "Dhaka" },
@@ -168,8 +180,11 @@ const ManageBiodata = () => {
 
   return (
     <div>
-      <div className="text-center text-2xl font-bold mb-4">Manage Biodata</div>
-      <div className="p-6 max-w-xl mx-auto bg-white rounded-lg shadow-md">
+      <Helmet>
+        <title>Manage Biodata | SoulMatch</title>
+      </Helmet>
+      <SectionTitleHome heading="Manage Biodata" subHeading="Edit & Update details" />
+      <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
         <form onSubmit={handleSubmit(onSubmit)}>
 
           {/* Name */}
@@ -287,22 +302,23 @@ const ManageBiodata = () => {
               />
               {errors.height && <p className="text-red-500 text-xs">{errors.height.message}</p>}
             </div>
-
             {/* Weight */}
             <div className="mb-4 w-full">
               <label htmlFor="weight" className="block text-sm font-medium text-gray-700">
                 Weight
               </label>
-              <input
-                id="weight"
-                type="number"
-                placeholder="Enter weight in kg"
-                {...register("weight", { required: "Weight is required" })}
-                className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              <Controller
+                name="weight"
+                control={control}
+                rules={{ required: "Weight is required" }}
+                render={({ field }) => (
+                  <Select
+                    className="mt-1"
+                    {...field} options={weightOptions} placeholder="Select Weight" />
+                )}
               />
               {errors.weight && <p className="text-red-500 text-xs">{errors.weight.message}</p>}
             </div>
-
             {/* Date of Birth */}
             <div className="mb-4 w-full">
               <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
@@ -330,15 +346,20 @@ const ManageBiodata = () => {
           {/* Occupation and Division */}
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
             {/* Occupation */}
+
             <div className="mb-4 w-full">
               <label htmlFor="occupation" className="block text-sm font-medium text-gray-700">
                 Occupation
               </label>
-              <input
-                id="occupation"
-                placeholder="Enter your occupation"
-                {...register("occupation", { required: "Occupation is required" })}
-                className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              <Controller
+                name="occupation"
+                control={control}
+                rules={{ required: "Occupation is required" }}
+                render={({ field }) => (
+                  <Select {...field}
+                    className="mt-1"
+                    options={occupationOptions} placeholder=" Occupation" />
+                )}
               />
               {errors.occupation && <p className="text-red-500 text-xs">{errors.occupation.message}</p>}
             </div>
@@ -398,7 +419,7 @@ const ManageBiodata = () => {
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 w-full">
 
             {/* Age */}
-            <div className="mb-4 w-full">
+            {/* <div className="mb-4 w-full">
               <label htmlFor="partnerAge" className="block text-sm font-medium text-gray-700">
                 Age
               </label>
@@ -408,6 +429,22 @@ const ManageBiodata = () => {
                 placeholder="Enter partner's age in number"
                 {...register("partnerAge", { required: "Partner's Age is required" })}
                 className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              />
+              {errors.partnerAge && <p className="text-red-500 text-xs">{errors.partnerAge.message}</p>}
+            </div> */}
+            <div className="mb-4 w-full">
+              <label htmlFor="partnerAge" className="block text-sm font-medium text-gray-700">
+                Partner's Age
+              </label>
+              <Controller
+                name="partnerAge"
+                control={control}
+                rules={{ required: "Partner's Age is required" }}
+                render={({ field }) => (
+                  <Select {...field}
+                    className="mt-1"
+                    options={partnerAgeOptions} placeholder="Partner's Age" />
+                )}
               />
               {errors.partnerAge && <p className="text-red-500 text-xs">{errors.partnerAge.message}</p>}
             </div>
@@ -438,12 +475,15 @@ const ManageBiodata = () => {
               <label htmlFor="partnerWeight" className="block text-sm font-medium text-gray-700">
                 Partner's Weight
               </label>
-              <input
-                id="partnerWeight"
-                type="number"
-                placeholder="Partner's weight in kg"
-                {...register("partnerWeight", { required: "Weight is required" })}
-                className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              <Controller
+                name="partnerWeight"
+                control={control}
+                rules={{ required: "Partner's Weight is required" }}
+                render={({ field }) => (
+                  <Select {...field}
+                    className="mt-1"
+                    options={weightOptions} placeholder=" Partner's Weight" />
+                )}
               />
               {errors.partnerWeight && <p className="text-red-500 text-xs">{errors.partnerWeight.message}</p>}
             </div>
