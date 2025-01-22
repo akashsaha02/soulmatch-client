@@ -28,7 +28,7 @@ const Contact = () => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-blue-50 to-blue-100 px-4">
             <Helmet>
-                <title>Contact Us</title>
+                <title>Contact Us | SoulMatch</title>
             </Helmet>
             <div className="max-w-4xl w-full bg-white shadow-xl rounded-lg p-10">
                 {/* Header */}

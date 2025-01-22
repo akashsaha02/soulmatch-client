@@ -2,6 +2,7 @@ import AppSidebar from "@/components/app-sidebar"
 import Loader from "@/components/shared/Loader"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import useAuth from "@/hooks/useAuth"
+import { Helmet } from "react-helmet"
 import { Outlet } from "react-router-dom"
 
 
@@ -13,6 +14,9 @@ const Dashboard = () => {
     // console.log(user);
     return (
         <SidebarProvider>
+            <Helmet>
+                <title>Dashboard | SoulMatch</title>
+            </Helmet>
             <AppSidebar />
             <div className="w-full">
                 <div className="flex justify-between items-center bg-gray-500 text-white w-full px-4 py-2">

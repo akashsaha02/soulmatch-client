@@ -26,7 +26,7 @@ const About = () => {
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-16 px-6">
             <Helmet>
-                <title>About Us</title>
+                <title>About Us | SoulMatch</title>
             </Helmet>
             <div className="max-w-7xl mx-auto space-y-16">
                 {/* Header Section */}

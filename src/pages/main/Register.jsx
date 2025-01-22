@@ -1,4 +1,4 @@
-// import loginImg from '../assets/others/authentication1.png';
+import loginImg from '../../assets/couple1.jpg'
 import { useNavigate } from 'react-router-dom';
 import { signOut, updateProfile } from 'firebase/auth';
 import Swal from 'sweetalert2';
@@ -6,6 +6,7 @@ import auth from '../../firebase/firebase.init';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
 import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
+import { Helmet } from 'react-helmet';
 
 const Register = () => {
     const axiosPublic = useAxiosPublic();
@@ -77,15 +78,25 @@ const Register = () => {
 
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-20 min-h-screen flex items-center justify-center bg-gray-100">
+
+            <Helmet>
+                <title>Register | SoulMatch</title>
+            </Helmet>
             <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 bg-white items-center">
                 {/* Image Section */}
-                <div className="hidden md:block order-2">
-                    {/* <img src={loginImg} alt="login" className="w-full" /> */}
+                <div className="hidden md:block">
+                    <img src={loginImg} alt="login" className="w-full" />
                 </div>
 
                 {/* Form Section */}
-                <div className="p-8">
-                    <h2 className="text-3xl font-bold text-center my-4">Register</h2>
+                <div className="p-8 max-w-md">
+                    <p className=" uppercase text-me-brown font-medium">start for free</p>
+                    <h2 className="text-3xl font-bold my-2 playfair">Sign up to SoulMatch</h2>
+                    <p className=" capitalize text-me-brown font-medium mb-4">Already Registered? <span
+                        onClick={() => navigate('/login')}
+                        className="text-blue-500 cursor-pointer"> Sign In Now</span></p>
+
+                    <hr className='my-4 md:my-6'></hr>
                     <form className="space-y-4" onSubmit={handleSubmit}>
                         {/* Name */}
                         <div className="flex flex-col w-full gap-2">
@@ -147,26 +158,18 @@ const Register = () => {
                         <div>
                             <button
                                 type="submit"
-                                className="block text-center py-3 px-4 text-white font-semibold w-full rounded-lg my-4 bg-beige"
+                                className="block text-center py-3 px-4 text-white font-semibold w-full rounded-lg my-4 bg-me-teal hover:bg-me-pink"
                             >
                                 Register
                             </button>
                         </div>
                     </form>
 
-                    <p className="text-beige text-center my-4">
-                        Already registered?{' '}
-                        <span
-                            onClick={() => navigate('/login')}
-                            className="font-semibold cursor-pointer"
-                        >
-                            Login Now
-                        </span>
-                    </p>
+                    {/* Social Sign In */}
 
                     <div className="flex items-center flex-col justify-center gap-4">
                         <p>Or sign up with</p>
-                        <SocialSignIn/>
+                        <SocialSignIn />
                     </div>
                 </div>
             </div>

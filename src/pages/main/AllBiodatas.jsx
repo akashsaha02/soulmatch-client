@@ -5,6 +5,7 @@ import useBiodatas from "@/hooks/useBiodatas";
 import Filters from "@/components/allBiodatas/Filters";
 import BiodatasList from "@/components/allBiodatas/BiodataList";
 import Loader from "@/components/shared/Loader";
+import { Helmet } from "react-helmet";
 
 
 const BiodatasPage = () => {
@@ -43,6 +44,9 @@ const BiodatasPage = () => {
 
   return (
     <div className="min-h-screen p-4">
+      <Helmet>
+        <title>All Biodatas | SoulMatch</title>
+      </Helmet>
       <div className="max-w-[1920px] mx-auto flex flex-col md:flex-row gap-2">
         <Filters
           filters={filters}

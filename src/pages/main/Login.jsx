@@ -1,11 +1,10 @@
-// import loginImg from '../assets/others/authentication1.png';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Swal from 'sweetalert2';
 import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
-import loginImg from '../../assets/couple5.jpg';
+import loginImg from '../../assets/couple2.jpg';
 
 const Login = () => {
     const navigate = useNavigate();
@@ -75,7 +74,7 @@ const Login = () => {
                 {/* Form Section */}
                 <div className="p-8 max-w-md">
                     <Helmet>
-                        <title>Login</title>
+                        <title>Login | SoulMatch</title>
                     </Helmet>
                     <p className=" uppercase text-me-brown font-medium">start for free</p>
                     <h2 className="text-3xl font-bold my-2 playfair">Sign in to SoulMatch</h2>
