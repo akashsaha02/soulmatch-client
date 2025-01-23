@@ -54,6 +54,7 @@ import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useAuth from '@/hooks/useAuth';
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_PK);
+import Payment from './../dashboard/user/Payment';
 
 const Checkout = () => {
     const { id } = useParams();
@@ -78,7 +79,7 @@ const Checkout = () => {
         <div>
             <SectionTitleHome heading="Checkout" subHeading="Please pay to view contact information" />
             <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-8">
-                <form className="space-y-4">
+                <form className="space-y-4 mb-4">
                     {/* Biodata ID */}
                     <div>
                         <label className="block text-sm font-medium text-gray-700">Biodata ID</label>
@@ -100,6 +101,17 @@ const Checkout = () => {
                             className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-600"
                         />
                     </div>
+                    {/* Amount */}
+                    <div>
+                        <label className="block text-sm font-medium text-gray-700">Your Payment Amount</label>
+                        <input
+                            type="text"
+                            value='5.00 $'
+                            readOnly
+                            className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-600"
+                        />
+                    </div>
+
                 </form>
                 {clientSecret ? (
                     <Elements stripe={stripePromise} options={options}>

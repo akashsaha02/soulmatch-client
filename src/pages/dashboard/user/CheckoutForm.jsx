@@ -46,7 +46,7 @@ const CheckoutForm = ({ id, email }) => {
                 setTransactionId(paymentIntent.id);
 
                 const contactRequest = {
-                    email:user.email,
+                    email: user.email,
                     biodataId: id,
                     transactionId: paymentIntent.id,
                     amount: paymentIntent.amount,
@@ -81,17 +81,28 @@ const CheckoutForm = ({ id, email }) => {
         }
     };
 
+    transactionId&& (
+        Swal.fire({
+            title: "Payment Successful",
+            text: "Your payment has been successfully processed.",
+            icon: "success",
+            showCancelButton: false,
+            confirmButtonText: "Ok",
+        })
+        
+    )
+
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <PaymentElement />
             <button
                 type="submit"
-                className="btn btn-primary w-full mt-4"
+                className="btn btn-primary bg-me-teal px-4 py-2 text-white font-bold uppercase rounded hover:bg-me-pink w-full mt-4"
                 disabled={!stripe || !elements || loading}
             >
-                {loading ? "Processing..." : "Pay Now"}
+                {loading ? "Processing..." : "Pay Now (5.00 $)"}
             </button>
-            {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
+            {/* {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>} */}
             {transactionId && <div className="text-green-500 mt-2">Transaction ID: {transactionId}</div>}
         </form>
     );

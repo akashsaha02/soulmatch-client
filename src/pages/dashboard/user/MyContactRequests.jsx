@@ -1,3 +1,4 @@
+import Loader from '@/components/shared/Loader';
 import SectionTitleHome from '@/components/shared/SectionTitleHome';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useContactRequest from '@/hooks/useContactRequests';
@@ -21,7 +22,7 @@ const MyContactRequest = () => {
         }
     };
 
-    if (isLoading) return <p>Loading...</p>;
+    if (isLoading) return <Loader />;
 
 
 
@@ -33,32 +34,34 @@ const MyContactRequest = () => {
             <table className="table-auto max-w-5xl mx-auto w-full border-collapse border border-gray-200">
                 <thead className="bg-gray-100">
                     <tr>
-                        <th className="px-4 py-2">Name</th>
-                        <th className="px-4 py-2">Biodata ID</th>
+                        <th className="px-4 py-2">Requested Biodata ID</th>
+                        <th className="px-4 py-2">Requested Mobile No</th>
+                        <th className="px-4 py-2">Requested Email</th>
                         <th className="px-4 py-2">Status</th>
-                        <th className="px-4 py-2">Mobile No</th>
-                        <th className="px-4 py-2">Email</th>
                         <th className="px-4 py-2">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {requests.map((req) => (
-                        <tr key={req._id}>
-                            <td className="border px-4 py-2">{req.name || "N/A"}</td>
+                    {requests.length > 0 ? requests.map((req) => (
+                        <tr key={req._id} className='text-center'>
                             <td className="border px-4 py-2">{req.biodataId}</td>
-                            <td className="border px-4 py-2">{req.status}</td>
-                            <td className="border px-4 py-2">{req.status === 'approved' ? req.mobileNumber : 'N/A'}</td>
-                            <td className="border px-4 py-2">{req.status === 'approved' ? req.email : 'N/A'}</td>
+                            <td className="border px-4 py-2">{req.status === 'approved' ? req.mobileNumber : 'Pending'}</td>
+                            <td className="border px-4 py-2">{req.status === 'approved' ? req.email : 'Pending'}</td>
+                            <td className="border px-4 py-2 capitalize">{req.status}</td>
                             <td className="border px-4 py-2">
                                 <button className="btn btn-danger" onClick={() => handleDelete(req._id)}>
                                     Delete
                                 </button>
                             </td>
                         </tr>
-                    ))}
+                    )) : <tr >
+
+                        <td className="px-6 py-4 text-me-red">No Contact Requests Found</td>
+
+                    </tr>}
                 </tbody>
             </table>
-        </div>
+        </div >
     );
 };
 
