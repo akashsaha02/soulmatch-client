@@ -17,17 +17,23 @@ const SuccessStories = () => {
         fetchData();
     }, []);
 
+
+
     // Sorting the stories by marriage date in descending order
     const sortedStories = successStories.sort(
-        (a, b) => new Date(b.marriageDate) - new Date(a.marriageDate)
+        (a, b) => new Date(a.marriageDate) - new Date(b.marriageDate)
     );
+
+    const data = sortedStories.slice(0, 2);
+
+    console.log(data);
 
     return (
         <div className="pb-16 bg-gray-50">
             <SectionTitleHome heading="Success Stories" subHeading="Real Couples, Real Love" />
 
-            <div className="flex flex-col gap-8 max-w-[1600px] grid grid-cols-2 mx-auto px-4 sm:px-6 lg:px-8">
-                {sortedStories.map((story, index) => (
+            <div className=" gap-5 max-w-[1600px] grid grid-cols-1 lg:grid-cols-2 mx-auto px-4 sm:px-6 lg:px-8">
+                {data.map((story, index) => (
                     <div
                         key={index}
                         className="flex flex-col md:flex-row bg-white shadow-lg rounded-lg overflow-hidden transform transition-transform"

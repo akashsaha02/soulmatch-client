@@ -1,3 +1,4 @@
+import SectionTitleHome from '@/components/shared/SectionTitleHome';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useContactRequest from '@/hooks/useContactRequests';
 
@@ -6,7 +7,7 @@ const MyContactRequest = () => {
 
     const { requests, refetch, isLoading } = useContactRequest();
 
-   
+
     const handleDelete = async (id) => {
         try {
             const res = await axiosSecure.delete(`/contact-requests/${id}`);
@@ -28,8 +29,8 @@ const MyContactRequest = () => {
 
     return (
         <div className="p-6">
-            <h2 className="text-2xl font-semibold mb-4">My Contact Requests</h2>
-            <table className="table-auto w-full border-collapse border border-gray-200">
+            <SectionTitleHome heading="My Contact Requests" subHeading="Manage your contact requests" />
+            <table className="table-auto max-w-5xl mx-auto w-full border-collapse border border-gray-200">
                 <thead className="bg-gray-100">
                     <tr>
                         <th className="px-4 py-2">Name</th>

@@ -9,9 +9,9 @@ const FeaturedUsers = () => {
     const premiumUsers = biodatas.filter(biodata => biodata.isPremium === true).slice(0, 6);
 
     return (
-        <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
+        <div className='max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16'>
             <SectionTitleHome heading="Featured Users" subHeading="Our Premium Members" />
-            <div className=" grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+            <div className=" grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
                 {premiumUsers.map((biodata, index) => (
                     <BiodataCard key={index} biodata={biodata} />))}
             </div>

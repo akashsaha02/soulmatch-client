@@ -14,7 +14,6 @@ const useAdmin = () => {
       const response = await axiosSecure.get(`/users/admin/${user.email}`);
       return response.data || false;
     },
-    // retry: false, // Optional: Prevent infinite retries in case of failure
   });
 
   return [isAdmin, isAdminLoading];

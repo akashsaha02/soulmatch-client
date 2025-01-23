@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { NavLink, Link } from "react-router-dom";
 import useAuth from "@/hooks/useAuth";
 import Swal from "sweetalert2";
-import logo from '../../assets/icons/logo.svg'
 import useAdmin from "@/hooks/useAdmin";
+import logo from '../../assets/icons/logo.png';
 
 const Navbar = () => {
     const { user, logoutUser, } = useAuth();
@@ -39,12 +39,12 @@ const Navbar = () => {
         <div className="sticky top-0 z-50 shadow-md bg-white">
             <Card className=" py-3 px-4 max-w-7xl mx-auto border-0 flex items-center justify-between gap-6 rounded-none">
                 {/* logo & site name */}
-                <div className="text-xl md:text-2xl 2xl:text-3xl text-me-darkOrange font-bold flex items-center cinzel">
-                    {/* <img src={logo} className="w-10 h-10 rounded-full" alt="" /> */}
-                    Soul<span className="text-me-brown">Match</span>
+                <div className="text-xl md:text-2xl 2xl:text-3xl text-me-darkOrange font-bold flex items-center gap-2 cinzel">
+                    <img src={logo} className="h-6" alt="" />
+                    <p className="hidden sm:block">Soul<span className=" text-me-brown">Match</span></p>
                 </div>
 
-                <ul className="hidden md:flex items-center gap-10 text-card-foreground">
+                <ul className="hidden lg:flex items-center gap-10 text-card-foreground">
                     <li>
                         <NavLink
                             to="/"
@@ -98,6 +98,15 @@ const Navbar = () => {
                             </NavLink>
                         </li>
                     )}
+                    {
+                        user && (
+                            <li>
+                                <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
+                                    Logout
+                                </Button>
+                            </li>
+                        )
+                    }
                 </ul>
 
                 <div className="flex items-center gap-2">
@@ -106,17 +115,15 @@ const Navbar = () => {
                         <div className="flex items-center gap-2">
                             <div className="flex items-center gap-2">
                                 <div className="text-right">
-                                    <p className="text-sm">Welcome, {user.displayName.split(' ')[0]}</p>
+                                    <p className="text-sm text-me-brown font-medium">{user.displayName.split(' ')[0]}</p>
                                     <p className="text-sm uppercase">
                                         {/* {role} */}
                                     </p>
                                 </div>
-                                <img src={user.photoURL} alt={user.email} className="w-12 h-12 rounded-full block" />
+                                <img src={user.photoURL} alt={user.email} className="w-8 h-8 rounded-full block" />
                             </div>
 
-                            <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
-                                Logout
-                            </Button>
+
                         </div>
                     ) : (
                         <>
@@ -129,7 +136,7 @@ const Navbar = () => {
                         </>
                     )}
 
-                    <div className="flex md:hidden items-center gap-2">
+                    <div className="flex lg:hidden items-center gap-2">
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" size="icon">
@@ -190,6 +197,14 @@ const Navbar = () => {
                                         </NavLink>
                                     </DropdownMenuItem>
                                 )}
+                                {user && (
+                                        <DropdownMenuItem>
+                                            <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
+                                                Logout
+                                            </Button>
+                                        </DropdownMenuItem>
+                                    )
+                                }
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>

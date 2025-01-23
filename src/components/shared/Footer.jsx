@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/icons/logo.png";
 
 const Footer = () => {
   return (
@@ -8,7 +9,10 @@ const Footer = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-8 mb-8">
           {/* Logo and Description */}
           <div>
-            <h2 className="text-2xl font-bold text-white">SoulMatch</h2>
+            <div className="flex items-center gap-2">
+              <img src={logo} className="h-8" alt="" />
+              <h2 className="text-2xl font-bold text-white cinzel">SoulMatch</h2>
+            </div>
             <p className="mt-2 text-sm text-gray-400">
               Connecting hearts and creating stories. SoulMatch brings you closer to your soulmate with trust and innovation.
             </p>
@@ -19,7 +23,7 @@ const Footer = () => {
             <h3 className="text-lg font-semibold text-white">Quick Links</h3>
             <ul className="mt-4 space-y-2">
               <li>
-                <Link to="/home" className="hover:text-blue-500 transition-colors">
+                <Link to="/" className="hover:text-blue-500 transition-colors">
                   Home
                 </Link>
               </li>
@@ -34,8 +38,8 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/faq" className="hover:text-blue-500 transition-colors">
-                  FAQ
+                <Link to="/biodatas" className="hover:text-blue-500 transition-colors">
+                  Biodatas
                 </Link>
               </li>
             </ul>

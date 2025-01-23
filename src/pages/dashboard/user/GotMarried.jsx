@@ -55,8 +55,8 @@ const GotMarried = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-xl font-bold mb-4">Share Your Success Story</h2>
-      <SectionTitleHome title="Share Your Success Story" />
+     
+      <SectionTitleHome heading="Got Married" subHeading='Share Your Success Story'/>
       <div className="max-w-xl mx-auto">
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Self Biodata ID */}
