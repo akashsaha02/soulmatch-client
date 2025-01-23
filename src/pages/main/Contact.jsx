@@ -1,3 +1,4 @@
+import SectionTitleHome from "@/components/shared/SectionTitleHome";
 import React, { useState } from "react";
 import { Helmet } from "react-helmet";
 import Swal from "sweetalert2";
@@ -32,12 +33,9 @@ const Contact = () => {
             </Helmet>
             <div className="max-w-4xl w-full bg-white shadow-xl rounded-lg p-10">
                 {/* Header */}
-                <div className="text-center">
-                    <h1 className="text-4xl font-bold text-blue-600 mb-4">Contact Us</h1>
-                    <p className="text-gray-600 mb-8">
-                        Have questions or feedback? Fill out the form below, and we’ll respond promptly.
-                    </p>
-                </div>
+
+                <SectionTitleHome heading="Contact Us" subHeading="Have questions or feedback? Reach out to us!" />
+              
 
                 {/* Form */}
                 <form onSubmit={handleSubmit} className="space-y-6">
