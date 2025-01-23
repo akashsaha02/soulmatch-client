@@ -1,3 +1,4 @@
+import Loader from '@/components/shared/Loader';
 import SectionTitleHome from '@/components/shared/SectionTitleHome';
 import { axiosSecure } from '@/hooks/useAxiosSecure';
 import { useEffect, useState } from 'react';
@@ -5,6 +6,8 @@ import { Helmet } from 'react-helmet';
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const AdminHome = () => {
+
+    const [loading, setLoading] = useState(true);
     const [data, setData] = useState({
         biodatas: 0,
         contactRequests: 0,
@@ -22,10 +25,13 @@ const AdminHome = () => {
             const response = await axiosSecure.get('/admin/stats');
             if (response.data) {
                 setData(response.data);
+                setLoading(false);
             }
         }
         fetchData();
     }, []);
+
+    if (loading) return <Loader/>
 
     const stats = [
         { label: "All Biodatas", value: data.biodatas, icon: "📝" },
@@ -45,7 +51,7 @@ const AdminHome = () => {
         { name: "Male Biodatas", value: data.maleBiodataCount },
         { name: "Female Biodatas", value: data.femaleBiodataCount },
         { name: "Premium Biodatas", value: data.premiumBiodatas },
-        { name: "Total Revenue", value: data.totalRevenue/100 },
+        { name: "Total Revenue", value: data.totalRevenue / 100 },
     ];
 
     const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];

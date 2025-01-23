@@ -1,3 +1,4 @@
+import Loader from '@/components/shared/Loader';
 import SectionTitleHome from '@/components/shared/SectionTitleHome';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useContactRequest from '@/hooks/useContactRequests';
@@ -27,7 +28,7 @@ const ApproveContactRequest = () => {
   };
 
   // Display loading spinner while fetching data
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <Loader />;
 
   // Render each request row
   const renderRequestRow = (req) => (
@@ -54,7 +55,7 @@ const ApproveContactRequest = () => {
 
   return (
     <div className="p-6">
-       <Helmet>
+      <Helmet>
         <title>Approve Contact | Dashboard</title>
       </Helmet>
       <SectionTitleHome heading={'Approve Contact Requests'} subHeading={'Contact Information Requests'} />

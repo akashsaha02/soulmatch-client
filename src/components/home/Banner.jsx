@@ -7,6 +7,7 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
 import slide1 from '../../assets/ban-bg.jpg';
 import slide2 from '../../assets/banner.jpg';
+import { useNavigate } from "react-router-dom";
 
 const slides = [
     { image: slide1, },
@@ -14,6 +15,7 @@ const slides = [
 ];
 
 const Banner = () => {
+    const navigate =useNavigate();
     return (
         <div
             className="relative min-h-[80vh] flex justify-center items-center text-white"
@@ -90,6 +92,7 @@ const Banner = () => {
                             className="border border-gray-300 p-3 font-bold text-me-brown rounded placeholder:font-bold placeholder:text-me-brown focus:outline-none focus:ring-2 focus:ring-me-orange"
                         />
                         <button
+                            onClick={()=>navigate('/biodatas')}
                             className="w-full bg-me-teal text-white py-3 rounded hover:bg-me-pink font-bold transition duration-200 uppercase"
                         >
                             Search Now

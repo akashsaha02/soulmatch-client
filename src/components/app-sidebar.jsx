@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import useAdmin from "@/hooks/useAdmin";
 import useAuth from "@/hooks/useAuth";
+import Swal from "sweetalert2";
 
 const sharedItems = [
   {
@@ -106,11 +107,32 @@ const AppSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleLogout = () => { 
+  const handleLogout = () => {
 
-    logoutUser().then(()=>{
-      navigate('/')
-    })
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You will be logged out of your account.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, Logout!',
+      cancelButtonText: 'Cancel',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Call the logout function
+
+        logoutUser().then(() => {
+          Swal.fire({
+            title: 'Logged Out!',
+            text: 'You have been logged out successfully.',
+            icon: 'success',
+          });
+          navigate('/')
+        })
+      }
+    });
+
 
   }
 
