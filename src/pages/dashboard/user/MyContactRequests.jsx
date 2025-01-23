@@ -49,7 +49,7 @@ const MyContactRequest = () => {
                             <td className="border px-4 py-2">{req.status === 'approved' ? req.email : 'Pending'}</td>
                             <td className="border px-4 py-2 capitalize">{req.status}</td>
                             <td className="border px-4 py-2">
-                                <button className="btn btn-danger" onClick={() => handleDelete(req._id)}>
+                                <button className="px-4 py-1 bg-me-red rounded-lg text-white" onClick={() => handleDelete(req._id)}>
                                     Delete
                                 </button>
                             </td>

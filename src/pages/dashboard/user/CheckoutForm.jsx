@@ -81,16 +81,20 @@ const CheckoutForm = ({ id, email }) => {
         }
     };
 
-    transactionId&& (
+    if (transactionId) {
         Swal.fire({
             title: "Payment Successful",
             text: "Your payment has been successfully processed.",
             icon: "success",
             showCancelButton: false,
             confirmButtonText: "Ok",
-        })
-        
-    )
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Navigate to the home page or desired route
+                navigate('/dashboard/my-contact-requests');
+            }
+        });
+    }
 
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -102,7 +106,7 @@ const CheckoutForm = ({ id, email }) => {
             >
                 {loading ? "Processing..." : "Pay Now (5.00 $)"}
             </button>
-            {/* {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>} */}
+            {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
             {transactionId && <div className="text-green-500 mt-2">Transaction ID: {transactionId}</div>}
         </form>
     );
