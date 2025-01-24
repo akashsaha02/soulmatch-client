@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Loader from "@/components/shared/Loader";
 import { Helmet } from "react-helmet";
 import SectionTitleHome from "@/components/shared/SectionTitleHome";
+import { useNavigate } from "react-router-dom";
 const weightOptions = Array.from({ length: 101 }, (_, i) => ({ value: i + 30, label: `${i + 30} kg` })); // 30kg to 130kg
 const partnerAgeOptions = Array.from({ length: 52 }, (_, i) => ({ value: i + 18, label: `${i + 18} years` })); // 18 to 70 years
 const occupationOptions = [
@@ -64,9 +65,8 @@ const ManageBiodata = () => {
   const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const axiosSecure = useAxiosSecure();
-  const [biodatas, loading, myBiodata] = useBiodatas();
-  console.log(biodatas.length);
-
+  const [, loading, myBiodata] = useBiodatas();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -152,6 +152,7 @@ const ManageBiodata = () => {
               icon: "success",
               confirmButtonText: "Okay",
             });
+            navigate("/dashboard/user-home");
           } else {
             Swal.fire({
               title: "Success!",
@@ -159,6 +160,7 @@ const ManageBiodata = () => {
               icon: "success",
               confirmButtonText: "Okay",
             });
+            navigate("/dashboard/user-home");
           }
         } catch (error) {
           console.error("Error creating biodata:", error);
@@ -419,19 +421,6 @@ const ManageBiodata = () => {
           <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 w-full">
 
             {/* Age */}
-            {/* <div className="mb-4 w-full">
-              <label htmlFor="partnerAge" className="block text-sm font-medium text-gray-700">
-                Age
-              </label>
-              <input
-                id="partnerAge"
-                type="number"
-                placeholder="Enter partner's age in number"
-                {...register("partnerAge", { required: "Partner's Age is required" })}
-                className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              />
-              {errors.partnerAge && <p className="text-red-500 text-xs">{errors.partnerAge.message}</p>}
-            </div> */}
             <div className="mb-4 w-full">
               <label htmlFor="partnerAge" className="block text-sm font-medium text-gray-700">
                 Partner's Age
