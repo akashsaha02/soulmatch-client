@@ -1,6 +1,4 @@
 # SoulMatch Matrimony Platform
-## Live Website
-[Visit SoulMatch](https://soulmatch-b2923.web.app/)
 
 SoulMatch is an advanced matrimony platform built using the MERN (MongoDB, Express, React, Node.js) stack. This online platform enables users to connect with potential life partners through an intuitive, secure, and user-friendly interface.
 
@@ -22,18 +20,13 @@ The client side of SoulMatch focuses on delivering a responsive and engaging use
 ### Technologies Used
 - **React**: Framework for building the user interface.
 - **React Router DOM**: For routing and private routes.
-- **Shadcn Ui**: Used Shadcn ui to create modern components.
+- **React Toastify**: Toast notifications for user feedback.
 - **Tailwind CSS**: For styling and responsiveness.
 - **TanStack Query**: Efficient data fetching and state management.
 - **Firebase**: Authentication and hosting.
 - **Stripe**: Payment gateway.
 - **SweetAlert2**: Stylish notifications and modals.
 - **Axios**: API requests.
-
-### Scripts
-- `dev`: Starts the development server.
-- `build`: Builds the production-ready client application.
-- `preview`: Previews the production build.
 
 ## Server-Side (Backend)
 
@@ -59,10 +52,6 @@ The server side ensures smooth API interactions, user data management, and secur
 - **Dotenv**: Secure storage of sensitive information.
 - **Cors**: Enable cross-origin requests.
 
-### Scripts
-- `start`: Starts the production server.
-- `dev`: Starts the development server.
-
 ## Repository Structure
 - `client/`: Frontend source code.
 - `server/`: Backend source code.
@@ -86,3 +75,13 @@ The server side ensures smooth API interactions, user data management, and secur
 8. Toast notifications for better user experience.
 9. Efficient data fetching with TanStack Query.
 10. Real-time updates and analytics for admins.
+
+## Scripts
+### Client-Side
+- `dev`: Starts the development server.
+- `build`: Builds the production-ready client application.
+- `preview`: Previews the production build.
+
+### Server-Side
+- `start`: Starts the production server.
+- `dev`: Starts the development server.
