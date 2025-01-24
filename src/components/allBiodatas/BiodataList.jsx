@@ -3,7 +3,7 @@ import BiodataCard from "./BiodataCard";
 
 const BiodatasList = ({ biodatas }) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 20;
+  const itemsPerPage = 10;
 
   // Calculate total pages
   const totalPages = Math.ceil(biodatas.length / itemsPerPage);
