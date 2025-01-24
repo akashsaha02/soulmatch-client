@@ -9,18 +9,21 @@ import SocialSignIn from '@/components/shared/SocialSignIn';
 import { Helmet } from 'react-helmet';
 import { useState } from 'react';
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Loader from '@/components/shared/Loader';
 
 const Register = () => {
     const axiosPublic = useAxiosPublic();
     const { createUser } = useAuth();
     const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
 
     const handleSubmit = async (e) => {
+        setLoading(true);
         e.preventDefault();
         const name = e.target.name.value;
         const email = e.target.email.value;
@@ -59,6 +62,7 @@ const Register = () => {
             const response = await axiosPublic.post('/users', userInfo);
 
             if (response.data.insertedId) {
+                setLoading(false);
                 // Log the user out after successful registration
                 await signOut(auth);
 
@@ -73,6 +77,7 @@ const Register = () => {
                 navigate('/');
             }
         } catch (error) {
+            setLoading(false);
             console.error('Error registering user:', error.message);
             Swal.fire({
                 icon: 'error',
@@ -81,6 +86,8 @@ const Register = () => {
             });
         }
     };
+
+    if (loading) return <Loader />
 
 
     return (
@@ -146,20 +153,6 @@ const Register = () => {
                                 required
                             />
                         </div>
-
-                        {/* Password */}
-                        {/* <div className="flex flex-col w-full gap-2">
-                            <label htmlFor="password" className="text-dark-2">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                placeholder="Enter your password"
-                                className="w-full border border-slate-200 rounded-lg py-3 px-5 outline-none bg-transparent"
-                                autoComplete="on"
-                                required
-                            />
-                        </div> */}
                         <div className="flex flex-col w-full gap-2">
                             <label htmlFor="password" className="text-dark-2">
                                 Password

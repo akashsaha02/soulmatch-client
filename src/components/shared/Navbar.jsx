@@ -111,20 +111,10 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-2">
                     {user ? (
-
-                        <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-2">
-                                <div className="text-right">
-                                    <p className="text-sm text-me-brown font-medium">{user.displayName.split(' ')[0]}</p>
-                                    <p className="text-sm uppercase">
-                                        {/* {role} */}
-                                    </p>
-                                </div>
-                                <img src={user.photoURL} alt={user.email} className="w-8 h-8 rounded-full block" />
-                            </div>
-
-
-                        </div>
+                        <Link to="/dashboard/user-home" className="flex items-center gap-2">
+                            <span className="hidden lg:block text-sm">{user?.displayName}</span>
+                            <img src={user?.photoURL} alt={user?.email} className="w-8 h-8 md:w-10 md:h-10 rounded-full block" />
+                        </Link>
                     ) : (
                         <>
                             <Button asChild variant="secondary" className="w-full text-sm">
@@ -198,12 +188,12 @@ const Navbar = () => {
                                     </DropdownMenuItem>
                                 )}
                                 {user && (
-                                        <DropdownMenuItem>
-                                            <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
-                                                Logout
-                                            </Button>
-                                        </DropdownMenuItem>
-                                    )
+                                    <DropdownMenuItem>
+                                        <Button variant="outline" size="sm" onClick={() => handleLogOut()}>
+                                            Logout
+                                        </Button>
+                                    </DropdownMenuItem>
+                                )
                                 }
                             </DropdownMenuContent>
                         </DropdownMenu>
