@@ -17,11 +17,11 @@ import { LuCircleCheckBig } from "react-icons/lu";
 import { FaRegQuestionCircle } from "react-icons/fa";
 
 const slides = [
-    { image: slide1, title: 'Find Your Match', description: 'Connect with your soulmate.', icon: LucideUserSearch, link: '/find-match' },
-    { image: slide2, title: 'Wedding Services', description: 'Plan your dream wedding.', icon: School, link: '/wedding-services' },
-    { image: slide3, title: 'Premium Membership', description: 'Enjoy exclusive benefits.', icon: IoDiamondOutline, link: '/premium-membership' },
-    { image: slide4, title: 'Success Stories', description: 'Hear from happy couples.', icon: LuCircleCheckBig, link: '/success-stories' },
-    { image: slide5, title: 'FAQs', description: 'Get answers to your questions.', icon: FaRegQuestionCircle, link: '/faqs' },
+    { image: slide1, title: 'Find Your Match', description: 'Connect with your soulmate.', icon: LucideUserSearch, link: '/biodatas' },
+    { image: slide2, title: 'Wedding Services', description: 'Plan your dream wedding.', icon: School, link: '/about' },
+    { image: slide3, title: 'Premium Membership', description: 'Enjoy exclusive benefits.', icon: IoDiamondOutline, link: '/dashboard/user-home' },
+    { image: slide4, title: 'Success Stories', description: 'Hear from happy couples.', icon: LuCircleCheckBig, link: '/' },
+    { image: slide5, title: 'FAQs', description: 'Get answers to your questions.', icon: FaRegQuestionCircle, link: '/about' },
 ];
 
 const Services = () => {
@@ -75,7 +75,7 @@ const Services = () => {
                             {/* Hover Button */}
                             <div className="absolute inset-0 flex items-center justify-center bg-me-darkOrange/70 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                                 <Link
-                                    href={slide.link}
+                                    to={slide.link}
                                     className="bg-white text-black py-2 px-4 rounded-lg font-semibold text-sm md:text-base hover:bg-gray-200 transition playfair"
                                 >
                                     Learn More

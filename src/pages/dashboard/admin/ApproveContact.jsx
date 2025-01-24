@@ -4,6 +4,7 @@ import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useContactRequest from '@/hooks/useContactRequests';
 import { useState } from 'react';
 import { Helmet } from 'react-helmet';
+import Swal from 'sweetalert2';
 
 const ApproveContactRequest = () => {
   const axiosSecure = useAxiosSecure();
@@ -14,8 +15,28 @@ const ApproveContactRequest = () => {
   const handleApprove = async (id, biodataId) => {
     setLoadingIds((prev) => new Set(prev).add(id)); // Add the current ID to the loading state
     try {
-      await axiosSecure.patch(`/admin/contact-requests/${id}`, { biodataId });
-      await refetch(); // Refresh the data
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, approve it!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+
+          const res = await axiosSecure.patch(`/admin/contact-requests/${id}`, { biodataId });
+          if (res.data) {
+            Swal.fire({
+              title: "Approved!",
+              text: "Your request has been approved.",
+              icon: "success"
+            });
+          }
+          await refetch(); // Refresh the data
+        }
+      });
     } catch (error) {
       console.error('Error approving contact request:', error);
     } finally {
@@ -36,18 +57,18 @@ const ApproveContactRequest = () => {
       <td className="border px-4 py-2">{req.email}</td>
       <td className="border px-4 py-2">{req.transactionId}</td>
       <td className="border px-4 py-2">{req.biodataId}</td>
-      <td className="border px-4 py-2">{req.status}</td>
+      <td className="border px-4 py-2 capitalize">{req.status}</td>
       <td className="border px-4 py-2">
         {req.status === 'pending' ? (
           <button
-            className="btn btn-success"
+            className="px-4 py-1 bg-green-500 rounded-lg text-white"
             onClick={() => handleApprove(req._id, req.biodataId)}
             disabled={loadingIds.has(req._id)}
           >
             {loadingIds.has(req._id) ? 'Approving...' : 'Approve'}
           </button>
         ) : (
-          <span className="text-green-600">Approved</span>
+          <span className="text-white px-4 py-1 bg-green-800 rounded-lg">Approved</span>
         )}
       </td>
     </tr>

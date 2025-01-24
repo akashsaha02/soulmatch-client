@@ -2,6 +2,7 @@ import Loader from '@/components/shared/Loader';
 import SectionTitleHome from '@/components/shared/SectionTitleHome';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useContactRequest from '@/hooks/useContactRequests';
+import Swal from 'sweetalert2';
 
 const MyContactRequest = () => {
     const axiosSecure = useAxiosSecure();
@@ -13,8 +14,13 @@ const MyContactRequest = () => {
         try {
             const res = await axiosSecure.delete(`/contact-requests/${id}`);
 
-            if (res.status === 200) {
-                alert('Request deleted successfully');
+            if (res.data.deletedCount > 0) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Request deleted successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 refetch();
             }
         } catch (error) {

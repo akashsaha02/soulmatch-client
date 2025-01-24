@@ -4,6 +4,7 @@ import usePremiumReq from "@/hooks/usePremiumRequests";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet";
+import Swal from "sweetalert2";
 
 const ApprovePremium = () => {
   const {
@@ -18,25 +19,76 @@ const ApprovePremium = () => {
   // Approve Request Handler
   const handleApprove = async (id, userEmail) => {
     try {
-      await axiosSecure.patch(`/admin/premium-requests/${id}/approve`, {
-        userEmail,
+      // await axiosSecure.patch(`/admin/premium-requests/${id}/approve`, {
+      //   userEmail,
+      // });
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, Approve!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+
+          const res = await axiosSecure.patch(`/admin/premium-requests/${id}/approve`, {
+            userEmail,
+          });
+
+          if (res.data) {
+            Swal.fire({
+              title: "Approved!",
+              text: "Request has been approved.",
+              icon: "success"
+            });
+          }
+        }
       });
-      toast.success("Request approved and role updated!");
+
       refetchPremiumReq(); // Call as a function
       refetchMyPremiumReq(); // Call as a function
     } catch (error) {
       console.error("Error approving request:", error);
-      toast.error("Failed to approve request");
-    }
-  };
+      Swal.fire({
+        title: "Error!",
+        text: "Failed to approve request.",
+        icon: "error"
+      })
+    };
+  }
 
   // Delete Request Handler
   const handleDelete = async (id) => {
     try {
-      await axiosSecure.delete(`/admin/premium-requests/${id}`);
-      toast.success("Request deleted successfully!");
-      refetchPremiumReq(); // Call as a function
-      refetchMyPremiumReq(); // Call as a function
+      // await axiosSecure.delete(`/admin/premium-requests/${id}`);
+
+
+      Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const res = await axiosSecure.delete(`/admin/premium-requests/${id}`);
+          if (res.data.deletedCount > 0) {
+            Swal.fire({
+              title: "Deleted!",
+              text: "Request has been deleted.",
+              icon: "success"
+            });
+
+
+            refetchPremiumReq(); // Call as a function
+            refetchMyPremiumReq(); // Call as a function
+          }
+        }
+      })
     } catch (error) {
       console.error("Error deleting request:", error);
       toast.error("Failed to delete request");
@@ -45,7 +97,7 @@ const ApprovePremium = () => {
 
   return (
     <div>
-       <Helmet>
+      <Helmet>
         <title>Approve Premium | Dashboard</title>
       </Helmet>
       <SectionTitleHome heading="Approve Premium Biodata" subHeading='Premium User Requests' />
@@ -69,7 +121,7 @@ const ApprovePremium = () => {
                 <td className="border px-4 py-2">{req.biodataId}</td>
                 <td className="border px-4 py-2">{req.userName}</td>
                 <td className="border px-4 py-2">{req.userEmail}</td>
-                <td className="border px-4 py-2">{req.status}</td>
+                <td className="border px-4 py-2 capitalize">{req.status}</td>
                 <td className="border px-4 py-2">
                   <button
                     className="bg-green-500 text-white px-4 py-2 rounded mr-2"

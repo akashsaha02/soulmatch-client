@@ -47,27 +47,27 @@ const MyFavourites = () => {
       <div className="">
 
         <div className="my-10">
-          <div className="overflow-x-auto max-w-3xl mx-auto">
-            <table className="table-auto w-full border-collapse bg-white shadow-md rounded-lg overflow-hidden">
+          <div className="overflow-x-auto max-w-4xl mx-auto shadow-md rounded-lg">
+            <table className="table-auto w-full border-collapse bg-white overflow-hidden">
               {/* head */}
               <thead>
-                <tr className="text-lg font-semibold bg-indigo-600 text-white">
-                  <th className="px-6 py-3 text-left">Biodata Id</th>
-                  <th className="px-6 py-3 text-left">Image</th>
-                  <th className="px-6 py-3 text-left">Name</th>
-                  <th className="px-6 py-3 text-left">Action</th>
+                <tr className="text-lg font-semibold bg-indigo-600 text-white ">
+                  <th className="px-6 py-3 text-center">Biodata Id</th>
+                  <th className="px-6 py-3 text-center">Image</th>
+                  <th className="px-6 py-3 text-center">Name</th>
+                  <th className="px-6 py-3 text-center">Action</th>
                 </tr>
               </thead>
               <tbody>
                 {/* row 1 */}
                 {
-                  favourites.length > 0 ? favourites.map((item, index) => {
+                  favourites.length > 0 ? favourites.map((item) => {
                     return (
-                      <tr key={item._id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 text-sm text-gray-700">{item.favouriteBiodataId}</td>
+                      <tr key={item._id} className="hover:bg-gray-50 text-center border-b border-gray-200">
+                        <td className="px-6 py-4 text-sm text-black">{item.favouriteBiodataId}</td>
                         <td className="px-6 py-4">
                           <div className="avatar">
-                            <div className="mask mask-squircle h-12 w-12">
+                            <div className="mask mask-squircle h-12 w-12 mx-auto">
                               <img
                                 src={item.favouriteProfileImage}
                                 alt={item.favouriteName}
@@ -89,7 +89,7 @@ const MyFavourites = () => {
                   }) : <tr>
 
                     <td className="px-6 py-4 text-me-red">No Favourites Found</td>
-                    
+
                   </tr>
                 }
               </tbody>

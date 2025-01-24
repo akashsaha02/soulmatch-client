@@ -1,8 +1,9 @@
 import SectionTitleHome from "../shared/SectionTitleHome";
 import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
 import "react-vertical-timeline-component/style.min.css";
-import { FaUserPlus, FaUserEdit, FaSearch, FaHeart, FaCrown } from "react-icons/fa";
-
+import { FaUserPlus, FaUserEdit, FaSearch, FaHeart, FaCrown,FaUserCheck } from "react-icons/fa";
+import { HiUsers } from "react-icons/hi";
+import { GiBigDiamondRing } from "react-icons/gi";
 const HowItWorks = () => {
     const steps = [
         {
@@ -27,16 +28,16 @@ const HowItWorks = () => {
         },
 
         {
-            icon: FaCrown,
+            icon: FaUserCheck,
             title: "Get Profile Information",
             description: "Get detailed information about the biodata you are interested in.",
         },
         {
-            icon: FaCrown,
+            icon: HiUsers,
             title: "Start Meetups",
             description: "Start meeting up with the biodata you are interested in.",
         }, {
-            icon: FaCrown,
+            icon: GiBigDiamondRing,
             title: "Get Married",
             description: "Get married to the biodata you are interested in.",
         }, {
