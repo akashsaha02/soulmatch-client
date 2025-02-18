@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 import useFavourites from '@/hooks/useFavourites';
 import usePremium from '@/hooks/usePremium';
 import BiodataRecomendation from '@/components/allBiodatas/BiodataRecomendation';
+import { IoMdHeart } from "react-icons/io";
 
 const BiodataDetails = () => {
   const { id } = useParams();
@@ -167,7 +168,7 @@ const BiodataDetails = () => {
                 onClick={handleAddToFavourite}
                 className="bg-white text-indigo-600 px-6 py-2 rounded-full shadow-md hover:bg-indigo-100"
               >
-                Add to Favourites
+                Add to Favourites <IoMdHeart />
               </button>
             </div>
           </div>
@@ -240,7 +241,7 @@ const BiodataDetails = () => {
               </p>
             ) : (
               <Link to={`/checkout/${biodataId}`}>
-                <Button>View Contact Information</Button>
+                <Button className='mt-4 bg-me-orange'>View Contact Information</Button>
               </Link>
             )}
           </div>
