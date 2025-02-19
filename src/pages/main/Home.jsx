@@ -6,6 +6,7 @@ import SuccessStories from '@/components/home/SuccessStories';
 import FeaturedUsers from '@/components/home/FeaturedUsers';
 import { Helmet } from 'react-helmet';
 import Gallery from './../../components/home/Galary';
+import SoulmatchFAQ from '@/components/home/SoulmatchFAQ';
 
 const Home = () => {
   return (
@@ -20,6 +21,7 @@ const Home = () => {
       <SuccessCounter />
       <Gallery/>
       <SuccessStories />
+      <SoulmatchFAQ/>
     </div>
   )
 }
