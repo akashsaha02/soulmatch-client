@@ -5,6 +5,10 @@ import SectionTitleHome from "../shared/SectionTitleHome";
 import useBiodatas from "@/hooks/useBiodatas";
 import { axiosPublic } from "@/hooks/useAxiosPublic";
 
+import maleImg from '../../assets/icons/male.png'
+import femaleImg from '../../assets/icons/woman.png'
+import successImg from '../../assets/icons/marrige.png'
+
 const SuccessCounter = () => {
 
     const [biodatas] = useBiodatas();
@@ -23,19 +27,19 @@ const SuccessCounter = () => {
     const femaleBiodataCount = biodatas.filter(biodata => biodata.biodataType == 'Female').length;
     const counters = [
         {
-            icon: FaFemale,
+            icon: femaleImg,
             count: femaleBiodataCount,
             label: "Girls' Profiles",
             color: "text-pink-500",
         },
         {
-            icon: FaMale,
+            icon: maleImg,
             count: maleBiodataCount,
             label: "Boys' Profiles",
             color: "text-blue-500",
         },
         {
-            icon: FaRing,
+            icon: successImg,
             count: successStories.length,
             label: "Successful Marriages",
             color: "text-green-500",
@@ -54,7 +58,9 @@ const SuccessCounter = () => {
                             className=" p-6 flex flex-col items-center border border-me-brown "
                         >
                             {/* Icon */}
-                            <counter.icon className={`text-5xl mb-4 ${counter.color}`} />
+                            {/* <counter.icon className={`text-5xl mb-4 ${counter.color}`} /> */}
+
+                            <img src={counter.icon} className="w-20 pb-4" alt=""/>
                             {/* Count with animation */}
                             <h3 className="text-4xl font-bold text-me-brown mb-2 cinzel">
                                 <CountUp
