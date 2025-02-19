@@ -5,6 +5,7 @@ import SuccessCounter from '@/components/home/SuccessCounter';
 import SuccessStories from '@/components/home/SuccessStories';
 import FeaturedUsers from '@/components/home/FeaturedUsers';
 import { Helmet } from 'react-helmet';
+import Gallery from './../../components/home/Galary';
 
 const Home = () => {
   return (
@@ -18,6 +19,7 @@ const Home = () => {
       <HowItWorks />
       <SuccessCounter />
       <SuccessStories />
+      <Gallery/>
     </div>
   )
 }

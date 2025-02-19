@@ -6,7 +6,6 @@ import { axiosPublic } from "@/hooks/useAxiosPublic";
 const SuccessStories = () => {
     const [successStories, setSuccessStories] = useState([]); // State to store success stories
 
-
     useEffect(() => {
         async function fetchData() {
             const res = await axiosPublic.get("/success-stories");
@@ -17,16 +16,12 @@ const SuccessStories = () => {
         fetchData();
     }, []);
 
-
-
     // Sorting the stories by marriage date in descending order
     const sortedStories = successStories.sort(
         (a, b) => new Date(a.marriageDate) - new Date(b.marriageDate)
     );
 
     const data = sortedStories.slice(0, 2);
-
-    console.log(data);
 
     return (
         <div className="pb-16 bg-gray-50">
@@ -46,7 +41,6 @@ const SuccessStories = () => {
                                 className="w-full h-72 lg:h-80 object-cover"
                             />
                         </div>
-
                         {/* Right: Card Body */}
                         <div className="p-6 md:w-2/3">
                             {/* Couple's Name and Marriage Date */}
@@ -58,12 +52,10 @@ const SuccessStories = () => {
                                     Married on: {new Date(story.marriageDate).toLocaleDateString()}
                                 </p>
                             </div>
-
                             {/* Story */}
                             <p className="text-gray-600 text-sm leading-relaxed mb-4 line-clamp-4">
                                 {story.successStory}
                             </p>
-
                             {/* Stars */}
                             <div className="flex items-center mb-4">
                                 {[...Array(5)].map((_, i) => (
@@ -74,7 +66,6 @@ const SuccessStories = () => {
                                     />
                                 ))}
                             </div>
-
                             {/* Couple Photos */}
                             <div className="flex items-center gap-4 mt-4">
                                 <img

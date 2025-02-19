@@ -95,3 +95,18 @@
 .playfair{
   font-family: 'Playfair Display', serif;
 }
+
+
+.animate-bgMove {
+  background-size: 200% 100%;
+  animation: bgMove 15s linear infinite;
+}
+
+@keyframes bgMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 100% 50%;
+  }
+}
