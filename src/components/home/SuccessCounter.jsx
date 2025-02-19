@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import CountUp from "react-countup";
-import { FaFemale, FaMale, FaRing } from "react-icons/fa";
 import SectionTitleHome from "../shared/SectionTitleHome";
 import useBiodatas from "@/hooks/useBiodatas";
 import { axiosPublic } from "@/hooks/useAxiosPublic";
-
 import maleImg from '../../assets/icons/male.png'
 import femaleImg from '../../assets/icons/woman.png'
 import successImg from '../../assets/icons/marrige.png'
@@ -57,9 +55,7 @@ const SuccessCounter = () => {
                             key={index}
                             className=" p-6 flex flex-col items-center border border-me-brown "
                         >
-                            {/* Icon */}
-                            {/* <counter.icon className={`text-5xl mb-4 ${counter.color}`} /> */}
-
+                            {/* Image */}
                             <img src={counter.icon} className="w-20 pb-4" alt=""/>
                             {/* Count with animation */}
                             <h3 className="text-4xl font-bold text-me-brown mb-2 cinzel">
