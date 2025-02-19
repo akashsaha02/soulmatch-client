@@ -4,6 +4,7 @@ import SectionTitleHome from '../shared/SectionTitleHome';
 import BiodataCard from '../allBiodatas/BiodataCard';
 import { Button } from '../ui/button';
 import { FaArrowRight } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 const FeaturedUsers = () => {
     const [biodatas, loading, myBiodata] = useBiodatas();
@@ -66,7 +67,9 @@ const FeaturedUsers = () => {
             </div>
 
             <div className="py-4 flex justify-center">
-                <Button className='bg-me-orange'>See More <FaArrowRight/></Button>
+                <Link to="/biodatas">
+                    <Button className='bg-me-pink cinzel font-bold'>See More <FaArrowRight /></Button>
+                </Link>
             </div>
         </div>
     );
