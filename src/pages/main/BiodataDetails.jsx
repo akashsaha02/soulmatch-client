@@ -147,7 +147,7 @@ const BiodataDetails = () => {
       <div className="container mx-auto max-w-6xl bg-white rounded-xl shadow-lg overflow-hidden">
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* Left Side */}
-          <div className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white p-8 flex flex-col items-center justify-center">
+          <div className="bg-gradient-to-r from-me-darkOrange to-me-orange text-white p-8 flex flex-col items-center justify-center">
             <img
               src={profileImage}
               alt={name}
@@ -166,9 +166,9 @@ const BiodataDetails = () => {
               </p>
               <button
                 onClick={handleAddToFavourite}
-                className="bg-white text-indigo-600 px-6 py-2 rounded-full shadow-md hover:bg-indigo-100"
+                className="bg-white px-6 py-2 rounded-full shadow-md hover:bg-indigo-100 flex items-center gap-3"
               >
-                Add to Favourites <IoMdHeart />
+                <span className="font-semibold text-me-pink">Add to Favourites</span><span className="text-me-pink text-lg"> <IoMdHeart /></span>
               </button>
             </div>
           </div>
