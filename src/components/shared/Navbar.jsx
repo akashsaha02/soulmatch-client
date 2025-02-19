@@ -111,7 +111,7 @@ const Navbar = () => {
 
                 <div className="flex items-center gap-2">
                     {user ? (
-                        <Link to="/dashboard/user-home" className="flex items-center gap-2">
+                        <Link to="/dashboard/my-profile" className="flex items-center gap-2">
                             <span className="hidden lg:block text-sm">{user?.displayName}</span>
                             <img src={user?.photoURL} alt={user?.email} className="w-8 h-8 md:w-10 md:h-10 rounded-full block" />
                         </Link>
