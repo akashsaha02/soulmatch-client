@@ -2,6 +2,8 @@ import { useState } from 'react';
 import useBiodatas from '@/hooks/useBiodatas';
 import SectionTitleHome from '../shared/SectionTitleHome';
 import BiodataCard from '../allBiodatas/BiodataCard';
+import { Button } from '../ui/button';
+import { FaArrowRight } from 'react-icons/fa';
 
 const FeaturedUsers = () => {
     const [biodatas, loading, myBiodata] = useBiodatas();
@@ -61,6 +63,10 @@ const FeaturedUsers = () => {
                 {sortedUsers.map((biodata, index) => (
                     <BiodataCard key={index} biodata={biodata} />
                 ))}
+            </div>
+
+            <div className="py-4 flex justify-center">
+                <Button className='bg-me-orange'>See More <FaArrowRight/></Button>
             </div>
         </div>
     );
