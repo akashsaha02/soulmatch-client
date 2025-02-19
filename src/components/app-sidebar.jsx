@@ -41,6 +41,11 @@ const sharedItems = [
     to: "/contact",
     icon: Send,
   },
+  {
+    title:"My Profile",
+    to:"/dashboard/my-profile",
+    icon: UserCog
+  }
 ];
 
 const adminItems = [

@@ -22,6 +22,7 @@ import AdminSuccessStory from "@/pages/dashboard/admin/SuccessStory"
 import Contact from "@/pages/main/Contact"
 import About from "@/pages/main/About"
 import AdminHome from "@/pages/dashboard/admin/AdminHome"
+import MyProfile from "@/pages/main/MyProfile"
 
 export const router = createBrowserRouter([
     {
@@ -61,7 +62,8 @@ export const router = createBrowserRouter([
             {
                 path: "/about",
                 element: <About />
-            },  
+            }, 
+           
         ],
 
     },
@@ -101,7 +103,13 @@ export const router = createBrowserRouter([
                 element: <PrivateRoute>
                     <GotMarried />
                 </PrivateRoute>
-            }
+            },
+            {
+                path: "/dashboard/my-profile",
+                element:<PrivateRoute>
+                    <MyProfile/>
+                </PrivateRoute>
+            } 
 
             // Admin Routes
             , {

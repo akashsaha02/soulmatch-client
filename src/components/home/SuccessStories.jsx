@@ -21,7 +21,7 @@ const SuccessStories = () => {
         (a, b) => new Date(a.marriageDate) - new Date(b.marriageDate)
     );
 
-    const data = sortedStories.slice(0, 2);
+    const data = sortedStories.slice(0, 4);
 
     return (
         <div className="pb-16 bg-gray-50">
@@ -38,7 +38,7 @@ const SuccessStories = () => {
                             <img
                                 src={story.coupleImage}
                                 alt={`Couple ${story.selfDetails.name} & ${story.partnerDetails.name}`}
-                                className="w-full h-72 lg:h-80 object-cover"
+                                className="w-full h-64 lg:h-72 object-cover"
                             />
                         </div>
                         {/* Right: Card Body */}
