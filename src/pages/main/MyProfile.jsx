@@ -1,15 +1,8 @@
-import useAuth from "@/hooks/useAuth";
-import {  useEffect } from "react";
 
-import { useLocation } from "react-router-dom";
+import useAuth from "@/hooks/useAuth";
 
 const MyProfile = () => {
-  const location = useLocation();
-  useEffect(() => {
-    const pageTitle = "PropertyPulse | My Profile";
-    document.title = pageTitle;
-  }, [location]);
-  const { user } = useAuth();
+const {user}=useAuth();
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-8 space-y-6">
