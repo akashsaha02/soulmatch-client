@@ -9,6 +9,8 @@ SoulMatch is an advanced matrimony platform built using the MERN (MongoDB, Expre
 ### Summary
 The client side of SoulMatch focuses on delivering a responsive and engaging user experience. Features include a homepage with premium biodatas, biodata filtering, private biodata details, and success stories. Key functionalities such as user authentication, dynamic form handling, and toast notifications have been implemented for seamless interaction.
 
+![alt text](./src/assets/github-banner.png)
+
 ### Key Features
 - Responsive design for mobile, tablet, and desktop.
 - Secure authentication using Firebase and JWT.
@@ -34,6 +36,65 @@ The client side of SoulMatch focuses on delivering a responsive and engaging use
 - `dev`: Starts the development server.
 - `build`: Builds the production-ready client application.
 - `preview`: Previews the production build.
+
+## Installation and Setup
+
+### Client Setup
+
+1. **Clone the Repository**  
+   Navigate to the client directory:  
+   ```
+   git clone https://github.com/akashsaha02/soulmatch-client 
+   cd soulmatch-client
+   ```
+
+2. **Install Dependencies**  
+   Run:  
+   ```
+   npm install
+   ```
+
+3. **Configure Environment Variables**  
+   Create a `.env` file and add the following key:
+   ```
+   VITE_API_BASE_URL=<your-backend-api-url>
+   ```
+
+4. **Run the Development Server**  
+   Start the development server with:  
+   ```
+   npm run dev
+   ```
+
+### Server Setup
+
+1. **Clone the Repository**  
+   Navigate to the server directory:  
+   ```
+   git clone https://github.com/akashsaha02/soulmatch-server
+   cd soulmatch-server
+   ```
+
+2. **Install Dependencies**  
+   Run:  
+   ```
+   npm install
+   ```
+
+3. **Configure Environment Variables**  
+   Create a `.env` file and configure the following variables:
+   - `MONGODB_URI` – MongoDB connection string  
+   - `JWT_SECRET` – Secret for signing JWT tokens  
+   - Optionally, set `NODE_ENV=production` for production deployment.
+
+4. **Run the Server**  
+   For development, start the server with:  
+   ```
+   npm start
+   ```
+   The server typically runs on port 3008, unless specified otherwise in your environment.
+
+---
 
 ## Server-Side (Backend)
 
