@@ -22,20 +22,20 @@ The client side of SoulMatch focuses on delivering a responsive and engaging use
 - Interactive dashboard for users and admins.
 
 ### Technologies Used
-- **React**: Framework for building the user interface.
-- **React Router DOM**: For routing and private routes.
-- **Shadcn Ui**: Used Shadcn ui to create modern components.
-- **Tailwind CSS**: For styling and responsiveness.
-- **TanStack Query**: Efficient data fetching and state management.
-- **Firebase**: Authentication and hosting.
+- **Next.js 15**: Framework with App Router.
+- **TypeScript**: Type-safe development.
+- **Redux Toolkit & RTK Query**: State management and API layer.
+- **Shadcn Ui**: Modern UI components.
+- **Tailwind CSS**: Styling and responsiveness.
+- **Firebase**: Authentication.
 - **Stripe**: Payment gateway.
-- **SweetAlert2**: Stylish notifications and modals.
+- **SweetAlert2**: Notifications and modals.
 - **Axios**: API requests.
 
 ### Scripts
-- `dev`: Starts the development server.
-- `build`: Builds the production-ready client application.
-- `preview`: Previews the production build.
+- `dev`: Starts the Next.js development server.
+- `build`: Builds the production-ready application.
+- `start`: Starts the production server.
 
 ## Installation and Setup
 
@@ -55,9 +55,16 @@ The client side of SoulMatch focuses on delivering a responsive and engaging use
    ```
 
 3. **Configure Environment Variables**  
-   Create a `.env` file and add the following key:
+   Create a `.env.local` file and add:
    ```
-   VITE_API_BASE_URL=<your-backend-api-url>
+   NEXT_PUBLIC_API_BASE_URL=<your-backend-api-url>
+   NEXT_PUBLIC_FIREBASE_API_KEY=...
+   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=...
+   NEXT_PUBLIC_FIREBASE_PROJECT_ID=...
+   NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=...
+   NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=...
+   NEXT_PUBLIC_FIREBASE_APP_ID=...
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=...
    ```
 
 4. **Run the Development Server**  
