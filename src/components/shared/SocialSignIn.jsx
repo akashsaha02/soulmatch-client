@@ -1,68 +1,45 @@
-import facebookIcon from '../../assets/icons/icons8-facebook.svg';
-import githubIcon from '../../assets/icons/icons8-github.svg';
-import googleIcon from '../../assets/icons/icons8-google.svg';
+import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
+import googleIcon from '../../assets/icons/icons8-google.svg';
 import useAuth from '@/hooks/useAuth';
 import useAxiosPublic from '@/hooks/useAxiosPublic';
+import { Button } from '@/components/ui/button';
 
-const SocialSignIn = () => {
-
+const SocialSignIn = ({ label = "Continue with Google" }) => {
     const { googleSignIn } = useAuth();
     const navigate = useNavigate();
     const location = useLocation();
+    const axiosPublic = useAxiosPublic();
+    const [pending, setPending] = useState(false);
 
     const from = location.state?.from?.pathname || '/';
 
-    const axiosPublic = useAxiosPublic();
-
-    const handleGoogleSignIn = () => {
-
+    const handleGoogleSignIn = async () => {
+        setPending(true);
         try {
-            googleSignIn().then((res) => {
-                const userInfo = {
-                    email: res.user?.email,
-                    name: res.user?.displayName
-                }
-                axiosPublic.post('/users', userInfo).then((res) => {
-                    if (res.data.insertedId) {
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Success',
-                            text: 'Logged in successfully with Google!',
-                        }).then(() => {
-                            navigate(from);
-                        });
-                    }
-                })
-            })
-
-
-        } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: err.message || 'Error logging in with Google. Please try again.',
+            const res = await googleSignIn();
+            await axiosPublic.post('/users', {
+                email: res.user?.email,
+                name: res.user?.displayName,
             });
+            toast.success(`Welcome, ${res.user?.displayName?.split(' ')[0] || 'friend'}!`);
+            navigate(from, { replace: true });
+        } catch (err) {
+            if (err?.code !== 'auth/popup-closed-by-user') {
+                toast.error(err.message || 'Google sign-in failed. Please try again.');
+            }
+        } finally {
+            setPending(false);
         }
     };
+
     return (
-        <div className="w-full">
-            <button
-                onClick={handleGoogleSignIn}
-                type="button"
-                className="p-4 border border-me-brown rounded-lg flex justify-center items-center gap-4 w-full"
-            >
-                <img src={googleIcon} alt="google" className="w-5" />
-                <p className="font-medium capitalize"> Sign in with google</p>
-            </button>
-            {/* <button type="button" className="p-4 border rounded-full">
-                <img src={facebookIcon} alt="facebook" className="w-6" />
-            </button>
-            <button type="button" className="p-4 border rounded-full">
-                <img src={githubIcon} alt="github" className="w-6" />
-            </button> */}
-        </div>
+        <Button type="button" variant="outline" size="lg" className="w-full" onClick={handleGoogleSignIn} disabled={pending}>
+            {pending ? <Loader2 className="animate-spin" /> : <img src={googleIcon} alt="" className="h-5 w-5" />}
+            {label}
+        </Button>
     )
 }
 

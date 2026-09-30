@@ -1,123 +1,83 @@
-import Loader from '@/components/shared/Loader';
-import SectionTitleHome from '@/components/shared/SectionTitleHome';
-import { axiosSecure } from '@/hooks/useAxiosSecure';
-import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet';
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useQuery } from '@tanstack/react-query';
+import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
+import { Crown, DollarSign, Heart, MailQuestion, ScrollText, UserRound, UserRoundCheck, Users } from 'lucide-react';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { DashboardPage, Panel, StatCard } from '@/components/dashboard/DashboardKit';
+import { Skeleton } from '@/components/ui/skeleton';
+
+const CHART_COLORS = ['hsl(var(--chart-1))', 'hsl(var(--chart-2))', 'hsl(var(--chart-3))'];
 
 const AdminHome = () => {
-
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState({
-        biodatas: 0,
-        contactRequests: 0,
-        premiumRequests: 0,
-        successStories: 0,
-        users: 0,
-        maleBiodataCount: 0,
-        femaleBiodataCount: 0,
-        premiumBiodatas: 0,
-        totalRevenue: 0,
+    const axiosSecure = useAxiosSecure();
+    const { data, isLoading } = useQuery({
+        queryKey: ['admin-stats'],
+        queryFn: async () => (await axiosSecure.get('/admin/stats')).data,
     });
 
-    useEffect(() => {
-        async function fetchData() {
-            const response = await axiosSecure.get('/admin/stats');
-            if (response.data) {
-                setData(response.data);
-                setLoading(false);
-            }
-        }
-        fetchData();
-    }, []);
+    if (isLoading || !data) {
+        return (
+            <DashboardPage title="Overview">
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {Array.from({ length: 8 }).map((_, i) => <Skeleton key={i} className="h-24 rounded-3xl" />)}
+                </div>
+            </DashboardPage>
+        );
+    }
 
-    if (loading) return <Loader/>
+    const revenue = (data.totalRevenue / 100).toLocaleString(undefined, { style: 'currency', currency: 'USD' });
 
     const stats = [
-        { label: "All Biodatas", value: data.biodatas, icon: "📝" },
-        { label: "Contact Requests", value: data.contactRequests, icon: "📞" },
-        { label: "Premium Requests", value: data.premiumRequests, icon: "⭐" },
-        { label: "Success Stories", value: data.successStories, icon: "🎉" },
-        { label: "Total Users", value: data.users, icon: "👥" },
-        { label: "Premium Biodatas", value: data.premiumBiodatas, icon: "👑" },
-        { label: "Male Biodata", value: data.maleBiodataCount, icon: "👨" },
-        { label: "Female Biodata", value: data.femaleBiodataCount, icon: "👩" },
-        { label: "Total Revenue", value: (data.totalRevenue / 100).toFixed(2), icon: "💵" },
+        { label: "Total biodatas", value: data.biodatas, icon: ScrollText },
+        { label: "Total users", value: data.users, icon: Users, tone: "plum" },
+        { label: "Premium biodatas", value: data.premiumBiodatas, icon: Crown, tone: "gold" },
+        { label: "Revenue", value: revenue, icon: DollarSign, tone: "sage" },
+        { label: "Brides", value: data.femaleBiodataCount, icon: UserRoundCheck },
+        { label: "Grooms", value: data.maleBiodataCount, icon: UserRound, tone: "sky" },
+        { label: "Contact requests", value: data.contactRequests, icon: MailQuestion, tone: "plum" },
+        { label: "Success stories", value: data.successStories, icon: Heart },
     ];
 
-    // Pie chart data for biodata
-    const biodataChartData = [
-        { name: "Total Biodatas", value: data.biodatas },
-        { name: "Male Biodatas", value: data.maleBiodataCount },
-        { name: "Female Biodatas", value: data.femaleBiodataCount },
-        { name: "Premium Biodatas", value: data.premiumBiodatas },
-        { name: "Total Revenue", value: data.totalRevenue / 100 },
+    // Premium is a subset of all biodatas, so split into male / female / premium share for the chart.
+    const genderData = [
+        { name: "Brides", value: data.femaleBiodataCount },
+        { name: "Grooms", value: data.maleBiodataCount },
+    ];
+    const premiumData = [
+        { name: "Premium", value: data.premiumBiodatas },
+        { name: "Free", value: Math.max(data.biodatas - data.premiumBiodatas, 0) },
     ];
 
-    const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#AF19FF"];
+    const Donut = ({ data: rows, colors }) => (
+        <div className="h-72">
+            <ResponsiveContainer>
+                <PieChart>
+                    <Pie data={rows} dataKey="value" nameKey="name" innerRadius="58%" outerRadius="85%" paddingAngle={3} stroke="none">
+                        {rows.map((_, i) => <Cell key={i} fill={colors[i % colors.length]} />)}
+                    </Pie>
+                    <Tooltip contentStyle={{ borderRadius: 12, border: '1px solid hsl(var(--border))', boxShadow: '0 8px 24px -6px rgba(46,26,40,.12)' }} />
+                    <Legend iconType="circle" verticalAlign="bottom" />
+                </PieChart>
+            </ResponsiveContainer>
+        </div>
+    );
 
     return (
-        <div className="max-w-6xl mx-auto p-4">
-            <Helmet>
-                <title>Admin Home | Dashboard</title>
-            </Helmet>
-
-            <SectionTitleHome heading="Admin Home" subHeading="View all the details" />
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 p-6">
-                {stats.map((stat, index) => (
-                    <div
-                        key={index}
-                        className="flex flex-col items-center justify-center bg-gray-200 shadow-lg rounded-lg p-6 text-black transform transition-transform hover:scale-105"
-                    >
-                        <div className="text-5xl mb-4">{stat.icon}</div>
-                        <h3 className="text-lg font-semibold mb-2">{stat.label}</h3>
-                        <p className="text-3xl font-bold">{stat.value}</p>
-                    </div>
+        <DashboardPage title="Overview" description="How SoulMatch is doing today.">
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {stats.map((stat, i) => (
+                    <StatCard key={stat.label} {...stat} delay={i * 0.04} />
                 ))}
             </div>
 
-            {/* Pie Chart Section */}
-            <div className="mt-10 bg-white shadow-lg rounded-lg p-6">
-                <h2 className="text-2xl font-bold text-center mb-6 cinzel">Biodata and Revenue Insights</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Biodata Pie Chart */}
-                    <div className="w-full h-72">
-                        <ResponsiveContainer>
-                            <PieChart>
-                                <Pie
-                                    data={biodataChartData}
-                                    dataKey="value"
-                                    nameKey="name"
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    label
-                                >
-                                    {biodataChartData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                        <p className="text-center mt-4">Biodata Distribution</p>
-                    </div>
-
-                    {/* Revenue Chart */}
-                    <div className="w-full h-80">
-                        <div className="flex flex-col items-center justify-center h-full bg-gradient-to-br from-blue-500 to-green-400 rounded-lg text-white shadow-md">
-                            <p className="text-3xl font-bold mb-2">💵</p>
-                            <h3 className="text-xl font-semibold">Total Revenue</h3>
-                            <p className="text-2xl mt-2">${(data.totalRevenue / 100).toFixed(2)}</p>
-                        </div>
-                    </div>
-                </div>
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+                <Panel title="Biodatas by gender" description={`${data.biodatas} biodatas in total`} bodyClassName="p-4">
+                    <Donut data={genderData} colors={CHART_COLORS} />
+                </Panel>
+                <Panel title="Premium share" description={`${data.premiumRequests} premium requests received`} bodyClassName="p-4">
+                    <Donut data={premiumData} colors={[CHART_COLORS[2], 'hsl(var(--muted))']} />
+                </Panel>
             </div>
-        </div>
+        </DashboardPage>
     );
 };
 

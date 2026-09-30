@@ -7,7 +7,7 @@ const useContactRequest = (isAdmin = false) => {
   const { user } = useAuth();
 
   const { refetch, data: requests = [], isLoading } = useQuery({
-    queryKey: ['contact-requests', user?.email],
+    queryKey: ['contact-requests', isAdmin ? 'admin' : user?.email],
     queryFn: async () => {
       const endpoint = isAdmin
         ? '/admin/contact-requests'

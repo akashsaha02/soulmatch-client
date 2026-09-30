@@ -48,12 +48,12 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/biodatas/:id",
-                element: <BiodataDetails />,
+                element: <PrivateRoute><BiodataDetails /></PrivateRoute>,
 
             },
             {
                 path: "/checkout/:id",
-                element: <Checkout />
+                element: <PrivateRoute><Checkout /></PrivateRoute>
             },
             {
                 path: "/contact",

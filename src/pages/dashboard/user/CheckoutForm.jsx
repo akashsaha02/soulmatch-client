@@ -1,11 +1,13 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
+import { Button } from '@/components/ui/button';
 
-const CheckoutForm = ({ id, email }) => {
+const CheckoutForm = ({ id, amount = 5 }) => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const stripe = useStripe();
@@ -13,7 +15,6 @@ const CheckoutForm = ({ id, email }) => {
     const axiosSecure = useAxiosSecure();
 
     const [errorMessage, setErrorMessage] = useState(null);
-    const [transactionId, setTransactionId] = useState(null);
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (event) => {
@@ -25,6 +26,7 @@ const CheckoutForm = ({ id, email }) => {
         }
 
         setLoading(true);
+        setErrorMessage(null);
 
         try {
             const { error, paymentIntent } = await stripe.confirmPayment({
@@ -32,7 +34,7 @@ const CheckoutForm = ({ id, email }) => {
                 confirmParams: {
                     payment_method_data: {
                         billing_details: {
-                            name: user?.name || "Guest User",
+                            name: user?.displayName || "Guest User",
                             email: user?.email || "guest@example.com",
                         },
                     },
@@ -43,8 +45,6 @@ const CheckoutForm = ({ id, email }) => {
             if (error) {
                 setErrorMessage(error.message);
             } else if (paymentIntent?.status === "succeeded") {
-                setTransactionId(paymentIntent.id);
-
                 const contactRequest = {
                     email: user.email,
                     biodataId: id,
@@ -55,59 +55,35 @@ const CheckoutForm = ({ id, email }) => {
                 };
 
                 const res = await axiosSecure.post("/payments", contactRequest);
-                // console.log(res.data);
 
                 if (res.data.result.insertedId) {
-                    console.log("Payment completed successfully");
-
-                    Swal.fire({
-                        title: "Payment Successful",
-                        text: "Your payment has been successfully processed.",
-                        icon: "success",
-                        showCancelButton: false,
-                        confirmButtonText: "Ok",
+                    toast.success("Payment successful", {
+                        description: `Transaction ${paymentIntent.id}. We'll notify you once it's approved.`,
                     });
-                    navigate("/dashboard/payment-history");
+                    navigate('/dashboard/my-contact-requests');
                 } else {
                     setErrorMessage("Payment not completed. Please try again.");
                 }
             } else {
                 setErrorMessage("Payment not completed. Please try again.");
             }
-        } catch (error) {
+        } catch {
             setErrorMessage("An error occurred while processing your payment.");
         } finally {
             setLoading(false);
         }
     };
 
-    if (transactionId) {
-        Swal.fire({
-            title: "Payment Successful",
-            text: "Your payment has been successfully processed.",
-            icon: "success",
-            showCancelButton: false,
-            confirmButtonText: "Ok",
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Navigate to the home page or desired route
-                navigate('/dashboard/my-contact-requests');
-            }
-        });
-    }
-
     return (
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
             <PaymentElement />
-            <button
-                type="submit"
-                className="btn btn-primary bg-me-teal px-4 py-2 text-white font-bold uppercase rounded hover:bg-me-pink w-full mt-4"
-                disabled={!stripe || !elements || loading}
-            >
-                {loading ? "Processing..." : "Pay Now (5.00 $)"}
-            </button>
-            {errorMessage && <div className="text-red-500 mt-2">{errorMessage}</div>}
-            {transactionId && <div className="text-green-500 mt-2">Transaction ID: {transactionId}</div>}
+            {errorMessage && (
+                <p role="alert" className="rounded-xl bg-destructive/5 px-4 py-3 text-sm text-destructive">{errorMessage}</p>
+            )}
+            <Button type="submit" size="lg" className="w-full" disabled={!stripe || !elements || loading}>
+                {loading && <Loader2 className="animate-spin" />}
+                {loading ? "Processing…" : `Pay $${amount.toFixed(2)}`}
+            </Button>
         </form>
     );
 };

@@ -1,205 +1,134 @@
-import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "./ui/sidebar";
 import {
   BookHeart,
+  ChartPie,
   Gem,
-  Home,
+  Globe,
+  Heart,
+  LayoutDashboard,
   LogOut,
   MailCheck,
-  MailWarning,
+  MailQuestion,
   Send,
-  SquareUser,
   UserCheck,
-  UserCog,
+  UserRound,
+  UserRoundPen,
+  Users,
 } from "lucide-react";
 import useAdmin from "@/hooks/useAdmin";
 import useAuth from "@/hooks/useAuth";
-import Swal from "sweetalert2";
-
-const sharedItems = [
-  {
-    title: "Home",
-    to: "/",
-    icon: Home,
-  },
-  {
-    title: "Biodatas",
-    to: "/biodatas",
-    icon: SquareUser,
-  },
-  {
-    title: "Contact Us",
-    to: "/contact",
-    icon: Send,
-  },
-  {
-    title:"My Profile",
-    to:"/dashboard/my-profile",
-    icon: UserCog
-  }
-];
+import Logo from "./shared/Logo";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { initials } from "@/lib/utils";
 
 const adminItems = [
-  {
-    title: "Admin Home",
-    to: "/dashboard/admin-home",
-    icon: Home,
-  },
-  {
-    title: "Manage Users",
-    to: "/dashboard/users",
-    icon: UserCog,
-  },
-  {
-    title: "Approve Premium",
-    to: "/dashboard/approve-premium",
-    icon: UserCheck,
-  },
-  {
-    title: "Approve Contact Requests",
-    to: "/dashboard/approve-contact-requests",
-    icon: MailCheck,
-  },
-  {
-    title: "Success Stories",
-    to: "/dashboard/admin/success-stories",
-    icon: MailCheck,
-  }
+  { title: "Overview", to: "/dashboard/admin-home", icon: ChartPie },
+  { title: "Manage users", to: "/dashboard/users", icon: Users },
+  { title: "Approve premium", to: "/dashboard/approve-premium", icon: UserCheck },
+  { title: "Contact requests", to: "/dashboard/approve-contact-requests", icon: MailCheck },
+  { title: "Success stories", to: "/dashboard/admin/success-stories", icon: Heart },
 ];
 
 const userItems = [
-  {
-    title: "User Home",
-    to: "/dashboard/user-home",
-    icon: Home,
-  },
-  {
-    title: "Manage Biodata",
-    to: "/dashboard/manage-biodata",
-    icon: UserCog,
-  },
-  {
-    title: "My Contact Requests",
-    to: "/dashboard/my-contact-requests",
-    icon: MailWarning,
-  },
-  {
-    title: "My Favourites",
-    to: "/dashboard/my-favourites",
-    icon: BookHeart,
-  },
-  {
-    title: "Got Married",
-    to: "/dashboard/got-married",
-    icon: Gem,
-  },
+  { title: "Overview", to: "/dashboard/user-home", icon: LayoutDashboard },
+  { title: "Edit biodata", to: "/dashboard/manage-biodata", icon: UserRoundPen },
+  { title: "Contact requests", to: "/dashboard/my-contact-requests", icon: MailQuestion },
+  { title: "Favourites", to: "/dashboard/my-favourites", icon: BookHeart },
+  { title: "Got married", to: "/dashboard/got-married", icon: Gem },
 ];
 
-const AppSidebar = () => {
-  const { logoutUser } = useAuth();
-  const [isAdmin, isAdminLoading] = useAdmin();
-  const isAdminRole = isAdmin;
-  const varriable = isAdminRole ? adminItems : userItems;
-  const location = useLocation();
-  const navigate = useNavigate();
+const sharedItems = [
+  { title: "My profile", to: "/dashboard/my-profile", icon: UserRound },
+  { title: "Browse profiles", to: "/biodatas", icon: Globe },
+  { title: "Contact us", to: "/contact", icon: Send },
+];
 
-  const handleLogout = () => {
-
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'You will be logged out of your account.',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, Logout!',
-      cancelButtonText: 'Cancel',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Call the logout function
-
-        logoutUser().then(() => {
-          Swal.fire({
-            title: 'Logged Out!',
-            text: 'You have been logged out successfully.',
-            icon: 'success',
-          });
-          navigate('/')
-        })
-      }
-    });
-
-
-  }
-
+const NavGroup = ({ label, items }) => {
+  const { isMobile, setOpenMobile } = useSidebar();
+  const { pathname } = useLocation();
 
   return (
-    <div>
-      <Sidebar>
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>Admin</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {varriable.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink
-                        to={item.to}
-                        className={
-                          location.pathname === item.to
-                            ? "flex items-center space-x-2 p-2 bg-indigo-500 text-white rounded-md"
-                            : "flex items-center space-x-2 p-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                        }
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-          <SidebarGroup>
-            <SidebarGroupLabel>Application</SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                {sharedItems.map((item) => (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild>
-                      <NavLink
-                        to={item.to}
-                        className={location.pathname === item.to
-                          ? "flex items-center space-x-2 p-2 bg-indigo-500 text-white rounded-md"
-                          : "flex items-center space-x-2 p-2 text-gray-700 hover:bg-gray-100 rounded-md"
-                        }
-                      >
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </NavLink>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-                <Link onClick={() => handleLogout()} className="bg-me-orange px-4 py-2 rounded-lg flex items-center gap-2 text-white"><LogOut size={20} />Logout</Link>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        </SidebarContent>
-      </Sidebar>
-    </div>
+    <SidebarGroup>
+      <SidebarGroupLabel className="text-[11px] uppercase tracking-[0.18em] text-sidebar-foreground/50">{label}</SidebarGroupLabel>
+      <SidebarGroupContent>
+        <SidebarMenu className="gap-1">
+          {items.map((item) => (
+            <SidebarMenuItem key={item.to}>
+              <SidebarMenuButton
+                asChild
+                isActive={pathname === item.to}
+                tooltip={item.title}
+                className="h-10 rounded-xl data-[active=true]:bg-sidebar-primary data-[active=true]:font-semibold data-[active=true]:text-sidebar-primary-foreground"
+              >
+                <NavLink to={item.to} end onClick={() => isMobile && setOpenMobile(false)}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </NavLink>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroupContent>
+    </SidebarGroup>
+  );
+};
+
+const AppSidebar = () => {
+  const { user, logoutUser } = useAuth();
+  const [isAdmin] = useAdmin();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logoutUser();
+    toast.success("You've been signed out");
+    navigate('/');
+  };
+
+  return (
+    <Sidebar>
+      <SidebarHeader className="px-4 py-5">
+        <Logo light />
+      </SidebarHeader>
+      <SidebarContent>
+        <NavGroup label={isAdmin ? "Admin" : "My account"} items={isAdmin ? adminItems : userItems} />
+        <NavGroup label="General" items={sharedItems} />
+      </SidebarContent>
+      <SidebarFooter className="p-3">
+        <div className="flex items-center gap-3 rounded-2xl bg-sidebar-accent p-3">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={user?.photoURL} alt="" />
+            <AvatarFallback className="bg-sidebar-primary text-xs text-white">{initials(user?.displayName)}</AvatarFallback>
+          </Avatar>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-sm font-semibold text-white">{user?.displayName}</p>
+            <p className="truncate text-xs text-sidebar-foreground/60">{user?.email}</p>
+          </div>
+          <button
+            type="button"
+            onClick={handleLogout}
+            aria-label="Sign out"
+            className="grid h-8 w-8 place-items-center rounded-full text-sidebar-foreground/70 transition hover:bg-white/10 hover:text-white"
+          >
+            <LogOut className="h-4 w-4" />
+          </button>
+        </div>
+      </SidebarFooter>
+    </Sidebar>
   );
 };
 
 export default AppSidebar;
-
-

@@ -1,125 +1,94 @@
-// import { useParams } from 'react-router-dom';
-// import SectionTitleHome from './../../components/shared/SectionTitleHome';
-// import CheckoutForm from '../dashboard/user/CheckoutForm';
-// import { loadStripe } from '@stripe/stripe-js';
-// import { Elements } from '@stripe/react-stripe-js';
-// import { useEffect, useState } from 'react';
-// import useAxiosSecure from '@/hooks/useAxiosSecure';
-
-
-// const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_PK);
-
-// const Checkout = () => {
-//     const [clientSecret, setClientSecret] = useState(null);
-//     const axiosSecure = useAxiosSecure();
-//     const { id } = useParams();
-//     const totalPrice = 5;
-//     useEffect(() => {
-//         if (totalPrice > 0) {
-//             const roundedPrice = Math.round(totalPrice * 100); // Convert to cents and round to nearest integer
-//             axiosSecure.post("/create-payment-intent", { price: roundedPrice })
-//                 .then((res) => setClientSecret(res.data.clientSecret))
-//                 .catch(() => console.error("Failed to fetch payment intent"));
-//         }
-//     }, [axiosSecure, totalPrice]);
-
-//     const appearance = { theme: 'stripe' };
-//     const options = { clientSecret, appearance };
-
-//     return (
-//         <div>
-//             <SectionTitleHome heading="Checkout" subHeading="Please pay to view contact Information" />
-
-//             {clientSecret ? (
-//                 <Elements stripe={stripePromise} options={options}>
-//                     <CheckoutForm  />
-//                 </Elements>
-//             ) : (
-//                 <p>Loading payment details...</p>
-//             )}
-//         </div>
-//     )
-// }
-
-// export default Checkout
-
-
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import SectionTitleHome from './../../components/shared/SectionTitleHome';
-import CheckoutForm from '../dashboard/user/CheckoutForm';
+import { Helmet } from 'react-helmet';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
-import { useEffect, useState } from 'react';
+import { LockKeyhole, ShieldCheck } from 'lucide-react';
+import CheckoutForm from '../dashboard/user/CheckoutForm';
+import PageHeader from '@/components/shared/PageHeader';
+import { Skeleton } from '@/components/ui/skeleton';
 import useAxiosSecure from '@/hooks/useAxiosSecure';
 import useAuth from '@/hooks/useAuth';
 
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_PK);
-import Payment from './../dashboard/user/Payment';
+const PRICE = 5;
 
 const Checkout = () => {
     const { id } = useParams();
     const { user } = useAuth();
     const axiosSecure = useAxiosSecure();
     const [clientSecret, setClientSecret] = useState(null);
-    const totalPrice = 5;
+    const [error, setError] = useState('');
 
     useEffect(() => {
-        if (totalPrice > 0) {
-            const roundedPrice = Math.round(totalPrice * 100); // Convert to cents
-            axiosSecure.post("/create-payment-intent", { price: roundedPrice })
-                .then((res) => setClientSecret(res.data.clientSecret))
-                .catch(() => console.error("Failed to fetch payment intent"));
-        }
-    }, [axiosSecure, totalPrice]);
+        axiosSecure.post("/create-payment-intent", { price: Math.round(PRICE * 100) })
+            .then((res) => setClientSecret(res.data.clientSecret))
+            .catch(() => setError("We couldn't start the payment. Please refresh and try again."));
+    }, [axiosSecure]);
 
-    const appearance = { theme: 'stripe' };
-    const options = { clientSecret, appearance };
+    const options = {
+        clientSecret,
+        appearance: {
+            theme: 'stripe',
+            variables: {
+                colorPrimary: '#c42a5a',
+                borderRadius: '12px',
+                fontFamily: '"Plus Jakarta Sans", system-ui, sans-serif',
+            },
+        },
+        fonts: [{ cssSrc: 'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap' }],
+    };
+
+    const summary = [
+        { label: 'Biodata ID', value: `#${id}` },
+        { label: 'Your email', value: user?.email },
+        { label: 'Access', value: 'Mobile & email' },
+    ];
 
     return (
-        <div>
-            <SectionTitleHome heading="Checkout" subHeading="Please pay to view contact information" />
-            <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6 mt-8">
-                <form className="space-y-4 mb-4">
-                    {/* Biodata ID */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Biodata ID</label>
-                        <input
-                            type="text"
-                            value={id}
-                            readOnly
-                            className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                    </div>
+        <div className="pb-24">
+            <Helmet>
+                <title>Checkout | SoulMatch</title>
+            </Helmet>
+            <PageHeader eyebrow="Checkout" title="Request contact information" lead="Once an admin approves your request, the contact details appear in your dashboard." />
 
-                    {/* Self Email */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Your Email</label>
-                        <input
-                            type="email"
-                            value={user?.email || ""}
-                            readOnly
-                            className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                    </div>
-                    {/* Amount */}
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700">Your Payment Amount</label>
-                        <input
-                            type="text"
-                            value='5.00 $'
-                            readOnly
-                            className="mt-1 w-full px-4 py-2 border rounded-md bg-gray-100 text-gray-600"
-                        />
-                    </div>
+            <div className="container-page grid gap-8 lg:grid-cols-[1fr_380px]">
+                <section className="rounded-3xl bg-card p-6 shadow-soft md:p-8" aria-label="Payment">
+                    <h2 className="mb-6 flex items-center gap-2 text-xl font-medium"><LockKeyhole className="h-5 w-5 text-primary" /> Payment details</h2>
+                    {error ? (
+                        <p className="rounded-xl bg-destructive/5 p-4 text-sm text-destructive">{error}</p>
+                    ) : clientSecret ? (
+                        <Elements stripe={stripePromise} options={options}>
+                            <CheckoutForm id={id} amount={PRICE} />
+                        </Elements>
+                    ) : (
+                        <div className="space-y-4">
+                            <Skeleton className="h-11 w-full rounded-xl" />
+                            <div className="grid grid-cols-2 gap-4"><Skeleton className="h-11 rounded-xl" /><Skeleton className="h-11 rounded-xl" /></div>
+                            <Skeleton className="h-12 w-full rounded-full" />
+                        </div>
+                    )}
+                </section>
 
-                </form>
-                {clientSecret ? (
-                    <Elements stripe={stripePromise} options={options}>
-                        <CheckoutForm id={id} />
-                    </Elements>
-                ) : (
-                    <p>Loading payment details...</p>
-                )}
+                <aside className="h-fit rounded-3xl bg-plum-950 p-6 text-white md:p-8 lg:sticky lg:top-28">
+                    <h2 className="text-xl font-medium">Order summary</h2>
+                    <dl className="mt-6 space-y-4 text-sm">
+                        {summary.map((row) => (
+                            <div key={row.label} className="flex justify-between gap-4">
+                                <dt className="text-plum-300">{row.label}</dt>
+                                <dd className="truncate font-medium">{row.value}</dd>
+                            </div>
+                        ))}
+                    </dl>
+                    <div className="mt-6 flex items-baseline justify-between border-t border-white/10 pt-6">
+                        <span className="text-plum-300">Total</span>
+                        <span className="font-display text-4xl font-light">${PRICE.toFixed(2)}</span>
+                    </div>
+                    <p className="mt-6 flex items-start gap-2 text-xs text-plum-300">
+                        <ShieldCheck className="h-4 w-4 shrink-0 text-gold-300" />
+                        Payments are processed securely by Stripe. We never see your card details.
+                    </p>
+                </aside>
             </div>
         </div>
     );

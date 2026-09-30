@@ -1,126 +1,97 @@
-import Slider from "rc-slider";
-import "rc-slider/assets/index.css";
-const Filters = ({
-  filters,
-  handleFilterChange,
-  handleRangeChange,
-  handleSearch,
-  handleSort,
-  handleReset,
-}) => {
+import { useEffect, useState } from "react";
+import { RotateCcw } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Slider } from "@/components/ui/slider";
+import { DIVISIONS } from "@/lib/biodata";
+import { cn } from "@/lib/utils";
+
+export const AGE_MIN = 18;
+export const AGE_MAX = 50;
+
+const Filters = ({ filters, onChange, onReset, className }) => {
+  // Keep the slider responsive while dragging; only commit to the URL on release.
+  const [ages, setAges] = useState([filters.minAge, filters.maxAge]);
+  useEffect(() => setAges([filters.minAge, filters.maxAge]), [filters.minAge, filters.maxAge]);
+
   return (
-    <aside className="w-full md:w-1/5 bg-white p-4 rounded-lg shadow-md">
-      <h2 className="text-lg font-semibold mb-4 playfair md:text-xl 2xl:text-2xl">Filters</h2>
-
-      {/* Search Bar */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">Search:</label>
-        <input
-          type="text"
-          name="search"
-          placeholder="Search by name..."
-          onChange={handleSearch}
-          className="w-full border rounded p-2"
-        />
+    <div className={cn("space-y-7", className)}>
+      <div className="space-y-3">
+        <Label>Looking for</Label>
+        <div className="grid grid-cols-3 gap-1 rounded-full bg-muted p-1" role="radiogroup" aria-label="Gender">
+          {[
+            { value: "", label: "All" },
+            { value: "Female", label: "Brides" },
+            { value: "Male", label: "Grooms" },
+          ].map((opt) => (
+            <button
+              key={opt.label}
+              type="button"
+              role="radio"
+              aria-checked={filters.gender === opt.value}
+              onClick={() => onChange("gender", opt.value)}
+              className={cn(
+                "rounded-full px-3 py-2 text-sm font-medium transition-all",
+                filters.gender === opt.value ? "bg-white text-foreground shadow-soft" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
       </div>
 
-      {/* Age Range Slider */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">Age Range:</label>
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <Label>Age</Label>
+          <span className="text-sm font-semibold tabular-nums text-primary">
+            {ages[0]} – {ages[1]}
+          </span>
+        </div>
         <Slider
-          min={18}
-          max={50}
+          min={AGE_MIN}
+          max={AGE_MAX}
           step={1}
-          range
-          value={filters.ageRange}
-          onChange={(range) => handleRangeChange(range)}
-          trackStyle={[{ backgroundColor: "#4F46E5" }]}
-          handleStyle={[
-            { borderColor: "#4F46E5", backgroundColor: "#FFFFFF" },
-            { borderColor: "#4F46E5", backgroundColor: "#FFFFFF" },
-          ]}
-          railStyle={{ backgroundColor: "#E5E7EB" }}
+          minStepsBetweenThumbs={1}
+          value={ages}
+          onValueChange={setAges}
+          onValueCommit={([min, max]) => onChange({ minAge: min, maxAge: max })}
+          aria-label="Age range"
         />
-        <div className="flex justify-between text-sm text-gray-600 mt-2">
-          <span>{filters.ageRange[0]} years</span>
-          <span>{filters.ageRange[1]} years</span>
-        </div>
       </div>
 
-      {/* Dropdown Filters */}
-      <div className="grid grid-cols-2 gap-2">
-        {/* Gender Filter */}
-        <div className="mb-4">
-          <label className="block font-medium mb-2">Gender:</label>
-          <select
-            name="biodataType"
-            value={filters.biodataType}
-            onChange={handleFilterChange}
-            className="w-full border rounded p-2"
-          >
-            <option value="">All</option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-          </select>
-        </div>
-
-        {/* Division Filter */}
-        <div>
-          <label className="block font-medium mb-2">Division:</label>
-          <select
-            name="division"
-            value={filters.division}
-            onChange={handleFilterChange}
-            className="w-full border rounded p-2"
-          >
-            <option value="">All</option>
-            <option value="Dhaka">Dhaka</option>
-            <option value="Chattagram">Chattagram</option>
-            <option value="Rangpur">Rangpur</option>
-            <option value="Barisal">Barisal</option>
-            <option value="Khulna">Khulna</option>
-            <option value="Mymensingh">Mymensingh</option>
-            <option value="Sylhet">Sylhet</option>
-          </select>
-        </div>
+      <div className="space-y-3">
+        <Label htmlFor="filter-division">Division</Label>
+        <Select value={filters.division || "any"} onValueChange={(v) => onChange("division", v === "any" ? "" : v)}>
+          <SelectTrigger id="filter-division"><SelectValue /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="any">All divisions</SelectItem>
+            {DIVISIONS.map((d) => (
+              <SelectItem key={d} value={d}>{d}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
-      {/* Premium User Checkbox */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">Premium Users:</label>
-        <input
-          type="checkbox"
-          name="isPremium"
-          onChange={handleFilterChange}
-          className="w-4 h-4 border rounded"
+      <label htmlFor="filter-premium" className="flex cursor-pointer items-start gap-3 rounded-2xl border bg-white p-4 transition-colors hover:border-primary/40">
+        <Checkbox
+          id="filter-premium"
+          checked={filters.premium}
+          onCheckedChange={(checked) => onChange("premium", checked === true)}
+          className="mt-0.5"
         />
-        <span className="ml-2 text-sm">Show only premium users</span>
-      </div>
+        <span>
+          <span className="block text-sm font-semibold">Premium members only</span>
+          <span className="block text-xs text-muted-foreground">Verified, highly active profiles</span>
+        </span>
+      </label>
 
-      {/* Sort Dropdown */}
-      <div className="mb-4">
-        <label className="block font-medium mb-2">Sort By:</label>
-        <select
-          name="sortBy"
-          onChange={handleSort}
-          className="w-full border rounded p-2"
-        >
-          <option value="default">Default</option>
-          <option value="id">Biodata ID</option>
-          <option value="age">Age</option>
-        </select>
-      </div>
-
-      {/* Reset Button */}
-      <div className="mt-4">
-        <button
-          onClick={handleReset}
-          className="w-full bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600"
-        >
-          Reset Filters
-        </button>
-      </div>
-    </aside>
+      <Button variant="outline" className="w-full" onClick={onReset}>
+        <RotateCcw /> Reset filters
+      </Button>
+    </div>
   );
 };
 

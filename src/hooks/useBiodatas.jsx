@@ -1,37 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import useAxiosPublic from './useAxiosPublic';
-import useAuth from './useAuth';
 
-
+// Every biodata (unpaginated). Used for small featured/recommendation lists; browsing uses useBiodataSearch.
 const useBiodatas = () => {
-    const { user } = useAuth();
+    const axiosPublic = useAxiosPublic();
 
-    const [biodatas, setBiodats] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [myBiodata, setMyBiodata] = useState(null);
+    const { data: biodatas = [], isLoading } = useQuery({
+        queryKey: ['biodatas', 'all'],
+        queryFn: async () => (await axiosPublic.get('/biodatas')).data,
+        staleTime: 60_000,
+    });
 
-    const axiosPublic = useAxiosPublic()
-    useEffect(() => {
-        axiosPublic.get('/biodatas')
-            .then((res) => {
-                setBiodats(res.data);
-                setLoading(false);
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-
-
-        if (user?.email) {
-            axiosPublic.get(`/biodatas/${user.email}`).then((res) => {
-                setMyBiodata(res.data);
-                setLoading(false);
-            }).then((err) => {
-                console.log(err);
-            })
-        }
-    }, [axiosPublic, user?.email])
-    return [biodatas, loading, myBiodata];
+    return [biodatas, isLoading];
 }
 
 export default useBiodatas

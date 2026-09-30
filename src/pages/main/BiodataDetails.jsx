@@ -1,261 +1,201 @@
-import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
-import useAxiosSecure from './../../hooks/useAxiosSecure';
-import { useEffect, useState } from 'react';
-import Loader from '@/components/shared/Loader';
-import { Button } from '@/components/ui/button';
-import useAuth from '@/hooks/useAuth';
-import Swal from 'sweetalert2';
-import useFavourites from '@/hooks/useFavourites';
+import { Link, useParams } from 'react-router-dom';
+import { useQuery } from '@tanstack/react-query';
+import { Helmet } from 'react-helmet';
+import {
+  ArrowLeft, Briefcase, CakeSlice, Crown, Heart, Lock, Mail, MapPin, Phone, Ruler, Users,
+} from 'lucide-react';
+import useAxiosSecure from '@/hooks/useAxiosSecure';
 import usePremium from '@/hooks/usePremium';
+import useToggleFavourite from '@/hooks/useToggleFavourite';
+import Loader from '@/components/shared/Loader';
+import Reveal from '@/components/shared/Reveal';
 import BiodataRecomendation from '@/components/allBiodatas/BiodataRecomendation';
-import { IoMdHeart } from "react-icons/io";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { calculateAge, occupationLabel } from '@/lib/biodata';
+import { cn } from '@/lib/utils';
+
+const valueOf = (v) => (v && typeof v === 'object' ? v.value ?? v.label : v);
+
+const InfoCard = ({ title, icon: Icon, rows, delay }) => (
+  <Reveal delay={delay} className="rounded-3xl bg-card p-6 shadow-soft md:p-8">
+    <h2 className="flex items-center gap-3 text-xl font-medium">
+      <span className="grid h-9 w-9 place-items-center rounded-full bg-secondary">
+        <Icon className="h-4 w-4 text-primary" />
+      </span>
+      {title}
+    </h2>
+    <dl className="mt-6 grid gap-x-6 gap-y-5 sm:grid-cols-2">
+      {rows.filter((r) => r.value !== undefined && r.value !== null && r.value !== '').map((row) => (
+        <div key={row.label}>
+          <dt className="text-xs font-medium uppercase tracking-wider text-muted-foreground">{row.label}</dt>
+          <dd className="mt-1 font-medium">{row.value}</dd>
+        </div>
+      ))}
+    </dl>
+  </Reveal>
+);
 
 const BiodataDetails = () => {
   const { id } = useParams();
-  const { user } = useAuth();
-  const [, refetch] = useFavourites();
-  const navigate = useNavigate();
-  const location = useLocation();
   const axiosSecure = useAxiosSecure();
-  const [biodata, setBiodata] = useState(null);
-  const [loading, setLoading] = useState(true);
-  // const isPremium = usePremium();
+  const [isPremium] = usePremium();
 
-  // console.log(isPremium);
-  const [isPremium, isLoading, userData] = usePremium();
+  const { data: biodata, isLoading } = useQuery({
+    queryKey: ['biodata', id],
+    queryFn: async () => (await axiosSecure.get(`/biodatas/details/${id}`)).data,
+  });
 
-  useEffect(() => {
-    axiosSecure
-      .get(`/biodatas/details/${id}`)
-      .then((res) => {
-        setBiodata(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setLoading(false);
-      });
-  }, [axiosSecure, id]);
+  const { isFavourite, toggle, isPending, isOwn } = useToggleFavourite(biodata);
 
-  // const isPremium = false;
-
-  const handleAddToFavourite = () => {
-    if (user && user.email) {
-      // Send data logic
-      const favouriteBiodata = {
-        favouriteId: id,
-        favouriteBiodataId: biodataId,
-        email: user.email,
-        favouriteName: name,
-        favouriteProfileImage: profileImage,
-        favouriteEmail: userEmail,
-      }
-
-      axiosSecure.post('/favourites', favouriteBiodata)
-        .then((res) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success',
-            text: 'Profile added to favourites!',
-            timer: 1000,
-          });
-          refetch();
-        })
-        .catch((err) => {
-          // Handle various error cases
-          if (err.response && err.response.data) {
-            if (err.response.data.message === 'Already added to favourites!') {
-              Swal.fire({
-                icon: 'warning',
-                title: 'Already Added',
-                text: 'This profile is already in your favourites!',
-              });
-            } else if (err.response.data.message === 'You cannot add your own profile to favourites.') {
-              Swal.fire({
-                icon: 'warning',
-                title: 'Cannot Add Own Profile',
-                text: 'You cannot add your own profile to favourites.',
-              });
-            } else {
-              Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong. Please try again!',
-              });
-            }
-          } else {
-            console.log(err);
-            Swal.fire({
-              icon: 'error',
-              title: 'Oops...',
-              text: 'Something went wrong. Please try again!',
-            });
-          }
-        });
-
-    } else {
-      Swal.fire({
-        icon: 'warning',
-        title: 'You\'re not logged in!',
-        text: 'Please login to add to favourites!',
-        showCancelButton: true,
-        confirmButtonText: 'Login',
-        cancelButtonText: 'Cancel',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          navigate('/login', { state: { from: location } });
-        }
-      });
-    }
-  };
-
-  if (loading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   if (!biodata) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-gray-600 text-lg">No biodata found.</p>
+      <div className="container-page flex min-h-[60vh] flex-col items-center justify-center text-center">
+        <h1 className="text-3xl font-light">Profile not found</h1>
+        <p className="mt-2 text-muted-foreground">This biodata may have been removed.</p>
+        <Button asChild className="mt-6"><Link to="/biodatas">Browse profiles</Link></Button>
       </div>
     );
   }
 
-
   const {
-    _id,
-    name,
-    profileImage,
-    biodataType,
-    dob,
-    fatherName,
-    motherName,
-    height,
-    weight,
-    occupation,
-    partnerAge,
-    partnerHeight,
-    partnerWeight,
-    permanentDivision,
-    presentDivision,
-    mobileNumber,
-    biodataId,
-    race,
-    userEmail,
+    _id, name, profileImage, biodataType, dob, fatherName, motherName, height, weight, occupation,
+    partnerAge, partnerHeight, partnerWeight, permanentDivision, presentDivision, mobileNumber,
+    biodataId, race, userEmail,
   } = biodata;
+  const age = calculateAge(dob);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="container mx-auto max-w-6xl bg-white rounded-xl shadow-lg overflow-hidden">
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Left Side */}
-          <div className="bg-gradient-to-r from-me-darkOrange to-me-orange text-white p-8 flex flex-col items-center justify-center">
-            <img
-              src={profileImage}
-              alt={name}
-              className="w-48 h-48 rounded-full border-4 border-white object-cover shadow-lg"
-            />
-            <h1 className="text-3xl font-bold mt-4">{name}</h1>
-            <p className="text-sm mt-2">{biodataType}</p>
-            <div className="mt-6 space-y-3 text-center">
-              <p>
-                <span className="font-medium">Present Location:</span>{" "}
-                {presentDivision}
-              </p>
-              <p>
-                <span className="font-medium">Permanent Location:</span>{" "}
-                {permanentDivision}
-              </p>
-              <button
-                onClick={handleAddToFavourite}
-                className="bg-white px-6 py-2 rounded-full shadow-md hover:bg-indigo-100 flex items-center gap-3"
-              >
-                <span className="font-semibold text-me-pink">Add to Favourites</span><span className="text-me-pink text-lg"> <IoMdHeart /></span>
-              </button>
-            </div>
-          </div>
+    <div className="pb-24">
+      <Helmet>
+        <title>{name} | SoulMatch</title>
+      </Helmet>
 
-          {/* Right Side */}
-          <div className="p-8 space-y-6">
-            <h2 className="text-2xl font-semibold border-b pb-4">Details</h2>
-            <div className="space-y-4">
-              <p>
-                <span className="font-medium text-gray-700">Date of Birth:</span>{" "}
-                {new Date(dob).toLocaleDateString()}
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">
-                  Father's Name:
-                </span>{" "}
-                {fatherName}
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">
-                  Mother's Name:
-                </span>{" "}
-                {motherName}
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">Height:</span>{" "}
-                {height}
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">Weight:</span>{" "}
-                {weight.value} kg
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">Race:</span>{" "}
-                {race}
-              </p>
+      <div className="container-page pt-8">
+        <Button asChild variant="ghost" size="sm" className="-ml-3 text-muted-foreground">
+          <Link to="/biodatas"><ArrowLeft /> Back to profiles</Link>
+        </Button>
+      </div>
+
+      <div className="container-page mt-4 grid gap-8 lg:grid-cols-[380px_1fr] lg:gap-12">
+        {/* Sticky profile + action card */}
+        <aside className="lg:sticky lg:top-28 lg:self-start">
+          <Reveal className="overflow-hidden rounded-[2rem] bg-card shadow-lift">
+            <div className="relative aspect-[4/5]">
+              <img src={profileImage} alt={name} className="h-full w-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-t from-plum-950/80 via-transparent to-transparent" />
+              <div className="absolute left-5 top-5 flex gap-2">
+                <Badge variant="glass">ID #{biodataId}</Badge>
+                {biodata.isPremium && <Badge variant="premium"><Crown /> Premium</Badge>}
+              </div>
+              <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+                <h1 className="text-3xl font-medium md:text-4xl">
+                  {name}{age ? <span className="font-light text-white/80">, {age}</span> : null}
+                </h1>
+                <p className="mt-2 flex items-center gap-1.5 text-sm text-white/85">
+                  <MapPin className="h-4 w-4" /> {permanentDivision}
+                  {occupationLabel(occupation) && <><span className="mx-1.5">·</span><Briefcase className="h-4 w-4" /> {occupationLabel(occupation)}</>}
+                </p>
+              </div>
             </div>
 
-            <h2 className="text-2xl font-semibold border-b pb-4">
-              Partner Preferences
+            <div className="space-y-3 p-5">
+              {isOwn ? (
+                <Button asChild variant="soft" size="lg" className="w-full">
+                  <Link to="/dashboard/manage-biodata">This is your profile — edit it</Link>
+                </Button>
+              ) : (
+                <Button
+                  size="lg"
+                  variant={isFavourite ? 'soft' : 'default'}
+                  className="w-full"
+                  onClick={toggle}
+                  disabled={isPending}
+                  aria-pressed={isFavourite}
+                >
+                  <Heart className={cn(isFavourite && 'fill-current')} />
+                  {isFavourite ? 'Saved to favourites' : 'Add to favourites'}
+                </Button>
+              )}
+            </div>
+          </Reveal>
+        </aside>
+
+        {/* Details */}
+        <div className="space-y-6">
+          <InfoCard
+            title="About"
+            icon={Users}
+            rows={[
+              { label: 'Gender', value: biodataType },
+              { label: 'Date of birth', value: dob && new Date(dob).toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' }) },
+              { label: 'Occupation', value: occupationLabel(occupation) },
+              { label: 'Race', value: race },
+              { label: 'Present division', value: presentDivision },
+              { label: 'Permanent division', value: permanentDivision },
+            ]}
+          />
+
+          <InfoCard
+            title="Family & appearance"
+            icon={Ruler}
+            delay={0.05}
+            rows={[
+              { label: "Father's name", value: fatherName },
+              { label: "Mother's name", value: motherName },
+              { label: 'Height', value: valueOf(height) },
+              { label: 'Weight', value: valueOf(weight) && `${valueOf(weight)} kg` },
+            ]}
+          />
+
+          <InfoCard
+            title="Partner expectations"
+            icon={CakeSlice}
+            delay={0.1}
+            rows={[
+              { label: 'Preferred age', value: valueOf(partnerAge) && `${valueOf(partnerAge)} years` },
+              { label: 'Preferred height', value: valueOf(partnerHeight) },
+              { label: 'Preferred weight', value: valueOf(partnerWeight) && `${valueOf(partnerWeight)} kg` },
+            ]}
+          />
+
+          {/* Contact information: visible to premium members, otherwise locked behind a request */}
+          <Reveal delay={0.15} className="relative overflow-hidden rounded-3xl bg-card p-6 shadow-soft md:p-8">
+            <h2 className="flex items-center gap-3 text-xl font-medium">
+              <span className="grid h-9 w-9 place-items-center rounded-full bg-secondary">
+                <Phone className="h-4 w-4 text-primary" />
+              </span>
+              Contact information
             </h2>
-            <div className="space-y-4">
-              <p>
-                <span className="font-medium text-gray-700">
-                  Preferred Age:
-                </span>{" "}
-                {partnerAge.value} years
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">
-                  Preferred Height:
-                </span>{" "}
-                {partnerHeight}
-              </p>
-              <p>
-                <span className="font-medium text-gray-700">
-                  Preferred Weight:
-                </span>{" "}
-                {partnerWeight.value} kg
-              </p>
+
+            <div className={cn('mt-6 grid gap-5 sm:grid-cols-2', !(isPremium || isOwn) && 'select-none blur-sm')} aria-hidden={!(isPremium || isOwn)}>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Mobile</p>
+                <p className="mt-1 flex items-center gap-2 font-medium"><Phone className="h-4 w-4 text-muted-foreground" />{isPremium || isOwn ? mobileNumber : '+880 1XXX-XXXXXX'}</p>
+              </div>
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Email</p>
+                <p className="mt-1 flex items-center gap-2 font-medium"><Mail className="h-4 w-4 text-muted-foreground" />{isPremium || isOwn ? userEmail : 'hidden@example.com'}</p>
+              </div>
             </div>
 
-            <h2 className="text-2xl font-semibold border-b pb-4">
-              Contact Information
-            </h2>
-            {isPremium ? (
-              <p>
-                <span className="font-medium text-gray-700">Mobile:</span>{" "}
-                {mobileNumber}
-              </p>
-            ) : (
-              <Link to={`/checkout/${biodataId}`}>
-                <Button className='mt-4 bg-me-orange'>View Contact Information</Button>
-              </Link>
+            {!(isPremium || isOwn) && (
+              <div className="absolute inset-0 top-16 flex flex-col items-center justify-center gap-3 bg-white/40 px-6 text-center">
+                <span className="grid h-11 w-11 place-items-center rounded-full bg-plum-900 text-white"><Lock className="h-5 w-5" /></span>
+                <p className="max-w-sm text-sm text-muted-foreground">Contact details are private. Request access for a one-time $5 fee, or go premium.</p>
+                <Button asChild>
+                  <Link to={`/checkout/${biodataId}`}>Request contact information</Link>
+                </Button>
+              </div>
             )}
-          </div>
+          </Reveal>
         </div>
-
-
-
-
       </div>
-      <div className="">
-        <BiodataRecomendation type={biodataType} />
-      </div>
+
+      <BiodataRecomendation type={biodataType} excludeId={_id} />
     </div>
-
   );
 };
 

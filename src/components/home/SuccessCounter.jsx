@@ -1,78 +1,46 @@
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import CountUp from "react-countup";
-import SectionTitleHome from "../shared/SectionTitleHome";
-import useBiodatas from "@/hooks/useBiodatas";
 import { axiosPublic } from "@/hooks/useAxiosPublic";
-import maleImg from '../../assets/icons/male.png'
-import femaleImg from '../../assets/icons/woman.png'
-import successImg from '../../assets/icons/marrige.png'
+import Reveal from "../shared/Reveal";
 
 const SuccessCounter = () => {
+    const { data: stats } = useQuery({
+        queryKey: ["biodata-stats"],
+        queryFn: async () => (await axiosPublic.get("/biodatas/stats")).data,
+    });
 
-    const [biodatas] = useBiodatas();
-    const [successStories, setSuccessStories] = useState([]); // State to store success stories
-    useEffect(() => {
-        async function fetchData() {
-            const res = await axiosPublic.get("/success-stories");
-            if (res.data) {
-                setSuccessStories(res.data);
-            }
-        }
-        fetchData();
-    }, []);
-
-    const maleBiodataCount = biodatas.filter(biodata => biodata.biodataType == 'Male').length;
-    const femaleBiodataCount = biodatas.filter(biodata => biodata.biodataType == 'Female').length;
     const counters = [
-        {
-            icon: femaleImg,
-            count: femaleBiodataCount,
-            label: "Girls' Profiles",
-            color: "text-pink-500",
-        },
-        {
-            icon: maleImg,
-            count: maleBiodataCount,
-            label: "Boys' Profiles",
-            color: "text-blue-500",
-        },
-        {
-            icon: successImg,
-            count: successStories.length,
-            label: "Successful Marriages",
-            color: "text-green-500",
-        },
+        { value: stats?.total, label: "Profiles on SoulMatch" },
+        { value: stats?.female, label: "Brides looking" },
+        { value: stats?.male, label: "Grooms looking" },
+        { value: stats?.marriages, label: "Happy marriages" },
     ];
 
     return (
-        <div className=" py-16">
-            <div className="max-w-6xl mx-auto px-6 text-center">
-                <SectionTitleHome heading="Our Success" subHeading="Numbers Speak" />
-
-                <div className="grid grid-cols-1 md:grid-cols-3">
-                    {counters.map((counter, index) => (
-                        <div
-                            key={index}
-                            className=" p-6 flex flex-col items-center border border-me-brown "
-                        >
-                            {/* Image */}
-                            <img src={counter.icon} className="w-20 pb-4" alt=""/>
-                            {/* Count with animation */}
-                            <h3 className="text-4xl font-bold text-me-brown mb-2 cinzel">
-                                <CountUp
-                                    start={0}
-                                    end={counter.count}
-                                    duration={2.5}
-                                    separator=","
-                                />
-                            </h3>
-                            {/* Label */}
-                            <p className="text-me-brown uppercase">{counter.label}</p>
-                        </div>
+        <section className="bg-plum-950 py-20 text-white md:py-24">
+            <div className="container-page">
+                <Reveal className="mx-auto mb-14 max-w-2xl text-center">
+                    <p className="eyebrow !text-gold-300">In numbers</p>
+                    <h2 className="mt-3 text-3xl font-light md:text-5xl">
+                        Love, <em className="text-gold-200">measured</em> in stories
+                    </h2>
+                </Reveal>
+                <dl className="grid grid-cols-2 gap-y-12 lg:grid-cols-4">
+                    {counters.map((c, i) => (
+                        <Reveal key={c.label} delay={i * 0.08} className="flex flex-col items-center border-white/10 text-center lg:border-l lg:first:border-l-0">
+                            <dt className="order-2 mt-2 text-sm text-plum-300">{c.label}</dt>
+                            <dd className="order-1 font-display text-5xl font-light tabular-nums md:text-6xl">
+                                {typeof c.value === "number" ? (
+                                    <CountUp end={c.value} duration={2.2} separator="," enableScrollSpy scrollSpyOnce />
+                                ) : (
+                                    "—"
+                                )}
+                            </dd>
+                        </Reveal>
                     ))}
-                </div>
+                </dl>
             </div>
-        </div>
+        </section>
     );
 };
 

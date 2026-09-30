@@ -1,106 +1,92 @@
-import SectionTitleHome from "@/components/shared/SectionTitleHome";
-import { axiosSecure } from "@/hooks/useAxiosSecure";
-import React, { useState, useEffect } from "react";
-import { Helmet } from "react-helmet";
-import { toast } from "react-toastify";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { Eye, Heart, Star } from "lucide-react";
+import useAxiosSecure from "@/hooks/useAxiosSecure";
+import { DashboardPage, EmptyState, Panel } from "@/components/dashboard/DashboardKit";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 
 const AdminSuccessStory = () => {
-  const [successStories, setSuccessStories] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const axiosSecure = useAxiosSecure();
   const [selectedStory, setSelectedStory] = useState(null);
 
-  // Fetch success stories on component mount
-  useEffect(() => {
-    const fetchSuccessStories = async () => {
-      try {
-        const response = await axiosSecure.get("/success-stories");
-        setSuccessStories(response.data);
-      } catch (error) {
-        toast.error("Failed to fetch success stories.");
-      }
-    };
-    fetchSuccessStories();
-  }, []);
+  const { data: successStories = [], isLoading } = useQuery({
+    queryKey: ["success-stories"],
+    queryFn: async () => (await axiosSecure.get("/success-stories")).data,
+  });
 
-  // Handle opening of the modal with the selected story
-  const handleViewStory = (story) => {
-    setSelectedStory(story);
-    setIsModalOpen(true);
-  };
-
-  // Handle closing of the modal
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedStory(null);
-  };
+  const couple = (s) => `${s.selfDetails?.name?.split(" ")[0] ?? "—"} & ${s.partnerDetails?.name?.split(" ")[0] ?? "—"}`;
 
   return (
-    <div className="p-6">
+    <DashboardPage title="Success stories" description={`${successStories.length} couples have shared their story`}>
+      <Panel>
+        {isLoading ? (
+          <div className="space-y-3 p-6">{Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-14 rounded-xl" />)}</div>
+        ) : successStories.length === 0 ? (
+          <EmptyState icon={Heart} title="No stories yet" description="Stories shared by married members will appear here." />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Couple</TableHead>
+                <TableHead>Biodata IDs</TableHead>
+                <TableHead>Married</TableHead>
+                <TableHead className="text-right">Story</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {successStories.map((story) => (
+                <TableRow key={story._id}>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <img src={story.coupleImage} alt="" className="h-10 w-10 rounded-xl object-cover" />
+                      <span className="font-semibold">{couple(story)}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">#{story.selfBiodataId} · #{story.partnerBiodataId}</TableCell>
+                  <TableCell className="text-muted-foreground">
+                    {story.marriageDate ? new Date(story.marriageDate).toLocaleDateString(undefined, { month: "short", year: "numeric" }) : "—"}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <Button variant="soft" size="sm" onClick={() => setSelectedStory(story)}><Eye /> View</Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </Panel>
 
-      <Helmet>
-        <title>Success Stories | Dashboard</title>
-      </Helmet>
-      <SectionTitleHome heading="Success Stories" subHeading="All the married couples" />
-
-      <table className="table-auto w-full max-w-5xl mx-auto border border-gray-200">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="px-4 py-2">Male Biodata ID</th>
-            <th className="px-4 py-2">Female Biodata ID</th>
-            <th className="px-4 py-2">View Story</th>
-          </tr>
-        </thead>
-        <tbody>
-          {successStories.length > 0 ? (
-            successStories.map((story) => (
-              <tr key={story._id} className="text-center">
-                <td className="border px-4 py-2">{story.selfBiodataId}</td>
-                <td className="border px-4 py-2">{story.partnerBiodataId}</td>
-                <td className="border px-4 py-2">
-                  <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded"
-                    onClick={() => handleViewStory(story)}
-                  >
-                    View Story
-                  </button>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="3" className="text-center">No success stories found</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-
-      {/* Modal for displaying the success story */}
-      {isModalOpen && selectedStory && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-6 rounded-md max-w-lg w-full">
-            <h3 className="text-lg font-semibold mb-4">Success Story</h3>
-            <p className="mb-4"><strong>Male Biodata ID:</strong> {selectedStory.selfBiodataId}</p>
-            <p className="mb-4"><strong>Female Biodata ID:</strong> {selectedStory.partnerBiodataId}</p>
-            {selectedStory.coupleImage && (
-              <div className="mb-4">
-                <img
-                  src={selectedStory.coupleImage}
-                  alt="Couple Image"
-                  className="w-32 h-32 object-cover rounded-md"
-                />
+      <Dialog open={!!selectedStory} onOpenChange={(open) => !open && setSelectedStory(null)}>
+        <DialogContent className="max-w-xl p-0">
+          {selectedStory && (
+            <>
+              {selectedStory.coupleImage && (
+                <img src={selectedStory.coupleImage} alt="" className="aspect-[16/9] w-full rounded-t-3xl object-cover" />
+              )}
+              <div className="space-y-4 p-6 pt-2">
+                <DialogHeader>
+                  <DialogTitle>{couple(selectedStory)}</DialogTitle>
+                  <DialogDescription>
+                    Biodata #{selectedStory.selfBiodataId} & #{selectedStory.partnerBiodataId}
+                    {selectedStory.marriageDate && ` · Married ${new Date(selectedStory.marriageDate).toLocaleDateString()}`}
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="flex gap-1" aria-label={`Rated ${Math.round(selectedStory.rating / 2)} out of 5`}>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} className={cn("h-4 w-4", i < Math.round(selectedStory.rating / 2) ? "fill-gold-400 text-gold-400" : "text-border")} />
+                  ))}
+                </div>
+                <p className="font-display text-lg leading-relaxed text-foreground/90">{selectedStory.successStory}</p>
               </div>
-            )}
-            <p className="mb-4"><strong>Story:</strong> {selectedStory.successStory}</p>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={closeModal}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-    </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    </DashboardPage>
   );
 };
 

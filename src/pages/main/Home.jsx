@@ -4,25 +4,27 @@ import HowItWorks from '@/components/home/HowItWorks';
 import SuccessCounter from '@/components/home/SuccessCounter';
 import SuccessStories from '@/components/home/SuccessStories';
 import FeaturedUsers from '@/components/home/FeaturedUsers';
-import { Helmet } from 'react-helmet';
-import Gallery from './../../components/home/Galary';
+import Gallery from '@/components/home/Galary';
 import SoulmatchFAQ from '@/components/home/SoulmatchFAQ';
+import CallToAction from '@/components/home/CallToAction';
+import { Helmet } from 'react-helmet';
 
 const Home = () => {
   return (
-    <div className=''>
+    <>
       <Helmet>
-        <title>Home | SoulMatch</title>
+        <title>SoulMatch — Find your life partner</title>
       </Helmet>
       <Banner />
       <Services />
       <FeaturedUsers />
       <HowItWorks />
       <SuccessCounter />
-      <Gallery/>
       <SuccessStories />
-      <SoulmatchFAQ/>
-    </div>
+      <Gallery />
+      <SoulmatchFAQ />
+      <CallToAction />
+    </>
   )
 }
 

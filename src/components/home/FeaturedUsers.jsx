@@ -1,77 +1,63 @@
-import { useState } from 'react';
-import useBiodatas from '@/hooks/useBiodatas';
-import SectionTitleHome from '../shared/SectionTitleHome';
-import BiodataCard from '../allBiodatas/BiodataCard';
-import { Button } from '../ui/button';
-import { FaArrowRight } from 'react-icons/fa';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import useBiodatas from '@/hooks/useBiodatas';
+import SectionHeading from '../shared/SectionHeading';
+import BiodataCard, { BiodataCardSkeleton } from '../allBiodatas/BiodataCard';
+import { Button } from '../ui/button';
 
 const FeaturedUsers = () => {
-    const [biodatas, loading, myBiodata] = useBiodatas();
-    const [sortOrder, setSortOrder] = useState("default"); // State to track sorting order
+    const [biodatas, loading] = useBiodatas();
+    const scroller = useRef(null);
 
-    // Helper function to calculate age from DOB
-    const calculateAge = (dob) => {
-        const birthDate = new Date(dob);
-        const today = new Date();
-        let age = today.getFullYear() - birthDate.getFullYear();
-        const monthDiff = today.getMonth() - birthDate.getMonth();
-        if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
-            age--;
-        }
-        return age;
+    const premiumUsers = biodatas.filter((b) => b.isPremium === true).slice(0, 8);
+
+    const scrollBy = (dir) => {
+        const el = scroller.current;
+        if (el) el.scrollBy({ left: dir * el.clientWidth * 0.8, behavior: 'smooth' });
     };
 
-    // Add calculated age to each biodata
-    const premiumUsers = biodatas
-        .filter((biodata) => biodata.isPremium === true)
-        .map((biodata) => ({
-            ...biodata,
-            age: calculateAge(biodata.dob), // Add `age` dynamically to each user
-        }));
-
-    // Sort based on the selected order
-    const sortedUsers = (() => {
-        if (sortOrder === "ascending") {
-            return [...premiumUsers].sort((a, b) => a.age - b.age);
-        } else if (sortOrder === "descending") {
-            return [...premiumUsers].sort((a, b) => b.age - a.age);
-        } else {
-            return premiumUsers; // Default: Original order
-        }
-    })().slice(0, 6); // Limit to 6 users
+    if (!loading && premiumUsers.length === 0) return null;
 
     return (
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-            <SectionTitleHome heading="Featured Users" subHeading="Our Premium Members" />
+        <section className="section overflow-hidden bg-secondary/40">
+            <div className="container-page">
+                <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+                    <SectionHeading
+                        align="left"
+                        className="!mb-0"
+                        eyebrow="Featured members"
+                        title="Meet our premium members"
+                        lead="Verified members who've gone premium to find their partner faster."
+                    />
+                    <div className="flex gap-2">
+                        <Button variant="outline" size="icon" aria-label="Scroll left" onClick={() => scrollBy(-1)}><ArrowLeft /></Button>
+                        <Button variant="outline" size="icon" aria-label="Scroll right" onClick={() => scrollBy(1)}><ArrowRight /></Button>
+                    </div>
+                </div>
 
-            {/* Dropdown for Sorting Order */}
-            <div className="flex justify-end items-center mb-4">
-                <label className="mr-2 font-bold playfair" >Sort By:</label>
-                <select
-                    className="border border-gray-300 rounded px-2 py-1 playfair font-bold"
-                    value={sortOrder}
-                    onChange={(e) => setSortOrder(e.target.value)}
+                <div
+                    ref={scroller}
+                    className="no-scrollbar -mx-4 mt-10 flex snap-x snap-mandatory gap-5 overflow-x-auto scroll-px-4 px-4 pb-4 sm:-mx-6 sm:scroll-px-6 sm:px-6 lg:-mx-8 lg:scroll-px-8 lg:px-8"
                 >
-                    <option value="default">Default</option>
-                    <option value="ascending">Age (Ascending)</option>
-                    <option value="descending">Age (Descending)</option>
-                </select>
-            </div>
+                    {loading
+                        ? Array.from({ length: 4 }).map((_, i) => (
+                            <div key={i} className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[calc(25%-15px)]"><BiodataCardSkeleton /></div>
+                        ))
+                        : premiumUsers.map((biodata) => (
+                            <div key={biodata._id} className="w-[78%] shrink-0 snap-start sm:w-[45%] lg:w-[calc(25%-15px)]">
+                                <BiodataCard biodata={biodata} />
+                            </div>
+                        ))}
+                </div>
 
-            {/* Biodata Cards */}
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-                {sortedUsers.map((biodata, index) => (
-                    <BiodataCard key={index} biodata={biodata} />
-                ))}
+                <div className="mt-8 flex justify-center">
+                    <Button asChild size="lg" variant="secondary">
+                        <Link to="/biodatas">Browse all profiles <ArrowRight /></Link>
+                    </Button>
+                </div>
             </div>
-
-            <div className="py-4 flex justify-center">
-                <Link to="/biodatas">
-                    <Button className='bg-me-pink cinzel font-bold'>See More <FaArrowRight /></Button>
-                </Link>
-            </div>
-        </div>
+        </section>
     );
 };
 

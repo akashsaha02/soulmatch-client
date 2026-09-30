@@ -1,62 +1,42 @@
-import { useState } from "react";
-import BiodataCard from "./BiodataCard";
+import { HeartCrack } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Pagination } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
+import BiodataCard, { BiodataCardSkeleton } from "./BiodataCard";
 
-const BiodatasList = ({ biodatas }) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+const BiodatasList = ({ biodatas, isLoading, isFetching, page, totalPages, onPageChange, onReset }) => {
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {Array.from({ length: 6 }).map((_, i) => <BiodataCardSkeleton key={i} />)}
+      </div>
+    );
+  }
 
-  // Calculate total pages
-  const totalPages = Math.ceil(biodatas.length / itemsPerPage);
-
-  // Get the biodatas for the current page
-  const paginatedBiodatas = biodatas.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
-
-  // Handle page change
-  const handlePageChange = (page) => {
-    if (page > 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
+  if (!biodatas.length) {
+    return (
+      <div className="flex flex-col items-center rounded-3xl border border-dashed bg-white px-6 py-20 text-center">
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-secondary">
+          <HeartCrack className="h-7 w-7 text-primary" />
+        </span>
+        <h3 className="mt-5 text-2xl font-medium">No matches found</h3>
+        <p className="mt-2 max-w-sm text-sm text-muted-foreground">
+          Try widening the age range or choosing a different division. Your person might be just one filter away.
+        </p>
+        <Button className="mt-6" onClick={onReset}>Reset filters</Button>
+      </div>
+    );
+  }
 
   return (
-    <section className="flex-1 p-4">
-      <h2 className="text-xl font-bold mb-4 playfair uppercase">
-        All Biodatas ({biodatas.length})
-      </h2>
-
-      {/* Biodata Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
-        {paginatedBiodatas.map((biodata) => (
+    <div>
+      <div className={cn("grid grid-cols-1 gap-5 transition-opacity sm:grid-cols-2 xl:grid-cols-3", isFetching && "opacity-60")}>
+        {biodatas.map((biodata) => (
           <BiodataCard key={biodata._id} biodata={biodata} />
         ))}
       </div>
-
-      {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 space-x-2">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 disabled:opacity-50"
-        >
-          Previous
-        </button>
-
-        <span className="font-medium text-gray-700">
-          Page {currentPage} of {totalPages}
-        </span>
-
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 disabled:opacity-50"
-        >
-          Next
-        </button>
-      </div>
-    </section>
+      <Pagination className="mt-12" page={page} totalPages={totalPages} onPageChange={onPageChange} />
+    </div>
   );
 };
 

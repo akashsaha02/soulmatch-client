@@ -1,79 +1,55 @@
-import SectionTitleHome from "../shared/SectionTitleHome";
-import { VerticalTimeline, VerticalTimelineElement } from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
-import { FaUserPlus, FaUserEdit, FaSearch, FaHeart, FaCrown,FaUserCheck } from "react-icons/fa";
-import { HiUsers } from "react-icons/hi";
-import { GiBigDiamondRing } from "react-icons/gi";
+import { Gem, HeartHandshake, Search, UserPlus } from "lucide-react";
+import SectionHeading from "../shared/SectionHeading";
+import Reveal from "../shared/Reveal";
+
+const steps = [
+    {
+        icon: UserPlus,
+        title: "Create your profile",
+        description: "Sign up free and share your story, background and what you're looking for.",
+    },
+    {
+        icon: Search,
+        title: "Discover matches",
+        description: "Browse profiles with filters for age, location and profession.",
+    },
+    {
+        icon: HeartHandshake,
+        title: "Connect with care",
+        description: "Save favourites and request contact details when you're ready.",
+    },
+    {
+        icon: Gem,
+        title: "Begin forever",
+        description: "Meet, involve your families, and share your success story with us.",
+    },
+];
+
 const HowItWorks = () => {
-    const steps = [
-        {
-            icon: FaUserPlus,
-            title: "Register for Free",
-            description: "Sign up for free and create your basic profile to get started.",
-        },
-        {
-            icon: FaUserEdit,
-            title: "Create Your Profile",
-            description: "Add personal details, preferences, and photos to showcase yourself.",
-        },
-        {
-            icon: FaSearch,
-            title: "Search for Matches",
-            description: "Browse through thousands of profiles to find your perfect match.",
-        },
-        {
-            icon: FaHeart,
-            title: "Express Interest",
-            description: "Send interest requests to profiles you like and start a conversation.",
-        },
-
-        {
-            icon: FaUserCheck,
-            title: "Get Profile Information",
-            description: "Get detailed information about the biodata you are interested in.",
-        },
-        {
-            icon: HiUsers,
-            title: "Start Meetups",
-            description: "Start meeting up with the biodata you are interested in.",
-        }, {
-            icon: GiBigDiamondRing,
-            title: "Get Married",
-            description: "Get married to the biodata you are interested in.",
-        }, {
-            icon: FaCrown,
-            title: "Upgrade to Premium",
-            description: "Enjoy exclusive benefits like priority visibility and direct messaging.",
-        },
-    ];
-
     return (
-        <div>
-            <SectionTitleHome heading="How It Works" subHeading="Simple Steps" />
+        <section className="section container-page">
+            <SectionHeading
+                eyebrow="How it works"
+                title="Four simple steps to your happily ever after"
+            />
 
-            {/* Timeline */}
-            <VerticalTimeline lineColor="#66451c">
-                {steps.map((step, index) => (
-                    <VerticalTimelineElement
-                        key={index}
-                        className="vertical-timeline-element--work"
-                        contentStyle={{
-                            background: "#fff",
-                            color: "#333",
-                            border: "1px solid #c48c46",
-                        }}
-                        contentArrowStyle={{ borderRight: "7px solid #c48c46" }}
-                        iconStyle={{ background: "#f6af04", color: "#fff" }}
-                        icon={<step.icon />}
-                    >
-                        <h3 className="vertical-timeline-element-title text-me-darkOrange text-xl md:text-2xl font-bold playfair">
-                            {step.title}
-                        </h3>
-                        <p className="text-gray-800 uppercase text-sm md:text-md">{step.description}</p>
-                    </VerticalTimelineElement>
+            <ol className="relative grid gap-10 md:grid-cols-2 lg:grid-cols-4 lg:gap-6">
+                {/* connecting line on large screens */}
+                <div aria-hidden="true" className="absolute left-[12%] right-[12%] top-8 hidden h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent lg:block" />
+                {steps.map((step, i) => (
+                    <Reveal as="li" key={step.title} delay={i * 0.1} className="relative flex flex-col items-center text-center">
+                        <div className="relative grid h-16 w-16 place-items-center rounded-full bg-white shadow-soft ring-8 ring-background">
+                            <step.icon className="h-6 w-6 text-primary" />
+                            <span className="absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full bg-plum-900 text-[11px] font-semibold text-white">
+                                {i + 1}
+                            </span>
+                        </div>
+                        <h3 className="mt-6 text-xl font-medium">{step.title}</h3>
+                        <p className="mt-2 max-w-xs text-sm leading-relaxed text-muted-foreground">{step.description}</p>
+                    </Reveal>
                 ))}
-            </VerticalTimeline>
-        </div>
+            </ol>
+        </section>
     );
 };
 

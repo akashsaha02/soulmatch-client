@@ -1,109 +1,72 @@
-import SectionTitleHome from '@/components/shared/SectionTitleHome';
+import { Link } from 'react-router-dom';
+import { toast } from 'sonner';
+import { BookHeart, Trash2 } from 'lucide-react';
 import useFavourites from '@/hooks/useFavourites';
-import { FaTrashAlt } from 'react-icons/fa';
-import React from 'react'
 import useAxiosSecure from '@/hooks/useAxiosSecure';
-import Swal from 'sweetalert2';
+import { confirmAction } from '@/lib/confirm';
+import { DashboardPage, EmptyState, Panel } from '@/components/dashboard/DashboardKit';
+import Reveal from '@/components/shared/Reveal';
+import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const MyFavourites = () => {
-
-  const [favourites, refetch] = useFavourites();
-
+  const [favourites, refetch, isLoading] = useFavourites();
   const axiosSecure = useAxiosSecure();
 
-  const handleDeleteFavourite = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You won't be able to revert this!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Yes, delete it!"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        axiosSecure.delete(`/favourites/${id}`).then((res) => {
-          if (res.data.deletedCount > 0) {
-            refetch();
-            Swal.fire({
-              title: "Deleted!",
-              text: "Your file has been deleted.",
-              icon: "success"
-            });
-          }
-        }).catch((err) => {
-          console.log(err);
-        });
+  const handleDeleteFavourite = async (item) => {
+    const ok = await confirmAction({ title: `Remove ${item.favouriteName}?`, text: 'They will be removed from your favourites.', confirmText: 'Remove' });
+    if (!ok) return;
+    try {
+      const res = await axiosSecure.delete(`/favourites/${item._id}`);
+      if (res.data.deletedCount > 0) {
+        toast.success('Removed from favourites');
+        refetch();
       }
-    });
-  }
+    } catch {
+      toast.error("Couldn't remove this favourite.");
+    }
+  };
+
   return (
-    <div>
-      <SectionTitleHome
-        heading='My Favourites'
-        subHeading='Liked profiles'
-      />
-
-      <div className="">
-
-        <div className="my-10">
-          <div className="overflow-x-auto max-w-4xl mx-auto shadow-md rounded-lg">
-            <table className="table-auto w-full border-collapse bg-white overflow-hidden">
-              {/* head */}
-              <thead>
-                <tr className="text-lg font-semibold bg-indigo-600 text-white ">
-                  <th className="px-6 py-3 text-center">Biodata Id</th>
-                  <th className="px-6 py-3 text-center">Image</th>
-                  <th className="px-6 py-3 text-center">Name</th>
-                  <th className="px-6 py-3 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {/* row 1 */}
-                {
-                  favourites.length > 0 ? favourites.map((item) => {
-                    return (
-                      <tr key={item._id} className="hover:bg-gray-50 text-center border-b border-gray-200">
-                        <td className="px-6 py-4 text-sm text-black">{item.favouriteBiodataId}</td>
-                        <td className="px-6 py-4">
-                          <div className="avatar">
-                            <div className="mask mask-squircle h-12 w-12 mx-auto">
-                              <img
-                                src={item.favouriteProfileImage}
-                                alt={item.favouriteName}
-                                className="object-cover w-full h-full rounded-full"
-                              />
-                            </div>
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 text-sm text-gray-700">{item.favouriteName}</td>
-                        <td className="px-6 py-4">
-                          <button
-                            onClick={() => handleDeleteFavourite(item._id)}
-                            className="btn btn-ghost btn-md text-red-500 hover:text-red-700">
-                            <FaTrashAlt />
-                          </button>
-                        </td>
-                      </tr>
-                    );
-                  }) : <tr>
-
-                    <td className="px-6 py-4 text-me-red">No Favourites Found</td>
-
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+    <DashboardPage title="Favourites" description="Profiles you've saved to revisit.">
+      {isLoading ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-28 rounded-3xl" />)}
         </div>
-
-      </div>
-
-
-
-
-    </div>
-
+      ) : favourites.length === 0 ? (
+        <Panel>
+          <EmptyState
+            icon={BookHeart}
+            title="No favourites yet"
+            description="Tap the heart on any profile to save it here."
+            action={<Button asChild><Link to="/biodatas">Browse profiles</Link></Button>}
+          />
+        </Panel>
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {favourites.map((item, i) => (
+            <Reveal key={item._id} delay={i * 0.04} className="group flex items-center gap-4 rounded-3xl bg-card p-4 shadow-soft transition hover:shadow-lift">
+              <Link to={`/biodatas/${item.favouriteId}`} className="flex min-w-0 flex-1 items-center gap-4">
+                <img src={item.favouriteProfileImage} alt={item.favouriteName} className="h-20 w-16 shrink-0 rounded-2xl object-cover" />
+                <div className="min-w-0">
+                  <p className="truncate font-display text-lg font-medium group-hover:text-primary">{item.favouriteName}</p>
+                  <p className="text-sm text-muted-foreground">Biodata #{item.favouriteBiodataId}</p>
+                </div>
+              </Link>
+              <Button
+                variant="ghost"
+                size="icon"
+                aria-label={`Remove ${item.favouriteName} from favourites`}
+                onClick={() => handleDeleteFavourite(item)}
+                className="shrink-0 text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 />
+              </Button>
+            </Reveal>
+          ))}
+        </div>
+      )}
+    </DashboardPage>
   )
 }
 

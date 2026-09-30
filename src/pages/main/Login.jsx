@@ -1,14 +1,32 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { Helmet } from 'react-helmet';
-import Swal from 'sweetalert2';
+import { toast } from 'sonner';
+import { Loader2 } from 'lucide-react';
 import useAuth from '@/hooks/useAuth';
 import SocialSignIn from '@/components/shared/SocialSignIn';
+import AuthLayout from '@/components/shared/AuthLayout';
+import PasswordInput from '@/components/shared/PasswordInput';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import loginImg from '../../assets/couple2.jpg';
+
+const friendlyError = (code) => {
+    switch (code) {
+        case 'auth/invalid-credential':
+        case 'auth/wrong-password':
+        case 'auth/user-not-found':
+            return 'That email and password don’t match. Please try again.';
+        case 'auth/too-many-requests':
+            return 'Too many attempts. Please wait a moment and try again.';
+        default:
+            return 'We couldn’t sign you in. Please try again.';
+    }
+};
 
 const Login = () => {
     const navigate = useNavigate();
-    const { loginUser, logoutUser } = useAuth();
+    const { loginUser } = useAuth();
     const location = useLocation();
     const from = location.state?.from?.pathname || '/';
     const [loading, setLoading] = useState(false);
@@ -22,121 +40,52 @@ const Login = () => {
         setLoading(true);
         setError('');
         try {
-            await loginUser(email, password);
-            Swal.fire({
-                icon: 'success',
-                title: 'Success',
-                text: 'Logged in successfully!',
-            }).then(() => {
-                navigate(from);
-            });
+            const { user } = await loginUser(email, password);
+            toast.success(`Welcome back, ${user?.displayName?.split(' ')[0] || 'friend'}!`);
+            navigate(from, { replace: true });
         } catch (err) {
-            setError(err.message || 'Error logging in.');
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: err.message || 'Error logging in. Please try again.',
-            });
+            setError(friendlyError(err.code));
         } finally {
             setLoading(false);
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            await logoutUser();
-            Swal.fire({
-                icon: 'success',
-                title: 'Logged Out',
-                text: 'You have been logged out successfully.',
-            }).then(() => {
-                navigate('/');
-            });
-        } catch (err) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Failed to log out. Please try again.',
-            });
-        }
-    };
-
-    const handleNewAccountClick = () => navigate('/register');
-
     return (
-        <div className="px-4 sm:px-6 lg:px-8 py-20 min-h-screen flex items-center justify-center bg-gray-100">
-            <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 bg-white items-center">
-                {/* Image Section */}
-                <div className="hidden md:block">
-                    <img src={loginImg} alt="login" className="w-full" />
-                </div>
+        <AuthLayout
+            title="Sign in"
+            image={loginImg}
+            eyebrow="Welcome back"
+            heading="Sign in to SoulMatch"
+            subheading={<>New here? <Link to="/register" state={location.state} className="font-semibold text-primary hover:underline">Create a free account</Link></>}
+            quote={{ text: 'We matched on a Tuesday and were engaged by spring. SoulMatch made the first hello easy.', author: 'Nadia & Arif' }}
+        >
+            <SocialSignIn />
 
-                {/* Form Section */}
-                <div className="p-8 max-w-md">
-                    <Helmet>
-                        <title>Login | SoulMatch</title>
-                    </Helmet>
-                    <p className=" uppercase text-me-brown font-medium">start for free</p>
-                    <h2 className="text-3xl font-bold my-2 playfair">Sign in to SoulMatch</h2>
-                    <p className=" capitalize text-me-brown font-medium mb-4">Not a member? <span
-                     onClick={handleNewAccountClick}
-                    className="text-blue-500 cursor-pointer"> Sign Up Now</span></p>
-
-                    <hr className='my-4 md:my-6'></hr>
-
-                    {error && <p className="text-red-500 text-center">{error}</p>}
-                    <form className="space-y-4" onSubmit={handleSubmit}>
-                        <div className="flex flex-col w-full gap-2">
-                            <label htmlFor="email" className="text-dark-2">Email</label>
-                            <input
-                                type="email"
-                                id="email"
-                                name="email"
-                                placeholder="Enter your email"
-                                className="w-full border border-slate-200 rounded-lg py-3 px-5 outline-none bg-transparent"
-                                autoComplete="on"
-                                required
-                            />
-                        </div>
-
-                        <div className="flex flex-col w-full gap-2">
-                            <label htmlFor="password" className="text-dark-2">Password</label>
-                            <input
-                                type="password"
-                                id="password"
-                                name="password"
-                                placeholder="Enter your password"
-                                className="w-full border border-slate-200 rounded-lg py-3 px-5 outline-none bg-transparent"
-                                autoComplete="on"
-                                required
-                            />
-                        </div>
-
-                        <div>
-                            <button
-                                type="submit"
-                                className={`block text-center py-3 px-4 text-white font-semibold w-full rounded-lg my-4 ${loading ? 'bg-gray-300 cursor-not-allowed' : 'bg-me-teal'}`}
-                            >
-                                {loading ? 'Loading...' : 'Login now'}
-                            </button>
-                        </div>
-                    </form>
-
-                    <div className="flex items-center flex-col justify-center gap-4">
-                        <p>Or sign in with</p>
-                        <SocialSignIn />
-                        <div className="">
-                            <button
-                                onClick={() => navigate('/forgot-password')}
-                                className="text-me-teal font-semibold cursor-pointer"
-                            >
-                                Forgot Password?
-                            </button>
-                        </div>
-                    </div>
-                </div>
+            <div className="my-6 flex items-center gap-4 text-xs uppercase tracking-widest text-muted-foreground">
+                <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
             </div>
-        </div>
+
+            <form className="space-y-5" onSubmit={handleSubmit}>
+                <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input type="email" id="email" name="email" placeholder="you@example.com" autoComplete="email" required />
+                </div>
+
+                <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <PasswordInput id="password" name="password" placeholder="Your password" autoComplete="current-password" required />
+                </div>
+
+                {error && (
+                    <p role="alert" className="rounded-xl bg-destructive/5 px-4 py-3 text-sm text-destructive">{error}</p>
+                )}
+
+                <Button type="submit" size="lg" className="w-full" disabled={loading}>
+                    {loading && <Loader2 className="animate-spin" />}
+                    {loading ? 'Signing in…' : 'Sign in'}
+                </Button>
+            </form>
+        </AuthLayout>
     );
 };
 

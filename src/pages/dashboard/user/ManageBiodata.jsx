@@ -3,34 +3,27 @@ import { useForm, Controller } from "react-hook-form";
 import Select from "react-select";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Heart, Loader2, Save, UserRound, MapPin } from "lucide-react";
 import useAuth from "@/hooks/useAuth";
 import useAxiosSecure from "@/hooks/useAxiosSecure";
-import useBiodatas from "@/hooks/useBiodatas";
-import Swal from "sweetalert2";
+import useMyBiodata from "@/hooks/useMyBiodata";
 import Loader from "@/components/shared/Loader";
-import { Helmet } from "react-helmet";
-import SectionTitleHome from "@/components/shared/SectionTitleHome";
-import { useNavigate } from "react-router-dom";
+import { DashboardPage, Panel } from "@/components/dashboard/DashboardKit";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { DIVISIONS } from "@/lib/biodata";
+import { selectClassNames } from "@/lib/selectStyles";
+import { cn } from "@/lib/utils";
+
 const weightOptions = Array.from({ length: 101 }, (_, i) => ({ value: i + 30, label: `${i + 30} kg` })); // 30kg to 130kg
 const partnerAgeOptions = Array.from({ length: 52 }, (_, i) => ({ value: i + 18, label: `${i + 18} years` })); // 18 to 70 years
-const occupationOptions = [
-  { value: "Engineer", label: "Engineer" },
-  { value: "Doctor", label: "Doctor" },
-  { value: "Teacher", label: "Teacher" },
-  { value: "Business", label: "Business" },
-  { value: "Student", label: "Student" },
-  { value: "Other", label: "Other" },
-];
-
-const divisions = [
-  { value: "Dhaka", label: "Dhaka" },
-  { value: "Chattagram", label: "Chattagram" },
-  { value: "Rangpur", label: "Rangpur" },
-  { value: "Barisal", label: "Barisal" },
-  { value: "Khulna", label: "Khulna" },
-  { value: "Mymensingh", label: "Mymensingh" },
-  { value: "Sylhet", label: "Sylhet" },
-];
+const occupationOptions = ["Engineer", "Doctor", "Teacher", "Business", "Student", "Other"].map((v) => ({ value: v, label: v }));
+const divisions = DIVISIONS.map((d) => ({ value: d, label: d }));
+const genderOptions = [{ value: "Male", label: "Male" }, { value: "Female", label: "Female" }];
 
 const races = [
   { value: "Black", label: "Black" },
@@ -61,436 +54,177 @@ const heightOptions = [
   { value: "6 feet 6 inch", label: "6'6\"" },
 ]
 
+const Field = ({ label, htmlFor, error, className, children }) => (
+  <div className={cn("space-y-2", className)}>
+    <Label htmlFor={htmlFor}>{label}</Label>
+    {children}
+    {error && <p className="text-xs text-destructive">{error.message}</p>}
+  </div>
+);
+
+const SelectField = ({ name, label, control, errors, options, placeholder, rules }) => (
+  <Field label={label} htmlFor={name} error={errors[name]}>
+    <Controller
+      name={name}
+      control={control}
+      rules={rules ?? { required: `${label} is required` }}
+      render={({ field }) => (
+        <Select {...field} inputId={name} options={options} placeholder={placeholder || "Select…"} classNames={selectClassNames} />
+      )}
+    />
+  </Field>
+);
+
 const ManageBiodata = () => {
   const { user } = useAuth();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const axiosSecure = useAxiosSecure();
-  const [, loading, myBiodata] = useBiodatas();
+  const queryClient = useQueryClient();
+  const [myBiodata, loading] = useMyBiodata();
   const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     control,
-    setValue,
+    reset,
     formState: { errors },
   } = useForm();
 
   useEffect(() => {
-    if (loading) return;
-    if (myBiodata) {
-      setValue("biodataType", myBiodata.biodataType);
-      setValue("name", myBiodata.name);
-      setValue("fatherName", myBiodata.fatherName);
-      setValue("motherName", myBiodata.motherName);
-      setValue("profileImage", myBiodata.profileImage);
-      setValue("race", { value: myBiodata.race, label: myBiodata.race });
-      setValue("height", { value: myBiodata.height, label: myBiodata.height });
-      setValue("weight", myBiodata.weight);
-      setValue("occupation", myBiodata.occupation);
-      setValue("dob", new Date(myBiodata.dob));
-      setValue("presentDivision", {
-        value: myBiodata.presentDivision,
-        label: myBiodata.presentDivision,
-      });
-      setValue("permanentDivision", {
-        value: myBiodata.permanentDivision,
-        label: myBiodata.permanentDivision,
-      });
-      setValue("mobileNumber", myBiodata.mobileNumber);
-      setValue("partnerAge", myBiodata.partnerAge);
-      setValue("partnerHeight", {
-        value: myBiodata.partnerHeight,
-        label: myBiodata.partnerHeight,
-      });
-      setValue("partnerWeight", myBiodata.partnerWeight);
-    }
-  }, [loading, myBiodata, setValue]);
+    if (!myBiodata) return;
+    const asOption = (v) => (v ? { value: v, label: v } : null);
+    reset({
+      biodataType: asOption(myBiodata.biodataType),
+      name: myBiodata.name,
+      fatherName: myBiodata.fatherName,
+      motherName: myBiodata.motherName,
+      profileImage: myBiodata.profileImage,
+      race: races.find((r) => r.value === myBiodata.race) || asOption(myBiodata.race),
+      height: heightOptions.find((h) => h.value === myBiodata.height) || asOption(myBiodata.height),
+      weight: myBiodata.weight,
+      occupation: myBiodata.occupation,
+      dob: myBiodata.dob ? new Date(myBiodata.dob) : null,
+      presentDivision: asOption(myBiodata.presentDivision),
+      permanentDivision: asOption(myBiodata.permanentDivision),
+      mobileNumber: myBiodata.mobileNumber,
+      partnerAge: myBiodata.partnerAge,
+      partnerHeight: heightOptions.find((h) => h.value === myBiodata.partnerHeight) || asOption(myBiodata.partnerHeight),
+      partnerWeight: myBiodata.partnerWeight,
+    });
+  }, [myBiodata, reset]);
 
-  if (loading) return <Loader />
-
+  if (loading) return <Loader fullScreen={false} />
 
   const onSubmit = async (data) => {
-    Swal.fire({
-      title: "Do you want to save the changes?",
-      text: "Make sure all the information is correct before saving.",
-      icon: "question",
-      showCancelButton: true,
-      confirmButtonText: "Save",
-      cancelButtonText: "Cancel",
-    }).then(async (result) => {
-      if (result.isConfirmed) {
-        setIsLoading(true); // Start the loading indicator
-        try {
-          const payload = {
-            userEmail: user.email,
-            name: data.name,
-            fatherName: data.fatherName,
-            motherName: data.motherName,
-            biodataType: data.biodataType,
-            profileImage: data.profileImage,
-            race: data.race?.value,
-            height: data.height?.value,
-            weight: data.weight,
-            occupation: data.occupation,
-            dob: data.dob,
-            presentDivision: data.presentDivision?.value,
-            permanentDivision: data.permanentDivision?.value,
-            mobileNumber: data.mobileNumber,
-            partnerAge: data.partnerAge,
-            partnerHeight: data.partnerHeight?.value,
-            partnerWeight: data.partnerWeight,
-          };
-          // console.log(payload);
+    setIsSaving(true);
+    try {
+      const payload = {
+        userEmail: user.email,
+        name: data.name,
+        fatherName: data.fatherName,
+        motherName: data.motherName,
+        biodataType: data.biodataType?.value,
+        profileImage: data.profileImage,
+        race: data.race?.value,
+        height: data.height?.value,
+        weight: data.weight,
+        occupation: data.occupation,
+        dob: data.dob,
+        presentDivision: data.presentDivision?.value,
+        permanentDivision: data.permanentDivision?.value,
+        mobileNumber: data.mobileNumber,
+        partnerAge: data.partnerAge,
+        partnerHeight: data.partnerHeight?.value,
+        partnerWeight: data.partnerWeight,
+      };
 
-          const response = await axiosSecure.post("/biodatas", payload);
-          console.log(response.data);
-
-          if (response.data.insertedId) {
-            Swal.fire({
-              title: "Congratulations!",
-              text: "Biodata created successfully",
-              icon: "success",
-              confirmButtonText: "Okay",
-            });
-            navigate("/dashboard/user-home");
-          } else {
-            Swal.fire({
-              title: "Success!",
-              text: "Biodata updated successfully",
-              icon: "success",
-              confirmButtonText: "Okay",
-            });
-            navigate("/dashboard/user-home");
-          }
-        } catch (error) {
-          console.error("Error creating biodata:", error);
-          Swal.fire({
-            title: "Error!",
-            text: "Failed to create biodata",
-            icon: "error",
-            confirmButtonText: "Okay",
-          });
-        } finally {
-          setIsLoading(false); // Stop the loading indicator
-        }
-      } else {
-        Swal.fire("Changes were not saved", "", "info");
-      }
-    });
+      const response = await axiosSecure.post("/biodatas", payload);
+      toast.success(response.status === 201 ? "Biodata published!" : "Biodata updated", {
+        description: "Your profile is now visible to other members.",
+      });
+      queryClient.invalidateQueries({ queryKey: ["my-biodata", user.email] });
+      queryClient.invalidateQueries({ queryKey: ["biodatas"] });
+      navigate("/dashboard/user-home");
+    } catch {
+      toast.error("Couldn't save your biodata. Please try again.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
+  const shared = { control, errors };
 
   return (
-    <div>
-      <Helmet>
-        <title>Manage Biodata | SoulMatch</title>
-      </Helmet>
-      <SectionTitleHome heading="Manage Biodata" subHeading="Edit & Update details" />
-      <div className="p-6 max-w-2xl mx-auto bg-white rounded-lg shadow-md">
-        <form onSubmit={handleSubmit(onSubmit)}>
-
-          {/* Name */}
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-              Name
-            </label>
-            <input
-              id="name"
-              placeholder="Enter your valid name"
-              {...register("name", { required: "Name is required" })}
-              className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+    <DashboardPage
+      title={myBiodata ? "Edit biodata" : "Create biodata"}
+      description="Complete, honest details help families find you faster."
+    >
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        <Panel title={<span className="flex items-center gap-2"><UserRound className="h-4 w-4 text-primary" /> About you</span>} bodyClassName="grid gap-5 p-6 md:grid-cols-2">
+          <Field label="Full name" htmlFor="name" error={errors.name}>
+            <Input id="name" placeholder="Your full name" {...register("name", { required: "Name is required" })} />
+          </Field>
+          <Field label="Profile image link" htmlFor="profileImage" error={errors.profileImage}>
+            <Input id="profileImage" type="url" placeholder="https://…" {...register("profileImage", { required: "Profile image link is required" })} />
+          </Field>
+          <SelectField name="biodataType" label="Gender" options={genderOptions} {...shared} />
+          <Field label="Date of birth" htmlFor="dob" error={errors.dob}>
+            <Controller
+              name="dob"
+              control={control}
+              defaultValue={null}
+              rules={{ required: "Date of birth is required" }}
+              render={({ field: { onChange, value } }) => (
+                <DatePicker
+                  id="dob"
+                  selected={value}
+                  onChange={onChange}
+                  dateFormat="d MMMM yyyy"
+                  showYearDropdown
+                  scrollableYearDropdown
+                  yearDropdownItemNumber={60}
+                  maxDate={new Date()}
+                  wrapperClassName="w-full"
+                  className="flex h-11 w-full rounded-xl border border-input bg-white px-4 text-sm focus-visible:border-primary/50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-primary/10"
+                  placeholderText="Select date"
+                />
+              )}
             />
-            {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
-          </div>
+          </Field>
+          <SelectField name="race" label="Race" options={races} {...shared} />
+          <SelectField name="occupation" label="Occupation" options={occupationOptions} {...shared} />
+          <SelectField name="height" label="Height" options={heightOptions} {...shared} />
+          <SelectField name="weight" label="Weight" options={weightOptions} {...shared} />
+          <Field label="Father's name" htmlFor="fatherName" error={errors.fatherName}>
+            <Input id="fatherName" placeholder="Father's name" {...register("fatherName", { required: "Father's name is required" })} />
+          </Field>
+          <Field label="Mother's name" htmlFor="motherName" error={errors.motherName}>
+            <Input id="motherName" placeholder="Mother's name" {...register("motherName", { required: "Mother's name is required" })} />
+          </Field>
+        </Panel>
 
-          {/* Fathers Name */}
-          <div className="mb-4">
-            <label htmlFor="fatherName" className="block text-sm font-medium text-gray-700">
-              Father Name
-            </label>
-            <input
-              id="fatherName"
-              placeholder="Enter your father's name"
-              {...register("fatherName", { required: "Father Name is required" })}
-              className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.fatherName && <p className="text-red-500 text-xs">{errors.fatherName.message}</p>}
-          </div>
+        <Panel title={<span className="flex items-center gap-2"><MapPin className="h-4 w-4 text-primary" /> Location & contact</span>} bodyClassName="grid gap-5 p-6 md:grid-cols-3">
+          <SelectField name="presentDivision" label="Present division" options={divisions} {...shared} />
+          <SelectField name="permanentDivision" label="Permanent division" options={divisions} {...shared} />
+          <Field label="Mobile number" htmlFor="mobileNumber" error={errors.mobileNumber}>
+            <Input id="mobileNumber" type="tel" placeholder="+880…" {...register("mobileNumber", { required: "Mobile number is required" })} />
+          </Field>
+        </Panel>
 
-          {/*Mothers Name */}
-          <div className="mb-4">
-            <label htmlFor="motherName" className="block text-sm font-medium text-gray-700">
-              Mother's Name
-            </label>
-            <input
-              id="motherName"
-              placeholder="Enter your mother's name"
-              {...register("motherName", { required: "Mother's Name is required" })}
-              className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.motherName && <p className="text-red-500 text-xs">{errors.motherName.message}</p>}
-          </div>
+        <Panel title={<span className="flex items-center gap-2"><Heart className="h-4 w-4 text-primary" /> Partner expectations</span>} bodyClassName="grid gap-5 p-6 md:grid-cols-3">
+          <SelectField name="partnerAge" label="Partner's age" options={partnerAgeOptions} {...shared} />
+          <SelectField name="partnerHeight" label="Partner's height" options={heightOptions} {...shared} />
+          <SelectField name="partnerWeight" label="Partner's weight" options={weightOptions} {...shared} />
+        </Panel>
 
-          {/* type and race */}
-          <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-            {/* Biodata Type */}
-            <div className="mb-4 w-full">
-              <label htmlFor="biodataType" className="block text-sm font-medium text-gray-700">
-                Biodata Type
-              </label>
-              <select
-                {...register("biodataType", { required: "Biodata Type is required" })}
-                className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-              >
-                <option value="">Select Type</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-              </select>
-              {errors.biodataType && <p className="text-red-500 text-xs">{errors.biodataType.message}</p>}
-            </div>
-
-            {/* Race Type */}
-            <div className="mb-4 w-full">
-              <label htmlFor="race" className="block text-sm font-medium text-gray-700">
-                Race
-              </label>
-              <Controller
-                name="race"
-                control={control}
-                rules={{ required: "Race is required" }}
-                render={({ field }) => (
-                  <Select
-                    placeholder="Select A Race"
-                    {...field} options={races} className="w-full mt-1" />
-                )}
-              />
-              {errors.race && <p className="text-red-500 text-xs">{errors.race.message}</p>}
-            </div>
-          </div>
-
-          {/* Profile Image */}
-          <div className="mb-4">
-            <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700">
-              Profile Image Link
-            </label>
-            <input
-              id="profileImage"
-              placeholder="Enter your formal profile image link"
-              {...register("profileImage", { required: "Profile Image Link is required" })}
-              className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.profileImage && <p className="text-red-500 text-xs">{errors.profileImage.message}</p>}
-          </div>
-
-          {/* Height Weight and date of birth */}
-          <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 w-full">
-            {/* Height */}
-            <div className="mb-4 w-full">
-              <label htmlFor="height" className="block text-sm font-medium text-gray-700">
-                Height
-              </label>
-              <Controller
-                name="height"
-                control={control}
-                rules={{ required: "Height is required" }}
-                render={({ field }) => (
-                  <Select
-                    className="mt-1 w-full"
-                    {...field}
-                    options={heightOptions}
-                    placeholder="Select Height"
-                  />
-                )}
-              />
-              {errors.height && <p className="text-red-500 text-xs">{errors.height.message}</p>}
-            </div>
-            {/* Weight */}
-            <div className="mb-4 w-full">
-              <label htmlFor="weight" className="block text-sm font-medium text-gray-700">
-                Weight
-              </label>
-              <Controller
-                name="weight"
-                control={control}
-                rules={{ required: "Weight is required" }}
-                render={({ field }) => (
-                  <Select
-                    className="mt-1"
-                    {...field} options={weightOptions} placeholder="Select Weight" />
-                )}
-              />
-              {errors.weight && <p className="text-red-500 text-xs">{errors.weight.message}</p>}
-            </div>
-            {/* Date of Birth */}
-            <div className="mb-4 w-full">
-              <label htmlFor="dob" className="block text-sm font-medium text-gray-700">
-                Date of Birth
-              </label>
-              <Controller
-                name="dob"
-                control={control}
-                defaultValue={null} // Ensure default value is null
-                rules={{ required: "Date of Birth is required" }}
-                render={({ field: { onChange, value } }) => (
-                  <DatePicker
-                    selected={value} // Bind the selected value
-                    onChange={onChange} // Update form state when date changes
-                    dateFormat="yyyy-MM-dd" // Display date in simple format
-                    className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    placeholderText="Select Date of Birth"
-                  />
-                )}
-              />
-              {errors.dob && <p className="text-red-500 text-xs">{errors.dob.message}</p>}
-            </div>
-          </div>
-
-          {/* Occupation and Division */}
-          <div className="flex flex-col md:flex-row items-center md:justify-between gap-4">
-            {/* Occupation */}
-
-            <div className="mb-4 w-full">
-              <label htmlFor="occupation" className="block text-sm font-medium text-gray-700">
-                Occupation
-              </label>
-              <Controller
-                name="occupation"
-                control={control}
-                rules={{ required: "Occupation is required" }}
-                render={({ field }) => (
-                  <Select {...field}
-                    className="mt-1"
-                    options={occupationOptions} placeholder=" Occupation" />
-                )}
-              />
-              {errors.occupation && <p className="text-red-500 text-xs">{errors.occupation.message}</p>}
-            </div>
-
-            {/* Present Division */}
-            <div className="mb-4 w-full">
-              <label htmlFor="presentDivision" className="block text-sm font-medium text-gray-700">
-                Present Division
-              </label>
-              <Controller
-                name="presentDivision"
-                control={control}
-                rules={{ required: "Present Division is required" }}
-                render={({ field }) => (
-                  <Select {...field} options={divisions} className="w-full mt-1" />
-                )}
-              />
-              {errors.presentDivision && <p className="text-red-500 text-xs">{errors.presentDivision.message}</p>}
-            </div>
-
-            {/* Permanent Division */}
-            <div className="mb-4 w-full">
-              <label htmlFor="permanentDivision" className="block text-sm font-medium text-gray-700">
-                Permanent Division
-              </label>
-              <Controller
-                name="permanentDivision"
-                control={control}
-                rules={{ required: "Permanent Division is required" }}
-                render={({ field }) => (
-                  <Select {...field} options={divisions} className="w-full mt-1" />
-                )}
-              />
-              {errors.permanentDivision && <p className="text-red-500 text-xs">{errors.permanentDivision.message}</p>}
-            </div>
-          </div>
-
-          {/* Mobile Number */}
-          <div className="mb-4">
-            <label htmlFor="mobileNumber" className="block text-sm font-medium text-gray-700">
-              Mobile Number
-            </label>
-            <input
-              id="mobileNumber"
-              placeholder="Enter your valid mobile number"
-              {...register("mobileNumber", { required: "Mobile Number is required" })}
-              className="mt-1 px-4 py-2 block w-full border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-            {errors.mobileNumber && <p className="text-red-500 text-xs">{errors.mobileNumber.message}</p>}
-          </div>
-
-
-          {/* <---------------------------- Partnar Info----------------------> */}
-          <div className="text-center text-gray-700 font-semibold mb-4">Expected Partner's Info</div>
-
-          {/* partner age, height, weight */}
-          <div className="flex flex-col md:flex-row items-center md:justify-between gap-4 w-full">
-
-            {/* Age */}
-            <div className="mb-4 w-full">
-              <label htmlFor="partnerAge" className="block text-sm font-medium text-gray-700">
-                Partner's Age
-              </label>
-              <Controller
-                name="partnerAge"
-                control={control}
-                rules={{ required: "Partner's Age is required" }}
-                render={({ field }) => (
-                  <Select {...field}
-                    className="mt-1"
-                    options={partnerAgeOptions} placeholder="Partner's Age" />
-                )}
-              />
-              {errors.partnerAge && <p className="text-red-500 text-xs">{errors.partnerAge.message}</p>}
-            </div>
-
-            {/* Partner's Height */}
-            <div className="mb-4 w-full">
-              <label htmlFor="partnerHeight" className="block text-sm font-medium text-gray-700">
-                Partner's Height
-              </label>
-              <Controller
-                name="partnerHeight"
-                control={control}
-                rules={{ required: "Partner's Height is required" }}
-                render={({ field }) => (
-                  <Select
-                    className="mt-1 w-full"
-                    {...field}
-                    options={heightOptions}
-                    placeholder="Select Height"
-                  />
-                )}
-              />
-              {errors.partnerHeight && <p className="text-red-500 text-xs">{errors.partnerHeight.message}</p>}
-            </div>
-
-            {/* Weight */}
-            <div className="mb-4 w-full">
-              <label htmlFor="partnerWeight" className="block text-sm font-medium text-gray-700">
-                Partner's Weight
-              </label>
-              <Controller
-                name="partnerWeight"
-                control={control}
-                rules={{ required: "Partner's Weight is required" }}
-                render={({ field }) => (
-                  <Select {...field}
-                    className="mt-1"
-                    options={weightOptions} placeholder=" Partner's Weight" />
-                )}
-              />
-              {errors.partnerWeight && <p className="text-red-500 text-xs">{errors.partnerWeight.message}</p>}
-            </div>
-          </div>
-
-          {/* Save Button */}
-          <div className="mb-4">
-            <button
-              className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 sm:text-sm"
-              type="submit"
-              disabled={isLoading}
-            >
-              {isLoading ? "Loading..." : "Save & Publish Now"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+        <div className="sticky bottom-4 z-10 flex justify-end">
+          <Button type="submit" size="lg" disabled={isSaving} className="shadow-lift">
+            {isSaving ? <Loader2 className="animate-spin" /> : <Save />}
+            {isSaving ? "Saving…" : myBiodata ? "Save changes" : "Publish biodata"}
+          </Button>
+        </div>
+      </form>
+    </DashboardPage>
   );
 };
 
